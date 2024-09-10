@@ -1,0 +1,13 @@
+services:
+  caddy:
+    image: caddy:alpine
+    ports:
+      - 8080:80
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+  backend:
+    build: ./backend
+    container_name: cinema-backend
+  frontend:
+    build: ./frontend
+    container_name: cinema-frontend

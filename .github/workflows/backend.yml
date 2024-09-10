@@ -25,7 +25,7 @@ jobs:
           java-version: '22'
 
       - name: Check style
-        run: mvn checkstyle:check
+        run: mvn git-code-format:validate-code-format -Dgcf.globPattern='**/*'
         working-directory: ./backend/
 
   build:
@@ -42,7 +42,7 @@ jobs:
           java-version: '22'
 
       - name: Build
-        run: mvn package -DskipTests
+        run: mvn package -DskipTests -DskipFormatCode
         working-directory: ./backend/
 
   test:
