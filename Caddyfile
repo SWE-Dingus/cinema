@@ -1,4 +1,4 @@
-http://localhost {
+https://localhost, http://localhost {
     route /* {
         reverse_proxy cinema-frontend:3000
     }
