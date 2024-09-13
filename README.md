@@ -4,4 +4,4 @@ Make sure you have [Docker](https://www.docker.com/) installed with [Docker Comp
 ```sh
 docker compose up --build
 ```
-from the repository root. The site should then be accessible at http://localhost:8080. Requests to `/api/` will be reverse-proxied to the backend.
+from the repository root. The site should then be accessible at http://localhost:8080 (insecure) or https://localhost:8443 (TLS). Requests to `/api/` will be reverse-proxied to the backend.
