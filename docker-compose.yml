@@ -1,14 +1,36 @@
 services:
-  caddy:
+  proxy:
     image: caddy:alpine
     ports:
       - 8080:80
       - 8443:443
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+  database:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
   backend:
     build: ./backend
     container_name: cinema-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+    depends_on:
+      database:
+        condition: service_healthy
+        restart: true
   frontend:
     build: ./frontend
     container_name: cinema-frontend
+    depends_on:
+      backend:
+        condition: service_started
