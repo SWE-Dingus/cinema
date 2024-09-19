@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -19,15 +19,13 @@ class MovieController {
     this.movieRepository = movieRepository;
   }
 
-  @PostMapping("makeMovie")
-  public Movie makeMovie(@RequestParam String title) {
-    var movie = new Movie();
-    movie.title = title;
+  @PostMapping(value = "/createMovie", consumes = "application/json")
+  public Movie createMovie(@RequestBody Movie movie) {
     movieRepository.save(movie);
     return movie;
   }
 
-  @GetMapping("getMovies")
+  @GetMapping("/getMovies")
   public List<Movie> getMovies() {
     return movieRepository.findAll();
   }
