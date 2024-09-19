@@ -1,6 +1,7 @@
 package com.cinema.backend.controllers;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import com.cinema.backend.entities.Movie;
 import com.cinema.backend.repositories.MovieRepository;
@@ -31,13 +32,21 @@ class MoviesController {
 
   @PostMapping("/create")
   public Map<String, Long> createMovie(@RequestBody Movie movie) {
-    movieRepository.save(movie);
-    return new HashMap<>() {
-      {
-        this.put("id", movie.getId());
+      if (movie.title != null) {
+        movieRepository.save(movie);
+        return new HashMap<>() {
+          {
+
+            this.put("id", movie.getId());
+            System.out.println(movie.title + " added to DB");
+
+          }
+        };
+      } else {
+        System.out.println("Movie title was not entered properly.");
+        return new HashMap<>() {};
       }
-    };
-  }
+  };
 
   @GetMapping("/get/{id}")
   public Movie getMovie(@PathVariable long id) {
