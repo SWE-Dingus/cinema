@@ -3,9 +3,7 @@ https://localhost, http://localhost {
 		reverse_proxy cinema-frontend:3000
 	}
 
-	redir /api /api/
 	route /api/* {
-		uri strip_prefix /api
 		reverse_proxy cinema-backend:8080
 	}
 }
