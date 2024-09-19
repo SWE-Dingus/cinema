@@ -36,10 +36,8 @@ class MoviesController {
         movieRepository.save(movie);
         return new HashMap<>() {
           {
-
             this.put("id", movie.getId());
             System.out.println(movie.title + " added to DB");
-
           }
         };
       } else {
