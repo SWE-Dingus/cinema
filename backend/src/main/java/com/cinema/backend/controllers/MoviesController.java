@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.Movie;
 import com.cinema.backend.repositories.MovieRepository;
+import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,20 +31,14 @@ class MoviesController {
   }
 
   @PostMapping("/create")
-  public Map<String, Long> createMovie(@RequestBody Movie movie) {
-      if (movie.title != null) {
-        movieRepository.save(movie);
-        return new HashMap<>() {
-          {
-            this.put("id", movie.getId());
-            System.out.println(movie.title + " added to DB");
-          }
-        };
-      } else {
-        System.out.println("Movie title was not entered properly.");
-        return new HashMap<>() {};
+  public Map<String, Long> createMovie(@Valid @RequestBody Movie movie) {
+    movieRepository.save(movie);
+    return new HashMap<>() {
+      {
+        this.put("id", movie.getId());
       }
-  };
+    };
+  }
 
   @GetMapping("/get/{id}")
   public Movie getMovie(@PathVariable long id) {
@@ -56,7 +51,7 @@ class MoviesController {
   }
 
   @PutMapping("/update/{id}")
-  public void updateMovie(@PathVariable long id, @RequestBody Movie movie) {
+  public void updateMovie(@PathVariable long id, @Valid @RequestBody Movie movie) {
     var dbMovie =
         movieRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
     dbMovie.copy(movie);

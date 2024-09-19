@@ -3,13 +3,14 @@ package com.cinema.backend.entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 public class Movie {
 
   @Id @GeneratedValue private long id;
 
-  public String title;
+  @NotEmpty public String title;
 
   public long getId() {
     return this.id;
