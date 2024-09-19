@@ -1,7 +1,6 @@
 package com.cinema.backend.controllers;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import com.cinema.backend.entities.Movie;
 import com.cinema.backend.repositories.MovieRepository;
