@@ -7,6 +7,20 @@ import jakarta.persistence.Id;
 @Entity
 public class Movie {
 
-  public String title;
   @Id @GeneratedValue private long id;
+
+  public String title;
+
+  public long getId() {
+    return this.id;
+  }
+
+  /**
+   * Copy the contents of another {@link Movie} into this one. Does not change {@link Movie#id}.
+   *
+   * @param other The other {@link Movie} to copy from.
+   */
+  public void copy(Movie other) {
+    this.title = other.title;
+  }
 }
