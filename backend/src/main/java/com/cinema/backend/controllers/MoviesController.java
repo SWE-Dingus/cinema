@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-class MovieController {
+@RestController("/movies")
+class MoviesController {
 
   private final MovieRepository movieRepository;
 
   @Autowired
-  public MovieController(MovieRepository movieRepository) {
+  public MoviesController(MovieRepository movieRepository) {
     this.movieRepository = movieRepository;
   }
 
