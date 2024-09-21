@@ -13,3 +13,8 @@
 ```sh
 ./mvnw spring-boot:run
 ```
+
+## Format
+```sh
+mvn git-code-format:format-code -Dgcf.globPattern='**/*'
+```
