@@ -8,12 +8,8 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.URL;
-
 import java.util.List;
-
-
-
+import org.hibernate.validator.constraints.URL;
 
 @Entity
 public class Movie {
@@ -32,9 +28,14 @@ public class Movie {
 
   @NotNull public AgeRating ageRating;
 
-  @Min(0) @Max(5) @NotNull public Double reviewRating;
+  @Min(0)
+  @Max(5)
+  @NotNull
+  public Double reviewRating;
 
-  @NotEmpty @Column(name="movieCast") public List<@NotEmpty String> cast;
+  @NotEmpty
+  @Column(name = "movieCast")
+  public List<@NotEmpty String> cast;
 
   @NotEmpty public String director;
 
@@ -42,21 +43,31 @@ public class Movie {
 
   @NotEmpty public List<@NotEmpty String> category;
 
-  @Min(0) @NotNull public Double childPrice;
+  @Min(0)
+  @NotNull
+  public Double childPrice;
 
-  @Min(0) @NotNull public Double adultPrice;
+  @Min(0)
+  @NotNull
+  public Double adultPrice;
 
-  @Min(0) @NotNull public Double seniorPrice;
+  @Min(0)
+  @NotNull
+  public Double seniorPrice;
 
-  @Min(0) @NotNull public Double onlineFee;
+  @Min(0)
+  @NotNull
+  public Double onlineFee;
 
-  @URL(regexp = "(http|https).*") public String posterUrl;
+  @URL(regexp = "(http|https).*")
+  public String posterUrl;
 
-  @URL(regexp = "https?:\\/\\/www.youtube.com\\/embed\\/[A-Za-z0-9_\\-]{11}") public String trailerUrl;
+  @URL(regexp = "https?:\\/\\/www.youtube.com\\/embed\\/[A-Za-z0-9_\\-]{11}")
+  public String trailerUrl;
 
   @NotNull public boolean isRunning;
 
-  //TODO Add list for screenshots/clips of movie later
+  // TODO Add list for screenshots/clips of movie later
 
   public long getId() {
     return this.id;
