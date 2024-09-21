@@ -65,7 +65,7 @@ public class Movie {
   @URL(regexp = "https?:\\/\\/www.youtube.com\\/embed\\/[A-Za-z0-9_\\-]{11}")
   public String trailerUrl;
 
-  @NotNull public boolean isRunning;
+  @NotNull public Boolean isRunning;
 
   // TODO Add list for screenshots/clips of movie later
 
