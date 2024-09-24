@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import Navbar from '../app/components/Navbar';
-import SearchBar from '../app/components/SearchBar';
-import MovieCard from '../app/components/MovieCard';
+import React, { useState, useEffect } from "react";
+import Navbar from "../app/components/Navbar";
+import SearchBar from "../app/components/SearchBar";
+import MovieCard from "../app/components/MovieCard";
 
 interface Movie {
   id: number;
@@ -15,7 +15,7 @@ interface Movie {
 
 const HomePage: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]); // State to store movies fetched from API
-  const [searchTerm, setSearchTerm] = useState<string>(''); // State to track the search input
+  const [searchTerm, setSearchTerm] = useState<string>(""); // State to track the search input
 
   // Fetch movies from the backend when the component mounts
   useEffect(() => {
@@ -24,11 +24,11 @@ const HomePage: React.FC = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/movies/getAll'); // Replace with your actual endpoint
+      const response = await fetch("http://localhost:8080/api/movies/getAll"); // Replace with your actual endpoint
       const data = await response.json();
-      setMovies(data);  // Store the fetched movies in the state
+      setMovies(data); // Store the fetched movies in the state
     } catch (error) {
-      console.error('Error fetching movies:', error);
+      console.error("Error fetching movies:", error);
     }
   };
 
@@ -36,7 +36,10 @@ const HomePage: React.FC = () => {
   const filteredMovies = movies.filter(
     (movie) =>
       movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      movie.category.join(', ').toLowerCase().includes(searchTerm.toLowerCase())
+      movie.category
+        .join(", ")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()),
   );
 
   return (

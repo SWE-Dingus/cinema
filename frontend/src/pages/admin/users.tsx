@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 interface User {
   name: string;
@@ -7,8 +7,8 @@ interface User {
 
 const ManageUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [newUserName, setNewUserName] = useState<string>('');
-  const [newUserEmail, setNewUserEmail] = useState<string>('');
+  const [newUserName, setNewUserName] = useState<string>("");
+  const [newUserEmail, setNewUserEmail] = useState<string>("");
 
   const addUser = () => {
     const newUser: User = {
@@ -16,8 +16,8 @@ const ManageUsers: React.FC = () => {
       email: newUserEmail,
     };
     setUsers([...users, newUser]);
-    setNewUserName('');
-    setNewUserEmail('');
+    setNewUserName("");
+    setNewUserEmail("");
   };
 
   const deleteUser = (index: number) => {
@@ -43,7 +43,10 @@ const ManageUsers: React.FC = () => {
           onChange={(e) => setNewUserEmail(e.target.value)}
           className="border p-2 mr-2"
         />
-        <button onClick={addUser} className="bg-green-500 text-white px-4 py-2 rounded">
+        <button
+          onClick={addUser}
+          className="bg-green-500 text-white px-4 py-2 rounded"
+        >
           Add User
         </button>
       </div>

@@ -5,7 +5,7 @@ interface Movie {
   id: number;
   title: string;
   category: string[];
-  posterUrl: string;  // Assuming the API returns a posterUrl
+  posterUrl: string; // Assuming the API returns a posterUrl
   trailerUrl: string; // Assuming the API returns a trailerUrl
   isRunning: boolean; // Add isRunning to your Movie interface
 }
@@ -21,12 +21,12 @@ const AllMoviesPage: React.FC = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/movies/getAll'); 
+      const response = await fetch("http://localhost:8080/api/movies/getAll");
       const data = await response.json();
-      console.log('Movies from backend:', data);  // Log the fetched data
-      setMovies(data);  // Store the fetched movies in the state
+      console.log("Movies from backend:", data); // Log the fetched data
+      setMovies(data); // Store the fetched movies in the state
     } catch (error) {
-      console.error('Error fetching movies:', error);
+      console.error("Error fetching movies:", error);
     }
   };
 
@@ -34,11 +34,16 @@ const AllMoviesPage: React.FC = () => {
   const filteredMovies = movies.filter(
     (movie) =>
       movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      movie.category.join(', ').toLowerCase().includes(searchTerm.toLowerCase())
+      movie.category
+        .join(", ")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()),
   );
 
   // Separate movies into Currently Running and Coming Soon
-  const currentlyRunningMovies = filteredMovies.filter((movie) => movie.isRunning);
+  const currentlyRunningMovies = filteredMovies.filter(
+    (movie) => movie.isRunning,
+  );
   const comingSoonMovies = filteredMovies.filter((movie) => !movie.isRunning);
 
   return (
@@ -62,7 +67,7 @@ const AllMoviesPage: React.FC = () => {
                 key={movie.id}
                 movie={{
                   title: movie.title,
-                  poster: movie.posterUrl,  // Adjusting to match MovieCard props
+                  poster: movie.posterUrl, // Adjusting to match MovieCard props
                   trailer: movie.trailerUrl, // Assuming API returns trailerUrl
                 }}
               />
@@ -81,7 +86,7 @@ const AllMoviesPage: React.FC = () => {
                 key={movie.id}
                 movie={{
                   title: movie.title,
-                  poster: movie.posterUrl,  // Adjusting to match MovieCard props
+                  poster: movie.posterUrl, // Adjusting to match MovieCard props
                   trailer: movie.trailerUrl, // Assuming API returns trailerUrl
                 }}
               />

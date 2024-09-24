@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const ManagePromotions: React.FC = () => {
   const [promotions, setPromotions] = useState<string[]>([]);
-  const [newPromotion, setNewPromotion] = useState<string>('');
+  const [newPromotion, setNewPromotion] = useState<string>("");
 
   const addPromotion = () => {
     setPromotions([...promotions, newPromotion]);
-    setNewPromotion('');
+    setNewPromotion("");
   };
 
   const deletePromotion = (index: number) => {
@@ -25,7 +25,10 @@ const ManagePromotions: React.FC = () => {
           onChange={(e) => setNewPromotion(e.target.value)}
           className="border p-2 mr-2"
         />
-        <button onClick={addPromotion} className="bg-green-500 text-white px-4 py-2 rounded">
+        <button
+          onClick={addPromotion}
+          className="bg-green-500 text-white px-4 py-2 rounded"
+        >
           Add Promotion
         </button>
       </div>

@@ -49,7 +49,7 @@ const CheckoutPage: React.FC = () => {
 
   return (
     <div style={styles.container}>
-        <h1 style={styles.heading}>Checkout</h1>
+      <h1 style={styles.heading}>Checkout</h1>
 
       <p style={styles.info}>
         <strong>Movie:</strong> {title}
@@ -74,9 +74,8 @@ const CheckoutPage: React.FC = () => {
           (e.currentTarget.style.backgroundColor = styles.button.background)
         }
       >
-            Confirm and Pay 
+        Confirm and Pay
       </button>
-     
     </div>
   );
 };

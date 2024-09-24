@@ -1,8 +1,8 @@
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link'; 
-import Navbar from '../../app/components/Navbar'; 
-import Image from 'next/image';
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import Navbar from "../../app/components/Navbar";
+import Image from "next/image";
 
 interface Movie {
   id: number;
@@ -19,16 +19,18 @@ interface Movie {
 const MovieDetailsPage: React.FC = () => {
   const [movie, setMovie] = useState<Movie | null>(null);
   const router = useRouter();
-  const { id } = router.query; 
+  const { id } = router.query;
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/movies/get/${id}`);
+        const response = await fetch(
+          `http://localhost:8080/api/movies/get/${id}`,
+        );
         const data = await response.json();
         setMovie(data);
       } catch (error) {
-        console.error('Error fetching movie details:', error);
+        console.error("Error fetching movie details:", error);
       }
     };
 
@@ -49,7 +51,9 @@ const MovieDetailsPage: React.FC = () => {
           <Image src={movie.posterUrl} alt={movie.title} className="w-1/3" />
           <div className="ml-5">
             <h1 className="text-4xl font-bold">{movie.title}</h1>
-            <p>{movie.duration} | {movie.ageRating} | {movie.releaseDate}</p>
+            <p>
+              {movie.duration} | {movie.ageRating} | {movie.releaseDate}
+            </p>
             <p className="mt-4">{movie.synopsis}</p>
 
             <div className="mt-5">

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';  // Using Link for navigation
+import React, { useState, useEffect } from "react";
+import Link from "next/link"; // Using Link for navigation
 
 interface Movie {
   id?: number;
@@ -22,8 +22,10 @@ const AdminMain: React.FC = () => {
   const fetchMovieData = async () => {
     try {
       // Fetch all movies from the backend
-      const movieResponse = await fetch('http://localhost:8080/api/movies/getAll');
-      const movies:  Movie[] = await movieResponse.json();
+      const movieResponse = await fetch(
+        "http://localhost:8080/api/movies/getAll",
+      );
+      const movies: Movie[] = await movieResponse.json();
 
       // Set movie count
       setMovieCount(movies.length);
@@ -31,7 +33,7 @@ const AdminMain: React.FC = () => {
       // Set recent movies (show the first 5 movies, for example)
       setRecentMovies(movies.slice(0, 5)); // Adjust the number as needed
     } catch (error) {
-      console.error('Error fetching movies:', error);
+      console.error("Error fetching movies:", error);
     }
   };
 

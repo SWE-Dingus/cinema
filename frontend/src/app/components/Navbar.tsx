@@ -1,5 +1,5 @@
-import React from 'react';
-import Link from 'next/link';  // Import Link component
+import React from "react";
+import Link from "next/link"; // Import Link component
 
 const Navbar: React.FC = () => {
   return (
