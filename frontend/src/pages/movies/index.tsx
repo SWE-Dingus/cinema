@@ -21,7 +21,7 @@ const AllMoviesPage: React.FC = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch('http://localhost:8080/movies/getAll');  // Adjust URL as needed
+      const response = await fetch('http://localhost:8080/api/movies/getAll');  // Adjust URL as needed
       const data = await response.json();
       console.log('Movies from backend:', data);  // Log the fetched data
       setMovies(data);  // Store the fetched movies in the state

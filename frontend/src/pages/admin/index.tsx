@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';  // Using Link for navigation
 
 interface Movie {
-  id: number;
+  id?: number;
   title: string;
   category: string;
   posterUrl: string;
@@ -22,7 +22,7 @@ const AdminMain: React.FC = () => {
   const fetchMovieData = async () => {
     try {
       // Fetch all movies from the backend
-      const movieResponse = await fetch('http://localhost:8080/movies/getAll');
+      const movieResponse = await fetch('http://localhost:8080/api/movies/getAll');
       const movies:  Movie[] = await movieResponse.json();
 
       // Set movie count
