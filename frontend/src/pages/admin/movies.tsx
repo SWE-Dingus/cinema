@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Config from "../../../frontend.config";
 
 enum AgeRating {
   G = "G",
@@ -54,7 +55,7 @@ const ManageMovies: React.FC = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/movies/getAll");
+      const response = await fetch(`${Config.apiRoot}/movies/getAll`);
       const data = await response.json();
 
       const initializedMovies = data.map((movie: Movie) => ({
@@ -90,7 +91,7 @@ const ManageMovies: React.FC = () => {
     console.log("Sending the following data:", newMovie);
 
     try {
-      const response = await fetch("http://localhost:8080/api/movies/create", {
+      const response = await fetch(`${Config.apiRoot}/movies/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -113,7 +114,7 @@ const ManageMovies: React.FC = () => {
   const deleteMovie = async (movieId: number) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/movies/delete/${movieId}`,
+        `${Config.apiRoot}/movies/delete/${movieId}`,
         {
           method: "DELETE",
         },

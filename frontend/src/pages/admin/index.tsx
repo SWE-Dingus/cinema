@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link"; // Using Link for navigation
+import Config from "../../../frontend.config";
 
 interface Movie {
   id?: number;
@@ -23,7 +24,7 @@ const AdminMain: React.FC = () => {
     try {
       // Fetch all movies from the backend
       const movieResponse = await fetch(
-        "http://localhost:8080/api/movies/getAll",
+        `${Config.apiRoot}/movies/getAll`,
       );
       const movies: Movie[] = await movieResponse.json();
 

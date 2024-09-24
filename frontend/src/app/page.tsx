@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../app/components/Navbar";
 import SearchBar from "../app/components/SearchBar";
 import MovieCard from "../app/components/MovieCard";
+import Config from "../../frontend.config";
 
 interface Movie {
   id: number;
@@ -24,7 +25,7 @@ const HomePage: React.FC = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/movies/getAll"); // Replace with your actual endpoint
+      const response = await fetch(`${Config.apiRoot}/movies/getAll`); // Replace with your actual endpoint
       const data = await response.json();
       setMovies(data); // Store the fetched movies in the state
     } catch (error) {

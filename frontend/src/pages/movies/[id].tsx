@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Navbar from "../../app/components/Navbar";
 import Image from "next/image";
+import Config from "../../../frontend.config";
 
 interface Movie {
   id: number;
@@ -25,7 +26,7 @@ const MovieDetailsPage: React.FC = () => {
     const fetchMovieDetails = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/movies/get/${id}`,
+          `${Config.apiRoot}/movies/get/${id}`,
         );
         const data = await response.json();
         setMovie(data);

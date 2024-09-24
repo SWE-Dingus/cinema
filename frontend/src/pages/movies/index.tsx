@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MovieCard from "../../app/components/MovieCard"; // Import MovieCard component
+import Config from "../../../frontend.config";
 
 interface Movie {
   id: number;
@@ -21,7 +22,7 @@ const AllMoviesPage: React.FC = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/movies/getAll");
+      const response = await fetch(`${Config.apiRoot}/movies/getAll`);
       const data = await response.json();
       console.log("Movies from backend:", data); // Log the fetched data
       setMovies(data); // Store the fetched movies in the state
