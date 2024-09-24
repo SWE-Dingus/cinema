@@ -307,22 +307,20 @@ const ManageMovies: React.FC = () => {
           </div>
 
           <div>
+            <input
+              type="checkbox"
+              checked={newIsRunning}
+              onChange={(e) => setNewIsRunning(e.target.checked)}
+              className="mr-2"
+            />
             <label className="block text-sm font-medium">
               Currently Running
             </label>
-            <div className="mt-2">
-              <input
-                type="checkbox"
-                checked={newIsRunning}
-                onChange={(e) => setNewIsRunning(e.target.checked)}
-                className="mr-2"
-              />
-              <span>Currently Running</span>
-            </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Cast Member</label>
+            <label className="block text-sm font-medium">Cast Members</label>
+            <div>{newCast.join(", ")}</div>
             <input
               type="text"
               placeholder="Add cast member"
@@ -339,7 +337,8 @@ const ManageMovies: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Category</label>
+            <label className="block text-sm font-medium">Categories</label>
+            <div>{newCategory.join(", ")}</div>
             <input
               type="text"
               placeholder="Add category"
