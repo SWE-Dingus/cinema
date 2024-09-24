@@ -23,9 +23,7 @@ const AdminMain: React.FC = () => {
   const fetchMovieData = async () => {
     try {
       // Fetch all movies from the backend
-      const movieResponse = await fetch(
-        `${Config.apiRoot}/movies/getAll`,
-      );
+      const movieResponse = await fetch(`${Config.apiRoot}/movies/getAll`);
       const movies: Movie[] = await movieResponse.json();
 
       // Set movie count

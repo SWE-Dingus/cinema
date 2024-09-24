@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 
 interface MovieCardProps {
   movie: {
@@ -13,7 +12,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   return (
     <div className="border p-2">
       {/* Movie Poster */}
-      <Image src={movie.poster} alt={movie.title} className="w-full" />
+      <img src={movie.poster} alt={movie.title} className="w-full" />
 
       {/* Movie Title */}
       <h3 className="mt-2 text-xl">{movie.title}</h3>

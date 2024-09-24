@@ -25,9 +25,7 @@ const MovieDetailsPage: React.FC = () => {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const response = await fetch(
-          `${Config.apiRoot}/movies/get/${id}`,
-        );
+        const response = await fetch(`${Config.apiRoot}/movies/get/${id}`);
         const data = await response.json();
         setMovie(data);
       } catch (error) {
