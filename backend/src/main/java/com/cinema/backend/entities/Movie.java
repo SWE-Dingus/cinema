@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import org.hibernate.validator.constraints.URL;
 
@@ -62,8 +63,9 @@ public class Movie {
   @URL(regexp = "(http|https).*")
   public String posterUrl;
 
-  @URL(regexp = "https?:\\/\\/www.youtube.com\\/embed\\/[A-Za-z0-9_\\-]{11}")
-  public String trailerUrl;
+  /** YouTube video ID for the trailer (not a full link) */
+  @Pattern(regexp = "[A-Za-z0-9_\\-]{11}")
+  public String trailerId;
 
   @NotNull public Boolean isRunning;
 
@@ -91,7 +93,7 @@ public class Movie {
     this.seniorPrice = other.seniorPrice;
     this.onlineFee = other.onlineFee;
     this.posterUrl = other.posterUrl;
-    this.trailerUrl = other.trailerUrl;
+    this.trailerId = other.trailerId;
     this.isRunning = other.isRunning;
   }
 }
