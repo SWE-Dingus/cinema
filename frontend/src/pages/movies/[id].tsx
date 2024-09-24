@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link'; // Import Link for navigation
 import Navbar from '../../app/components/Navbar'; // Adjust path based on your folder structure
+import Image from 'next/image';
 
 interface Movie {
   id: number;
@@ -22,7 +23,7 @@ const MovieDetailsPage: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      fetchMovieDetails();
+      fetchMovieDetails(); // Call the function here
     }
   }, [id]);
 
@@ -47,7 +48,13 @@ const MovieDetailsPage: React.FC = () => {
       <div className="p-5">
         {/* Movie Poster and Title */}
         <div className="flex">
-          <img src={movie.posterUrl} alt={movie.title} className="w-1/3" />
+          <Image 
+          src={movie.posterUrl} 
+          alt={movie.title} 
+          width={300} 
+          height={450} 
+          className="w-1/3" 
+          />
           <div className="ml-5">
             <h1 className="text-4xl font-bold">{movie.title}</h1>
             <p>{movie.duration} | {movie.ageRating} | {movie.releaseDate}</p>
