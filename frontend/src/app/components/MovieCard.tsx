@@ -11,14 +11,24 @@ interface MovieCardProps {
 const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   return (
     <div className="border p-2">
-      <img src={movie.poster} alt={movie.title} />
-      <h3 className="mt-2">{movie.title}</h3>
-      <button
-        className="mt-2 bg-blue-500 text-white px-3 py-1"
-        onClick={() => window.open(movie.trailer, '_blank')}
-      >
-        Watch Trailer
-      </button>
+      {/* Movie Poster */}
+      <img src={movie.poster} alt={movie.title} className="w-full" />
+
+      {/* Movie Title */}
+      <h3 className="mt-2 text-xl">{movie.title}</h3>
+
+      {/* Embed YouTube Trailer */}
+      <div className="mt-2">
+        <iframe
+          width="100%"
+          height="200"
+          src={movie.trailer}
+          title={`${movie.title} Trailer`}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
     </div>
   );
 };

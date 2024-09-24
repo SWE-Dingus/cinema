@@ -4,7 +4,7 @@ import MovieCard from "../../app/components/MovieCard"; // Import MovieCard comp
 interface Movie {
   id: number;
   title: string;
-  category: string;
+  category: string[];
   posterUrl: string;  // Assuming the API returns a posterUrl
   trailerUrl: string; // Assuming the API returns a trailerUrl
   isRunning: boolean; // Add isRunning to your Movie interface
@@ -21,7 +21,7 @@ const AllMoviesPage: React.FC = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/movies/getAll');  // Adjust URL as needed
+      const response = await fetch('http://localhost:8080/api/movies/getAll'); 
       const data = await response.json();
       console.log('Movies from backend:', data);  // Log the fetched data
       setMovies(data);  // Store the fetched movies in the state
@@ -34,7 +34,7 @@ const AllMoviesPage: React.FC = () => {
   const filteredMovies = movies.filter(
     (movie) =>
       movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      movie.category.toLowerCase().includes(searchTerm.toLowerCase())
+      movie.category.join(', ').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Separate movies into Currently Running and Coming Soon
@@ -53,6 +53,7 @@ const AllMoviesPage: React.FC = () => {
       />
 
       <div className="p-5">
+        {/* Currently Running Movies */}
         <h2 className="text-2xl font-bold mb-5">Currently Running</h2>
         <div className="grid grid-cols-4 gap-4">
           {currentlyRunningMovies.length > 0 ? (
@@ -71,6 +72,7 @@ const AllMoviesPage: React.FC = () => {
           )}
         </div>
 
+        {/* Coming Soon Movies */}
         <h2 className="text-2xl font-bold mb-5 mt-10">Coming Soon</h2>
         <div className="grid grid-cols-4 gap-4">
           {comingSoonMovies.length > 0 ? (
