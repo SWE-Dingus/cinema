@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
 
+enum AgeRating {
+  G = "G",
+  PG = "PG",
+  PG13 = "PG13",
+  R = "R",
+  NC17 = "NC17",
+}
+
 interface Movie {
   id?: number; // Include ID for backend reference
   title: string;
-  ageRating: string;
+  ageRating: AgeRating;
   reviewRating: number;
   cast: string[];
   director: string;
@@ -21,7 +29,9 @@ interface Movie {
 const ManageMovies: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [newMovieTitle, setNewMovieTitle] = useState<string>("");
-  const [newMovieAgeRating, setNewMovieAgeRating] = useState<string>("G");
+  const [newMovieAgeRating, setNewMovieAgeRating] = useState<AgeRating>(
+    AgeRating.G,
+  );
   const [newReviewRating, setNewReviewRating] = useState<number>(0);
   const [newCast, setNewCast] = useState<string[]>([]);
   const [newDirector, setNewDirector] = useState<string>("");
@@ -121,7 +131,7 @@ const ManageMovies: React.FC = () => {
 
   const resetMovieFields = () => {
     setNewMovieTitle("");
-    setNewMovieAgeRating("G");
+    setNewMovieAgeRating(AgeRating.G);
     setNewReviewRating(0);
     setNewCast([]);
     setNewDirector("");
@@ -166,16 +176,27 @@ const ManageMovies: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium">
-              Age Rating (e.g., G, PG13, NC17)
-            </label>
-            <input
-              type="text"
-              placeholder="Enter movie age rating"
+            <label className="block text-sm font-medium">Age Rating</label>
+            <select
               value={newMovieAgeRating}
-              onChange={(e) => setNewMovieAgeRating(e.target.value)}
-              className="border p-2 rounded w-full"
-            />
+              onChange={(e) => {
+                setNewMovieAgeRating(
+                  AgeRating[e.target.value as keyof typeof AgeRating],
+                );
+              }}
+            >
+              {(() => {
+                const members = [];
+                for (const member in AgeRating) {
+                  members.push(member);
+                }
+                return members.map((m) => (
+                  <option key={m} value={m}>
+                    {m}
+                  </option>
+                ));
+              })()}
+            </select>
           </div>
 
           <div>
