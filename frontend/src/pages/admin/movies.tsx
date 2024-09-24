@@ -23,7 +23,7 @@ interface Movie {
   seniorPrice: number;
   onlineFee: number;
   posterUrl: string;
-  trailerUrl: string;
+  trailerId: string;
   isRunning: boolean;
 }
 
@@ -84,7 +84,7 @@ const ManageMovies: React.FC = () => {
       seniorPrice: newSeniorPrice,
       onlineFee: newOnlineFee,
       posterUrl: newPosterUrl,
-      trailerUrl: newTrailerUrl,
+      trailerId: newTrailerUrl,
       isRunning: newIsRunning,
     };
 
@@ -296,10 +296,10 @@ const ManageMovies: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Trailer URL</label>
+            <label className="block text-sm font-medium">Trailer ID</label>
             <input
               type="text"
-              placeholder="Trailer URL"
+              placeholder="Trailer ID"
               value={newTrailerUrl}
               onChange={(e) => setNewTrailerUrl(e.target.value)}
               className="border p-2 rounded w-full"
@@ -376,7 +376,7 @@ const ManageMovies: React.FC = () => {
                   <strong>{movie.title}</strong> -{" "}
                   {movie.category?.join(", ") || "No category"}
                   <div>Poster URL: {movie.posterUrl}</div>
-                  <div>Trailer URL: {movie.trailerUrl}</div>
+                  <div>Trailer YouTube ID: {movie.trailerId}</div>
                   <div>Cast: {movie.cast?.join(", ") || "No cast"}</div>
                   <div>Review Rating: {movie.reviewRating}</div>
                   <div>Running: {movie.isRunning ? "Yes" : "No"}</div>

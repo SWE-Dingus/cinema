@@ -10,7 +10,7 @@ interface Movie {
   title: string;
   synopsis: string;
   posterUrl: string;
-  trailerUrl: string;
+  trailerId: string;
   releaseDate: string;
   duration: string;
   ageRating: string;
@@ -60,7 +60,7 @@ const MovieDetailsPage: React.FC = () => {
               <iframe
                 width="100%"
                 height="400"
-                src={movie.trailerUrl}
+                src={`https://youtube.com/embed/${movie.trailerId}`}
                 title={`${movie.title} Trailer`}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

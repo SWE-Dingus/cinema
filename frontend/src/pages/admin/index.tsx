@@ -7,7 +7,7 @@ interface Movie {
   title: string;
   category: string;
   posterUrl: string;
-  trailerUrl: string;
+  trailerId: string;
   isRunning: boolean;
 }
 

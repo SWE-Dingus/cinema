@@ -7,7 +7,7 @@ interface Movie {
   title: string;
   category: string[];
   posterUrl: string; // Assuming the API returns a posterUrl
-  trailerUrl: string; // Assuming the API returns a trailerUrl
+  trailerId: string; // Assuming the API returns a trailerId
   isRunning: boolean; // Add isRunning to your Movie interface
 }
 
@@ -69,7 +69,7 @@ const AllMoviesPage: React.FC = () => {
                 movie={{
                   title: movie.title,
                   poster: movie.posterUrl, // Adjusting to match MovieCard props
-                  trailer: movie.trailerUrl, // Assuming API returns trailerUrl
+                  trailer: `https://youtube.com/embed/movie.trailerId`, // Assuming API returns trailerUrl
                 }}
               />
             ))
@@ -88,7 +88,7 @@ const AllMoviesPage: React.FC = () => {
                 movie={{
                   title: movie.title,
                   poster: movie.posterUrl, // Adjusting to match MovieCard props
-                  trailer: movie.trailerUrl, // Assuming API returns trailerUrl
+                  trailer: `https://youtube.com/embed/movie.trailerId`, // Assuming API returns trailerUrl
                 }}
               />
             ))

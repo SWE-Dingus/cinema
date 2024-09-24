@@ -10,7 +10,7 @@ interface Movie {
   title: string;
   category: string[];
   posterUrl: string;
-  trailerUrl: string;
+  trailerId: string;
   isRunning: boolean;
 }
 
@@ -59,7 +59,7 @@ const HomePage: React.FC = () => {
                 movie={{
                   title: movie.title,
                   poster: movie.posterUrl,
-                  trailer: movie.trailerUrl, // Embedded trailer
+                  trailer: `https://youtube.com/embed/${movie.trailerId}`, // Embedded trailer
                 }}
               />
             ))}
@@ -77,7 +77,7 @@ const HomePage: React.FC = () => {
                 movie={{
                   title: movie.title,
                   poster: movie.posterUrl,
-                  trailer: movie.trailerUrl, // Embedded trailer
+                  trailer: `https://youtube.com/embed/${movie.trailerId}`, // Embedded trailer
                 }}
               />
             ))}
