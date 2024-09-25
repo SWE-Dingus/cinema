@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../../app/globals.css";
 
 interface User {
   name: string;
@@ -24,9 +25,69 @@ const ManageUsers: React.FC = () => {
     setUsers(users.filter((_, i) => i !== index));
   };
 
+  const styles = {
+    container: {
+      display: "flex",
+      flexDirection: "column" as const,
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100vh",
+      background: "#1b0c1a", // Darker beige background
+      padding: "2rem",
+    },
+    heading: {
+      fontSize: "2rem",
+      color: "#ffffff", // White text for contrast
+      fontWeight: "bold",
+      marginBottom: "1.5rem",
+    },
+    input: {
+      padding: "0.75rem",
+      fontSize: "1rem",
+      border: "1px solid #e2e8f0",
+      borderRadius: "8px",
+      marginRight: "0.5rem",
+      background: "#f8f9fa", // Light background for inputs
+      color: "#1b0c1a",
+    },
+    button: {
+      padding: "0.75rem 1.5rem",
+      fontSize: "1.1rem",
+      color: "#1b0c1a", // Darker color for text
+      background: "#fadcd5", // Pinkish button color
+      border: "none",
+      borderRadius: "8px",
+      cursor: "pointer",
+      transition: "background-color 0.3s",
+    },
+    buttonHover: {
+      backgroundColor: "#e0c2a0", // Slightly darker shade for hover
+    },
+    userList: {
+      marginTop: "1.5rem",
+      width: "100%",
+      textAlign: "left" as const,
+    },
+    userItem: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: "0.5rem 0",
+      borderBottom: "1px solid #e2e8f0",
+      color: "#e2e8f0", // Light color for better visibility
+    },
+    deleteButton: {
+      marginLeft: "1rem",
+      color: "#e74c3c", // Red color for delete button
+      background: "none",
+      border: "none",
+      cursor: "pointer",
+    },
+  };
+
   return (
-    <div className="p-5">
-      <h1 className="text-2xl font-bold mb-5">Manage Users</h1>
+    <div style={styles.container}>
+      <h1 style={styles.heading}>Manage Users</h1>
 
       <div>
         <input
@@ -34,32 +95,39 @@ const ManageUsers: React.FC = () => {
           placeholder="Enter user name"
           value={newUserName}
           onChange={(e) => setNewUserName(e.target.value)}
-          className="border p-2 mr-2"
+          style={styles.input}
         />
         <input
           type="email"
           placeholder="Enter user email"
           value={newUserEmail}
           onChange={(e) => setNewUserEmail(e.target.value)}
-          className="border p-2 mr-2"
+          style={styles.input}
         />
         <button
           onClick={addUser}
-          className="bg-green-500 text-white px-4 py-2 rounded"
+          style={styles.button}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.backgroundColor =
+              styles.buttonHover.backgroundColor)
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.backgroundColor = styles.button.background)
+          }
         >
           Add User
         </button>
       </div>
 
-      <div className="mt-5">
-        <h2 className="text-xl font-bold mb-3">Existing Users</h2>
-        <ul>
+      <div style={styles.userList}>
+        <h2 style={{ ...styles.heading, fontSize: "1.5rem" }}>Existing Users</h2>
+        <ul style={{ padding: 0 }}>
           {users.map((user, index) => (
-            <li key={index} className="mb-2">
+            <li key={index} style={styles.userItem}>
               {user.name} - {user.email}
               <button
                 onClick={() => deleteUser(index)}
-                className="ml-4 text-red-500"
+                style={styles.deleteButton}
               >
                 Delete
               </button>
