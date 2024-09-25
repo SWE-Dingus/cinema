@@ -87,6 +87,7 @@ const MovieSection: React.FC<{ title: string; movies: Movie[] }> = ({ title, mov
               title: movie.title,
               poster: movie.posterUrl,
               trailer: `https://youtube.com/embed/${movie.trailerId}`,
+              isRunning: movie.isRunning
             }}
           />
         ))}

@@ -5,6 +5,7 @@ interface MovieCardProps {
     title: string;
     poster: string;
     trailer: string;
+    isRunning: boolean;
   };
 }
 
@@ -29,6 +30,12 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
           allowFullScreen
         ></iframe>
       </div>
+      {/* Book Tickets Button (conditionally rendered) */}
+      {movie.isRunning && (
+        <button className="mt-3 bg-blue-500 text-white py-2 px-4 rounded">
+          Book Tickets
+        </button>
+      )}
     </div>
   );
 };

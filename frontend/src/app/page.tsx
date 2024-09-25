@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import '../app/globals.css';
 import Navbar from "../app/components/Navbar";
 import SearchBar from "../app/components/SearchBar";
 import MovieCard from "../app/components/MovieCard";
@@ -60,6 +61,7 @@ const HomePage: React.FC = () => {
                   title: movie.title,
                   poster: movie.posterUrl,
                   trailer: `https://youtube.com/embed/${movie.trailerId}`, // Embedded trailer
+                  isRunning: movie.isRunning
                 }}
               />
             ))}
@@ -78,6 +80,7 @@ const HomePage: React.FC = () => {
                   title: movie.title,
                   poster: movie.posterUrl,
                   trailer: `https://youtube.com/embed/${movie.trailerId}`, // Embedded trailer
+                  isRunning: movie.isRunning
                 }}
               />
             ))}
