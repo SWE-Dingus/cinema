@@ -10,6 +10,10 @@ const CheckoutPage: React.FC = () => {
     router.push("/"); // After checkout, redirect to the home page or a confirmation page
   };
 
+  const handleCancel = () => {
+    router.push("/");
+  }
+
   const styles = {
     container: {
       display: "flex",
@@ -75,6 +79,20 @@ const CheckoutPage: React.FC = () => {
         }
       >
         Confirm and Pay
+      </button>
+
+      <button
+        onClick={handleCancel}
+        style={styles.button}
+        onMouseEnter={(e) =>
+          (e.currentTarget.style.backgroundColor =
+            styles.buttonHover.backgroundColor)
+        }
+        onMouseLeave={(e) =>
+          (e.currentTarget.style.backgroundColor = styles.button.background)
+        }
+      >
+        Cancel
       </button>
     </div>
   );
