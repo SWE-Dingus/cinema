@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Config from "../../../frontend.config";
+import { Movie } from '../../app/models/Movie';
 
 enum AgeRating {
   G = "G",
@@ -7,24 +8,6 @@ enum AgeRating {
   PG13 = "PG13",
   R = "R",
   NC17 = "NC17",
-}
-
-interface Movie {
-  id?: number; // Include ID for backend reference
-  title: string;
-  ageRating: AgeRating;
-  reviewRating: number;
-  cast: string[];
-  director: string;
-  synopsis: string;
-  category: string[];
-  childPrice: number;
-  adultPrice: number;
-  seniorPrice: number;
-  onlineFee: number;
-  posterUrl: string;
-  trailerId: string;
-  isRunning: boolean;
 }
 
 const ManageMovies: React.FC = () => {
