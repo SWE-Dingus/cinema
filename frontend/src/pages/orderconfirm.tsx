@@ -35,9 +35,9 @@ const OrderConfirm: React.FC = () => {
         <p className="text-lg">
           Seats:{" "}
           <span className="font-semibold">
-            {orderDetails.seatNumbers.length > 0
-              ? orderDetails.seatNumbers.join(", ")
-              : "No seats selected"}
+            {orderDetails?.seatNumbers && orderDetails.seatNumbers.length > 0
+            ? orderDetails.seatNumbers.join(", ")
+            : "No seats selected"}
           </span>
         </p>
         <p className="mt-4 text-lg font-bold text-[#fadcd5]">
