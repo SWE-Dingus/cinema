@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MovieCard from "../../app/components/MovieCard";
 import Config from "../../../frontend.config";
-
-interface Movie {
-  id: number;
-  title: string;
-  category: string[];
-  posterUrl: string;
-  trailerId: string;
-  isRunning: boolean;
-}
+import { Movie } from "@/app/models/Movie"
 
 const AllMoviesPage: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -83,12 +75,7 @@ const MovieSection: React.FC<{ title: string; movies: Movie[] }> = ({ title, mov
         {movies.map((movie) => (
           <MovieCard
             key={movie.id}
-            movie={{
-              title: movie.title,
-              poster: movie.posterUrl,
-              trailer: `https://youtube.com/embed/${movie.trailerId}`,
-              isRunning: movie.isRunning
-            }}
+            movie={movie}
           />
         ))}
       </div>

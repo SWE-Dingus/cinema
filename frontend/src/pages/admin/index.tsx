@@ -2,15 +2,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link"; // Using Link for navigation
 import Config from "../../../frontend.config";
 import "../../app/globals.css"; // Ensure you have necessary styles in globals.css
-
-interface Movie {
-  id?: number;
-  title: string;
-  category: string;
-  posterUrl: string;
-  trailerId: string;
-  isRunning: boolean;
-}
+import { Movie } from "@/app/models/Movie";
 
 const AdminMain: React.FC = () => {
   const [movieCount, setMovieCount] = useState<number>(0);

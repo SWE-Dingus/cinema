@@ -4,18 +4,7 @@ import Link from "next/link";
 import Navbar from "../../app/components/Navbar";
 import Image from "next/image";
 import Config from "../../../frontend.config";
-
-interface Movie {
-  id: number;
-  title: string;
-  synopsis: string;
-  posterUrl: string;
-  trailerId: string;
-  releaseDate: string;
-  duration: string;
-  ageRating: string;
-  category: string[];
-}
+import { Movie } from "@/app/models/Movie";
 
 const MovieDetailsPage: React.FC = () => {
   const [movie, setMovie] = useState<Movie | null>(null);
@@ -51,7 +40,7 @@ const MovieDetailsPage: React.FC = () => {
           <div className="ml-5">
             <h1 className="text-4xl font-bold">{movie.title}</h1>
             <p>
-              {movie.duration} | {movie.ageRating} | {movie.releaseDate}
+              TODO Movie duration here | {movie.ageRating} | TODO Movie release date here
             </p>
             <p className="mt-4">{movie.synopsis}</p>
 

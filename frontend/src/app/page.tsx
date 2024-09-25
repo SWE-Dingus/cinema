@@ -4,15 +4,7 @@ import Navbar from "../app/components/Navbar";
 import SearchBar from "../app/components/SearchBar";
 import MovieCard from "../app/components/MovieCard";
 import Config from "../../frontend.config";
-
-interface Movie {
-  id: number;
-  title: string;
-  category: string[];
-  posterUrl: string;
-  trailerId: string;
-  isRunning: boolean;
-}
+import {Movie} from "@/app/models/Movie";
 
 const HomePage: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]); // State to store movies fetched from API
@@ -56,12 +48,7 @@ const HomePage: React.FC = () => {
             .map((movie) => (
               <MovieCard
                 key={movie.id}
-                movie={{
-                  title: movie.title,
-                  poster: movie.posterUrl,
-                  trailer: `https://youtube.com/embed/${movie.trailerId}`, // Embedded trailer
-                  isRunning: movie.isRunning
-                }}
+                movie={movie}
               />
             ))}
         </div>
@@ -75,12 +62,7 @@ const HomePage: React.FC = () => {
             .map((movie) => (
               <MovieCard
                 key={movie.id}
-                movie={{
-                  title: movie.title,
-                  poster: movie.posterUrl,
-                  trailer: `https://youtube.com/embed/${movie.trailerId}`, // Embedded trailer
-                  isRunning: movie.isRunning
-                }}
+                movie={movie}
               />
             ))}
         </div>

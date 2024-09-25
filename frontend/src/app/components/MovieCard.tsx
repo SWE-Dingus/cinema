@@ -1,19 +1,15 @@
 import React from "react";
+import { Movie } from "@/app/models/Movie"
 
 interface MovieCardProps {
-  movie: {
-    title: string;
-    poster: string;
-    trailer: string;
-    isRunning: boolean;
-  };
+  movie: Movie;
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   return (
     <div className="border p-2">
       {/* Movie Poster */}
-      <img src={movie.poster} alt={movie.title} className="w-full" />
+      <img src={movie.posterUrl} alt={movie.title} className="w-full" />
 
       {/* Movie Title */}
       <h3 className="mt-2 text-xl">{movie.title}</h3>
@@ -23,7 +19,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
         <iframe
           width="100%"
           height="200"
-          src={movie.trailer}
+          src={`https://youtube.com/embed/${movie.trailerId}`}
           title={`${movie.title} Trailer`}
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
