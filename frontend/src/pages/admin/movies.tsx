@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Config from "../../../frontend.config";
-import { Movie } from '../../app/models/Movie';
+import { Movie } from "../../app/models/Movie";
 
 enum AgeRating {
   G = "G",

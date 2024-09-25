@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const EditProfilePage = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [street, setStreet] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [zipCode, setZipCode] = useState('');
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zipCode, setZipCode] = useState("");
 
-  const [cardType, setCardType] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expirationDate, setExpirationDate] = useState('');
-  const [billingAddress, setBillingAddress] = useState('');
+  const [cardType, setCardType] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
+  const [billingAddress, setBillingAddress] = useState("");
 
   const handleSaveChanges = () => {
     // Handle form submission logic here
@@ -33,7 +33,7 @@ const EditProfilePage = () => {
       cardType,
       cardNumber,
       expirationDate,
-      billingAddress
+      billingAddress,
     });
     // Add logic to send data to backend and handle validation
   };
@@ -41,7 +41,7 @@ const EditProfilePage = () => {
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold mb-8">Edit Profile</h1>
-      
+
       {/* Personal Information */}
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Personal Information</h2>
