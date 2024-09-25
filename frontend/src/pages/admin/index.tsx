@@ -101,7 +101,9 @@ const AdminMain: React.FC = () => {
           Total Movies: <span style={{ fontWeight: "bold" }}>{movieCount}</span>
         </p>
 
-        <h3 style={{ color: "#ffffff", fontSize: "1.5rem", marginBottom: "1rem" }}>
+        <h3
+          style={{ color: "#ffffff", fontSize: "1.5rem", marginBottom: "1rem" }}
+        >
           Recently Added Movies
         </h3>
         {recentMovies.length > 0 ? (
@@ -112,7 +114,11 @@ const AdminMain: React.FC = () => {
                 style={styles.movieCard}
                 className="hover:shadow-lg transition duration-200"
               >
-                <img src={movie.posterUrl} alt={movie.title} className="w-full h-48 object-cover rounded mb-2" />
+                <img
+                  src={movie.posterUrl}
+                  alt={movie.title}
+                  className="w-full h-48 object-cover rounded mb-2"
+                />
                 <h4 style={styles.movieTitle}>{movie.title}</h4>
                 <p style={styles.movieCategory}>Category: {movie.category}</p>
               </li>
@@ -126,7 +132,8 @@ const AdminMain: React.FC = () => {
           <button
             style={styles.button}
             onMouseEnter={(e) =>
-              (e.currentTarget.style.backgroundColor = styles.buttonHover.backgroundColor)
+              (e.currentTarget.style.backgroundColor =
+                styles.buttonHover.backgroundColor)
             }
             onMouseLeave={(e) =>
               (e.currentTarget.style.backgroundColor = styles.button.background)

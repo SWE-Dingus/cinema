@@ -40,7 +40,8 @@ const MovieDetailsPage: React.FC = () => {
           <div className="ml-5">
             <h1 className="text-4xl font-bold">{movie.title}</h1>
             <p>
-              TODO Movie duration here | {movie.ageRating} | TODO Movie release date here
+              TODO Movie duration here | {movie.ageRating} | TODO Movie release
+              date here
             </p>
             <p className="mt-4">{movie.synopsis}</p>
 

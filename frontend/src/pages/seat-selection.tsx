@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import React, { useState } from "react";
+import { useRouter } from "next/router";
 import "../app/globals.css";
 
 const SeatSelection: React.FC = () => {
   const router = useRouter();
 
-  const seats = ['A1', 'A2', 'A3', 'A4', 'A5', 'B1', 'B2', 'B3', 'B4', 'B5',]; // Example seat list
-  const ageCategories = ['Child', 'Adult', 'Senior'];
+  const seats = ["A1", "A2", "A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5"]; // Example seat list
+  const ageCategories = ["Child", "Adult", "Senior"];
 
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
-  const [seatAgeCategories, setSeatAgeCategories] = useState<{ [seat: string]: string }>({});
+  const [seatAgeCategories, setSeatAgeCategories] = useState<{
+    [seat: string]: string;
+  }>({});
 
   const toggleSeatSelection = (seat: string) => {
     if (selectedSeats.includes(seat)) {
@@ -32,13 +34,16 @@ const SeatSelection: React.FC = () => {
   const handleProceedToOrderSummary = () => {
     const selectedSeatsWithAgeCategories = selectedSeats.map((seat) => ({
       seat,
-      ageCategory: seatAgeCategories[seat] || 'Adult', // Default to adult if not selected
+      ageCategory: seatAgeCategories[seat] || "Adult", // Default to adult if not selected
     }));
 
     // Example of passing this data to the order summary page
-    localStorage.setItem('order', JSON.stringify(selectedSeatsWithAgeCategories));
+    localStorage.setItem(
+      "order",
+      JSON.stringify(selectedSeatsWithAgeCategories),
+    );
 
-    router.push('/ordersummary');
+    router.push("/ordersummary");
   };
 
   return (
@@ -51,7 +56,9 @@ const SeatSelection: React.FC = () => {
             key={seat}
             onClick={() => toggleSeatSelection(seat)}
             className={`p-4 border rounded-lg transition-colors ${
-              selectedSeats.includes(seat) ? 'bg-[#6f42c1] text-white' : 'bg-[#2a1c2a] text-white'
+              selectedSeats.includes(seat)
+                ? "bg-[#6f42c1] text-white"
+                : "bg-[#2a1c2a] text-white"
             } hover:bg-[#5a32a1]`}
           >
             {seat}
@@ -66,7 +73,7 @@ const SeatSelection: React.FC = () => {
             <div key={seat} className="flex items-center justify-between mb-2">
               <span className="text-lg">{seat}</span>
               <select
-                value={seatAgeCategories[seat] || 'Adult'}
+                value={seatAgeCategories[seat] || "Adult"}
                 onChange={(e) => handleAgeCategoryChange(seat, e.target.value)}
                 className="border border-gray-300 p-2 rounded bg-[#3b2d3b] text-white"
               >

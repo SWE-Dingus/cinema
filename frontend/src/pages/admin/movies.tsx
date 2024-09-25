@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Config from "../../../frontend.config";
 import { Movie } from "../../app/models/Movie";
-import "../../app/globals.css"
+import "../../app/globals.css";
 
 enum AgeRating {
   G = "G",
@@ -14,7 +14,9 @@ enum AgeRating {
 const ManageMovies: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [newMovieTitle, setNewMovieTitle] = useState<string>("");
-  const [newMovieAgeRating, setNewMovieAgeRating] = useState<AgeRating>(AgeRating.G);
+  const [newMovieAgeRating, setNewMovieAgeRating] = useState<AgeRating>(
+    AgeRating.G,
+  );
   const [newReviewRating, setNewReviewRating] = useState<number>(0);
   const [newCast, setNewCast] = useState<string[]>([]);
   const [newDirector, setNewDirector] = useState<string>("");
@@ -92,9 +94,12 @@ const ManageMovies: React.FC = () => {
 
   const deleteMovie = async (movieId: number) => {
     try {
-      const response = await fetch(`${Config.apiRoot}/movies/delete/${movieId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${Config.apiRoot}/movies/delete/${movieId}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (!response.ok) {
         throw new Error("Failed to delete movie");
@@ -136,10 +141,12 @@ const ManageMovies: React.FC = () => {
   return (
     <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
       <h1 className="text-4xl font-bold mb-8 text-center">Manage Movies</h1>
-  
+
       {/* Movie Input Form */}
       <div className="bg-[#2a1c2a] p-8 rounded-lg shadow-lg mb-10">
-        <h2 className="text-2xl font-semibold mb-5 text-[#fadcd5]">Add New Movie</h2>
+        <h2 className="text-2xl font-semibold mb-5 text-[#fadcd5]">
+          Add New Movie
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium">Movie Title</label>
@@ -151,13 +158,15 @@ const ManageMovies: React.FC = () => {
               className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-  
+
           <div>
             <label className="block text-sm font-medium">Age Rating</label>
             <select
               value={newMovieAgeRating}
               onChange={(e) => {
-                setNewMovieAgeRating(AgeRating[e.target.value as keyof typeof AgeRating]);
+                setNewMovieAgeRating(
+                  AgeRating[e.target.value as keyof typeof AgeRating],
+                );
               }}
               className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             >
@@ -168,9 +177,11 @@ const ManageMovies: React.FC = () => {
               ))}
             </select>
           </div>
-  
+
           <div>
-            <label className="block text-sm font-medium">Review Rating (0-5)</label>
+            <label className="block text-sm font-medium">
+              Review Rating (0-5)
+            </label>
             <input
               type="number"
               placeholder="Review Rating (0-5)"
@@ -181,7 +192,7 @@ const ManageMovies: React.FC = () => {
               className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-  
+
           <div>
             <label className="block text-sm font-medium">Director</label>
             <input
@@ -192,7 +203,7 @@ const ManageMovies: React.FC = () => {
               className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-  
+
           <div className="sm:col-span-2">
             <label className="block text-sm font-medium">Synopsis</label>
             <textarea
@@ -202,7 +213,7 @@ const ManageMovies: React.FC = () => {
               className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-  
+
           <div>
             <label className="block text-sm font-medium">Child Price</label>
             <input
@@ -214,7 +225,7 @@ const ManageMovies: React.FC = () => {
               className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-  
+
           <div>
             <label className="block text-sm font-medium">Adult Price</label>
             <input
@@ -226,7 +237,7 @@ const ManageMovies: React.FC = () => {
               className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-  
+
           <div>
             <label className="block text-sm font-medium">Senior Price</label>
             <input
@@ -238,7 +249,7 @@ const ManageMovies: React.FC = () => {
               className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-  
+
           <div>
             <label className="block text-sm font-medium">Online Fee</label>
             <input
@@ -250,7 +261,7 @@ const ManageMovies: React.FC = () => {
               className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-  
+
           <div>
             <label className="block text-sm font-medium">Poster URL</label>
             <input
@@ -261,7 +272,7 @@ const ManageMovies: React.FC = () => {
               className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-  
+
           <div>
             <label className="block text-sm font-medium">Trailer ID</label>
             <input
@@ -272,7 +283,7 @@ const ManageMovies: React.FC = () => {
               className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-  
+
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -280,9 +291,11 @@ const ManageMovies: React.FC = () => {
               onChange={(e) => setNewIsRunning(e.target.checked)}
               className="mr-2"
             />
-            <label className="block text-sm font-medium">Currently Running</label>
+            <label className="block text-sm font-medium">
+              Currently Running
+            </label>
           </div>
-  
+
           <div>
             <label className="block text-sm font-medium">Cast Members</label>
             <div>{newCast.join(", ") || "No cast members"}</div>
@@ -300,7 +313,7 @@ const ManageMovies: React.FC = () => {
               Add Cast Member
             </button>
           </div>
-  
+
           <div>
             <label className="block text-sm font-medium">Categories</label>
             <div>{newCategory.join(", ") || "No categories"}</div>
@@ -318,7 +331,7 @@ const ManageMovies: React.FC = () => {
               Add Category
             </button>
           </div>
-  
+
           <div className="sm:col-span-2">
             <button
               onClick={addMovie}
@@ -329,18 +342,23 @@ const ManageMovies: React.FC = () => {
           </div>
         </div>
       </div>
-  
+
       {/* Movie List */}
       <div className="bg-[#2a1c2a] p-6 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-4 text-[#fadcd5]">Existing Movies</h2>
+        <h2 className="text-2xl font-bold mb-4 text-[#fadcd5]">
+          Existing Movies
+        </h2>
         <ul className="divide-y divide-gray-200">
           {movies.map((movie, index) => (
             <li key={movie.id || index} className="py-4">
               <div className="flex justify-between items-center">
                 <div>
-                  <strong>{movie.title}</strong> - {movie.category?.join(", ") || "No category"}
+                  <strong>{movie.title}</strong> -{" "}
+                  {movie.category?.join(", ") || "No category"}
                   <div>Poster URL: {movie.posterUrl || "No poster"}</div>
-                  <div>Trailer YouTube ID: {movie.trailerId || "No trailer"}</div>
+                  <div>
+                    Trailer YouTube ID: {movie.trailerId || "No trailer"}
+                  </div>
                   <div>Cast: {movie.cast?.join(", ") || "No cast"}</div>
                   <div>Review Rating: {movie.reviewRating}</div>
                   <div>Running: {movie.isRunning ? "Yes" : "No"}</div>
@@ -358,8 +376,6 @@ const ManageMovies: React.FC = () => {
       </div>
     </div>
   );
-  
-
 };
 
 export default ManageMovies;

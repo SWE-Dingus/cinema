@@ -1,5 +1,5 @@
 import React from "react";
-import { Movie } from "@/app/models/Movie"
+import { Movie } from "@/app/models/Movie";
 
 interface MovieCardProps {
   movie: Movie;

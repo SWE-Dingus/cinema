@@ -12,7 +12,7 @@ const CheckoutPage: React.FC = () => {
 
   const handleCancel = () => {
     router.push("/");
-  }
+  };
 
   const styles = {
     container: {

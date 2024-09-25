@@ -4,7 +4,7 @@ import Navbar from "../app/components/Navbar";
 import SearchBar from "../app/components/SearchBar";
 import MovieCard from "../app/components/MovieCard";
 import Config from "../../frontend.config";
-import {Movie} from "@/app/models/Movie";
+import { Movie } from "@/app/models/Movie";
 
 const HomePage: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]); // State to store movies fetched from API
@@ -46,10 +46,7 @@ const HomePage: React.FC = () => {
           {filteredMovies
             .filter((movie) => movie.isRunning)
             .map((movie) => (
-              <MovieCard
-                key={movie.id}
-                movie={movie}
-              />
+              <MovieCard key={movie.id} movie={movie} />
             ))}
         </div>
       </section>
@@ -60,10 +57,7 @@ const HomePage: React.FC = () => {
           {filteredMovies
             .filter((movie) => !movie.isRunning)
             .map((movie) => (
-              <MovieCard
-                key={movie.id}
-                movie={movie}
-              />
+              <MovieCard key={movie.id} movie={movie} />
             ))}
         </div>
       </section>

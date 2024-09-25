@@ -101,7 +101,9 @@ const ManagePromotions: React.FC = () => {
       </div>
 
       <div style={styles.promotionList}>
-        <h2 style={{ ...styles.heading, fontSize: "1.5rem" }}>Existing Promotions</h2>
+        <h2 style={{ ...styles.heading, fontSize: "1.5rem" }}>
+          Existing Promotions
+        </h2>
         <ul style={{ padding: 0 }}>
           {promotions.map((promotion, index) => (
             <li key={index} style={styles.promotionItem}>

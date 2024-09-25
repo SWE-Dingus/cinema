@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import "../app/globals.css"
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import "../app/globals.css";
 
 interface OrderDetails {
   movieTitle: string;
@@ -17,9 +17,9 @@ const OrderSummary: React.FC = () => {
   useEffect(() => {
     // Simulated order details passed from seat selection
     const savedOrder = {
-      movieTitle: 'Transformers One',
-      showtime: '7:00 PM',
-      seatNumbers: ['A1', 'A2', 'A3'],
+      movieTitle: "Transformers One",
+      showtime: "7:00 PM",
+      seatNumbers: ["A1", "A2", "A3"],
       ticketPrices: [10, 10, 10],
       total: 30,
     };
@@ -29,13 +29,17 @@ const OrderSummary: React.FC = () => {
 
   const handleProceedToCheckout = () => {
     // Redirect to checkout page
-    router.push('/checkout');
+    router.push("/checkout");
   };
 
   const handleDeleteTicket = (index: number) => {
     if (orderDetails) {
-      const updatedSeats = orderDetails.seatNumbers.filter((_, i) => i !== index);
-      const updatedPrices = orderDetails.ticketPrices.filter((_, i) => i !== index);
+      const updatedSeats = orderDetails.seatNumbers.filter(
+        (_, i) => i !== index,
+      );
+      const updatedPrices = orderDetails.ticketPrices.filter(
+        (_, i) => i !== index,
+      );
       const updatedTotal = updatedPrices.reduce((sum, price) => sum + price, 0);
 
       setOrderDetails({
@@ -55,12 +59,14 @@ const OrderSummary: React.FC = () => {
         <div className="bg-[#2a1c2a] border p-6 rounded-lg shadow-md max-w-lg mx-auto">
           <h2 className="text-2xl font-bold mb-4">{orderDetails.movieTitle}</h2>
           <p className="mb-2">Showtime: {orderDetails.showtime}</p>
-          <p className="mb-2">Seats: {orderDetails.seatNumbers.join(', ')}</p>
+          <p className="mb-2">Seats: {orderDetails.seatNumbers.join(", ")}</p>
           <p className="mb-2">Ticket Prices:</p>
           <ul className="list-disc ml-5">
             {orderDetails.ticketPrices.map((price, index) => (
               <li key={index} className="flex justify-between">
-                <span>Seat {orderDetails.seatNumbers[index]}: ${price}</span>
+                <span>
+                  Seat {orderDetails.seatNumbers[index]}: ${price}
+                </span>
                 <button
                   onClick={() => handleDeleteTicket(index)}
                   className="text-red-500 hover:underline"

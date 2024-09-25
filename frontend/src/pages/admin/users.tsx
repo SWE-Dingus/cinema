@@ -120,7 +120,9 @@ const ManageUsers: React.FC = () => {
       </div>
 
       <div style={styles.userList}>
-        <h2 style={{ ...styles.heading, fontSize: "1.5rem" }}>Existing Users</h2>
+        <h2 style={{ ...styles.heading, fontSize: "1.5rem" }}>
+          Existing Users
+        </h2>
         <ul style={{ padding: 0 }}>
           {users.map((user, index) => (
             <li key={index} style={styles.userItem}>
