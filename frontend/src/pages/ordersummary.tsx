@@ -1,23 +1,26 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import React, { useState } from "react";
+import { useRouter } from "next/router";
 
 const OrderSummary = () => {
   const router = useRouter();
 
   // Sample ticket data - this would be fetched from the backend in a real app
   const [tickets, setTickets] = useState([
-    { id: 1, type: 'Adult', price: 15, quantity: 1 },
-    { id: 2, type: 'Child', price: 10, quantity: 1 },
-    { id: 3, type: 'Senior', price: 12, quantity: 1 },
+    { id: 1, type: "Adult", price: 15, quantity: 1 },
+    { id: 2, type: "Child", price: 10, quantity: 1 },
+    { id: 3, type: "Senior", price: 12, quantity: 1 },
   ]);
 
   // Calculate order total
-  const orderTotal = tickets.reduce((total, ticket) => total + ticket.price * ticket.quantity, 0);
+  const orderTotal = tickets.reduce(
+    (total, ticket) => total + ticket.price * ticket.quantity,
+    0,
+  );
 
   // Handle updating ticket quantity
   const updateTicketQuantity = (id: number, newQuantity: number) => {
     const updatedTickets = tickets.map((ticket) =>
-      ticket.id === id ? { ...ticket, quantity: newQuantity } : ticket
+      ticket.id === id ? { ...ticket, quantity: newQuantity } : ticket,
     );
     setTickets(updatedTickets);
   };
@@ -31,13 +34,13 @@ const OrderSummary = () => {
   // Proceed to checkout
   const proceedToCheckout = () => {
     // Logic to proceed to checkout (e.g., navigate to the checkout page)
-    router.push('/checkout');
+    router.push("/checkout");
   };
 
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold mb-8">Order Summary</h1>
-      
+
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Ticket Details</h2>
 
@@ -61,12 +64,16 @@ const OrderSummary = () => {
                   <input
                     type="number"
                     value={ticket.quantity}
-                    onChange={(e) => updateTicketQuantity(ticket.id, parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateTicketQuantity(ticket.id, parseInt(e.target.value))
+                    }
                     min={1}
                     className="border p-2 w-16"
                   />
                 </td>
-                <td className="px-4 py-2 border-b">${ticket.price * ticket.quantity}</td>
+                <td className="px-4 py-2 border-b">
+                  ${ticket.price * ticket.quantity}
+                </td>
                 <td className="px-4 py-2 border-b">
                   <button
                     onClick={() => deleteTicket(ticket.id)}

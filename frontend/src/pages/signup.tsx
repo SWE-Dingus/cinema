@@ -18,7 +18,8 @@ const SignupPage: React.FC = () => {
   const [homeAddressCity, setHomeAddressCity] = useState<string>("");
   const [homeAddressState, setHomeAddressState] = useState<string>("");
   const [homeAddressZip, setHomeAddressZip] = useState<string>("");
-  const [showHomeAddressInfo, setShowHomeAddressInfo] = useState<boolean>(false);
+  const [showHomeAddressInfo, setShowHomeAddressInfo] =
+    useState<boolean>(false);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -195,84 +196,96 @@ const SignupPage: React.FC = () => {
 
         <div style={styles.inputGroup}>
           <label>
-            <input type="checkbox" checked={showPaymentInfo} onChange={() => setShowPaymentInfo(!showPaymentInfo)} />
+            <input
+              type="checkbox"
+              checked={showPaymentInfo}
+              onChange={() => setShowPaymentInfo(!showPaymentInfo)}
+            />
             Enter payment info?
           </label>
-          {showPaymentInfo && <div>
-            <label>
-              <input
-                placeholder="Enter your credit card number"
-                value={cardNumber}
-                onChange={(e) => setCardNumber(e.target.value)}
-                required={showPaymentInfo}
-                style={styles.input}
-              />
-            </label>
-            <label>
-              <input
-                placeholder="Enter your credit card expiration date"
-                type="date"
-                value={cardExpiration}
-                onChange={(e) => setCardExpiration(e.target.value)}
-                required={showPaymentInfo}
-                style={styles.input}
-              />
-            </label>
-            <label>
-              <input
-                placeholder="Enter your billing address"
-                value={cardBillingAddress}
-                onChange={(e) => setCardBillingAddress(e.target.value)}
-                required={showPaymentInfo}
-                style={styles.input}
-              />
-            </label>
-          </div>}
+          {showPaymentInfo && (
+            <div>
+              <label>
+                <input
+                  placeholder="Enter your credit card number"
+                  value={cardNumber}
+                  onChange={(e) => setCardNumber(e.target.value)}
+                  required={showPaymentInfo}
+                  style={styles.input}
+                />
+              </label>
+              <label>
+                <input
+                  placeholder="Enter your credit card expiration date"
+                  type="date"
+                  value={cardExpiration}
+                  onChange={(e) => setCardExpiration(e.target.value)}
+                  required={showPaymentInfo}
+                  style={styles.input}
+                />
+              </label>
+              <label>
+                <input
+                  placeholder="Enter your billing address"
+                  value={cardBillingAddress}
+                  onChange={(e) => setCardBillingAddress(e.target.value)}
+                  required={showPaymentInfo}
+                  style={styles.input}
+                />
+              </label>
+            </div>
+          )}
         </div>
 
         <div style={styles.inputGroup}>
           <label>
-            <input type="checkbox" checked={showHomeAddressInfo} onChange={() => setShowHomeAddressInfo(!showHomeAddressInfo)} />
+            <input
+              type="checkbox"
+              checked={showHomeAddressInfo}
+              onChange={() => setShowHomeAddressInfo(!showHomeAddressInfo)}
+            />
             Enter home address info?
           </label>
-          {showHomeAddressInfo && <div>
-            <label>
-              <input
-                placeholder="Enter your street"
-                value={homeAddressStreet}
-                onChange={(e) => setHomeAddressStreet(e.target.value)}
-                required={showHomeAddressInfo}
-                style={styles.input}
-              />
-            </label>
-            <label>
-              <input
-                placeholder="Enter your city"
-                value={homeAddressCity}
-                onChange={(e) => setHomeAddressCity(e.target.value)}
-                required={showHomeAddressInfo}
-                style={styles.input}
-              />
-            </label>
-            <label>
-              <input
-                placeholder="Enter your state"
-                value={homeAddressState}
-                onChange={(e) => setHomeAddressState(e.target.value)}
-                required={showHomeAddressInfo}
-                style={styles.input}
-              />
-            </label>
-            <label>
-              <input
-                placeholder="Enter your ZIP code"
-                value={homeAddressZip}
-                onChange={(e) => setHomeAddressZip(e.target.value)}
-                required={showHomeAddressInfo}
-                style={styles.input}
-              />
-            </label>
-          </div>}
+          {showHomeAddressInfo && (
+            <div>
+              <label>
+                <input
+                  placeholder="Enter your street"
+                  value={homeAddressStreet}
+                  onChange={(e) => setHomeAddressStreet(e.target.value)}
+                  required={showHomeAddressInfo}
+                  style={styles.input}
+                />
+              </label>
+              <label>
+                <input
+                  placeholder="Enter your city"
+                  value={homeAddressCity}
+                  onChange={(e) => setHomeAddressCity(e.target.value)}
+                  required={showHomeAddressInfo}
+                  style={styles.input}
+                />
+              </label>
+              <label>
+                <input
+                  placeholder="Enter your state"
+                  value={homeAddressState}
+                  onChange={(e) => setHomeAddressState(e.target.value)}
+                  required={showHomeAddressInfo}
+                  style={styles.input}
+                />
+              </label>
+              <label>
+                <input
+                  placeholder="Enter your ZIP code"
+                  value={homeAddressZip}
+                  onChange={(e) => setHomeAddressZip(e.target.value)}
+                  required={showHomeAddressInfo}
+                  style={styles.input}
+                />
+              </label>
+            </div>
+          )}
         </div>
 
         {error && <div style={styles.error}>{error}</div>}
