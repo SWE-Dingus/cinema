@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import "../app/globals.css";
 
 const SeatSelection: React.FC = () => {
   const router = useRouter();
-  
-  const seats = ['A1', 'A2', 'A3', 'A4', 'A5']; // Example seat list, you can replace with actual data
-  const ageCategories = ['Child', 'Adult', 'Senior']; // Age categories for pricing
-  
+
+  const seats = ['A1', 'A2', 'A3', 'A4', 'A5', 'B1', 'B2', 'B3', 'B4', 'B5',]; // Example seat list
+  const ageCategories = ['Child', 'Adult', 'Senior'];
+
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [seatAgeCategories, setSeatAgeCategories] = useState<{ [seat: string]: string }>({});
 
@@ -41,15 +42,17 @@ const SeatSelection: React.FC = () => {
   };
 
   return (
-    <div className="p-5">
-      <h1 className="text-2xl font-bold mb-5">Select Your Seats</h1>
+    <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
+      <h1 className="text-4xl font-bold mb-6 text-center">Select Your Seats</h1>
 
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-5 gap-2 mb-8">
         {seats.map((seat) => (
           <button
             key={seat}
             onClick={() => toggleSeatSelection(seat)}
-            className={`p-2 border ${selectedSeats.includes(seat) ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`p-4 border rounded-lg transition-colors ${
+              selectedSeats.includes(seat) ? 'bg-[#6f42c1] text-white' : 'bg-[#2a1c2a] text-white'
+            } hover:bg-[#5a32a1]`}
           >
             {seat}
           </button>
@@ -57,15 +60,15 @@ const SeatSelection: React.FC = () => {
       </div>
 
       {selectedSeats.length > 0 && (
-        <div className="mt-5">
-          <h2 className="text-xl font-bold">Selected Seats</h2>
+        <div className="bg-[#2a1c2a] p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Selected Seats</h2>
           {selectedSeats.map((seat) => (
-            <div key={seat} className="flex items-center justify-between mt-2">
-              <span>{seat}</span>
+            <div key={seat} className="flex items-center justify-between mb-2">
+              <span className="text-lg">{seat}</span>
               <select
                 value={seatAgeCategories[seat] || 'Adult'}
                 onChange={(e) => handleAgeCategoryChange(seat, e.target.value)}
-                className="border p-2"
+                className="border border-gray-300 p-2 rounded bg-[#3b2d3b] text-white"
               >
                 {ageCategories.map((category) => (
                   <option key={category} value={category}>
@@ -77,7 +80,7 @@ const SeatSelection: React.FC = () => {
           ))}
 
           <button
-            className="mt-5 bg-green-500 text-white px-4 py-2 rounded"
+            className="mt-5 bg-[#28a745] text-white px-6 py-3 rounded hover:bg-[#218838] transition"
             onClick={handleProceedToOrderSummary}
           >
             Proceed to Order Summary

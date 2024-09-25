@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import "../app/globals.css"
 
 interface OrderDetails {
   movieTitle: string;
@@ -47,22 +48,22 @@ const OrderSummary: React.FC = () => {
   };
 
   return (
-    <div className="p-5">
-      <h1 className="text-2xl font-bold mb-5">Order Summary</h1>
+    <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
+      <h1 className="text-4xl font-bold mb-6 text-center">Order Summary</h1>
 
       {orderDetails ? (
-        <div className="border p-5 rounded-md shadow-lg max-w-lg mx-auto">
-          <h2 className="text-xl font-bold mb-3">{orderDetails.movieTitle}</h2>
+        <div className="bg-[#2a1c2a] border p-6 rounded-lg shadow-md max-w-lg mx-auto">
+          <h2 className="text-2xl font-bold mb-4">{orderDetails.movieTitle}</h2>
           <p className="mb-2">Showtime: {orderDetails.showtime}</p>
           <p className="mb-2">Seats: {orderDetails.seatNumbers.join(', ')}</p>
           <p className="mb-2">Ticket Prices:</p>
           <ul className="list-disc ml-5">
             {orderDetails.ticketPrices.map((price, index) => (
-              <li key={index}>
-                Seat {orderDetails.seatNumbers[index]}: ${price}
+              <li key={index} className="flex justify-between">
+                <span>Seat {orderDetails.seatNumbers[index]}: ${price}</span>
                 <button
                   onClick={() => handleDeleteTicket(index)}
-                  className="text-red-500 ml-4"
+                  className="text-red-500 hover:underline"
                 >
                   Delete
                 </button>
@@ -72,7 +73,7 @@ const OrderSummary: React.FC = () => {
           <p className="mt-4 font-bold">Total: ${orderDetails.total}</p>
 
           <button
-            className="bg-green-500 text-white px-4 py-2 rounded mt-4"
+            className="bg-[#28a745] text-white px-6 py-3 rounded mt-4 hover:bg-[#218838]"
             onClick={handleProceedToCheckout}
           >
             Proceed to Checkout
