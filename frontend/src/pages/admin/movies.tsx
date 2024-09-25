@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Config from "../../../frontend.config";
 import { Movie } from "../../app/models/Movie";
+import "../../app/globals.css"
 
 enum AgeRating {
   G = "G",
@@ -13,9 +14,7 @@ enum AgeRating {
 const ManageMovies: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [newMovieTitle, setNewMovieTitle] = useState<string>("");
-  const [newMovieAgeRating, setNewMovieAgeRating] = useState<AgeRating>(
-    AgeRating.G,
-  );
+  const [newMovieAgeRating, setNewMovieAgeRating] = useState<AgeRating>(AgeRating.G);
   const [newReviewRating, setNewReviewRating] = useState<number>(0);
   const [newCast, setNewCast] = useState<string[]>([]);
   const [newDirector, setNewDirector] = useState<string>("");
@@ -31,7 +30,6 @@ const ManageMovies: React.FC = () => {
   const [newCastMember, setNewCastMember] = useState<string>("");
   const [newCategoryInput, setNewCategoryInput] = useState<string>("");
 
-  // Fetch movies from the backend when the component mounts
   useEffect(() => {
     fetchMovies();
   }, []);
@@ -71,8 +69,6 @@ const ManageMovies: React.FC = () => {
       isRunning: newIsRunning,
     };
 
-    console.log("Sending the following data:", newMovie);
-
     try {
       const response = await fetch(`${Config.apiRoot}/movies/create`, {
         method: "POST",
@@ -87,7 +83,7 @@ const ManageMovies: React.FC = () => {
       }
 
       const savedMovie = await response.json();
-      setMovies((prevMovies) => [...prevMovies, savedMovie]); // Update the list with the new movie
+      setMovies((prevMovies) => [...prevMovies, savedMovie]);
       resetMovieFields();
     } catch (error) {
       console.error("Error adding movie:", error);
@@ -96,12 +92,9 @@ const ManageMovies: React.FC = () => {
 
   const deleteMovie = async (movieId: number) => {
     try {
-      const response = await fetch(
-        `${Config.apiRoot}/movies/delete/${movieId}`,
-        {
-          method: "DELETE",
-        },
-      );
+      const response = await fetch(`${Config.apiRoot}/movies/delete/${movieId}`, {
+        method: "DELETE",
+      });
 
       if (!response.ok) {
         throw new Error("Failed to delete movie");
@@ -141,12 +134,12 @@ const ManageMovies: React.FC = () => {
   };
 
   return (
-    <div className="p-5">
+    <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
       <h1 className="text-3xl font-bold mb-6 text-center">Manage Movies</h1>
 
       {/* Movie Input Form */}
-      <div className="bg-gray-100 p-6 rounded-lg shadow-md mb-8">
-        <h2 className="text-xl font-semibold mb-4">Add New Movie</h2>
+      <div className="bg-[#2a1c2a] p-6 rounded-lg shadow-md mb-8">
+        <h2 className="text-xl font-semibold mb-4 text-[#fadcd5]">Add New Movie</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium">Movie Title</label>
@@ -155,7 +148,7 @@ const ManageMovies: React.FC = () => {
               placeholder="Enter movie title"
               value={newMovieTitle}
               onChange={(e) => setNewMovieTitle(e.target.value)}
-              className="border p-2 rounded w-full"
+              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
             />
           </div>
 
@@ -164,29 +157,20 @@ const ManageMovies: React.FC = () => {
             <select
               value={newMovieAgeRating}
               onChange={(e) => {
-                setNewMovieAgeRating(
-                  AgeRating[e.target.value as keyof typeof AgeRating],
-                );
+                setNewMovieAgeRating(AgeRating[e.target.value as keyof typeof AgeRating]);
               }}
+              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
             >
-              {(() => {
-                const members = [];
-                for (const member in AgeRating) {
-                  members.push(member);
-                }
-                return members.map((m) => (
-                  <option key={m} value={m}>
-                    {m}
-                  </option>
-                ));
-              })()}
+              {Object.keys(AgeRating).map((key) => (
+                <option key={key} value={key}>
+                  {key}
+                </option>
+              ))}
             </select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium">
-              Review Rating (0-5)
-            </label>
+            <label className="block text-sm font-medium">Review Rating (0-5)</label>
             <input
               type="number"
               placeholder="Review Rating (0-5)"
@@ -194,7 +178,7 @@ const ManageMovies: React.FC = () => {
               max={5}
               value={newReviewRating}
               onChange={(e) => setNewReviewRating(Number(e.target.value))}
-              className="border p-2 rounded w-full"
+              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
             />
           </div>
 
@@ -205,7 +189,7 @@ const ManageMovies: React.FC = () => {
               placeholder="Enter director name"
               value={newDirector}
               onChange={(e) => setNewDirector(e.target.value)}
-              className="border p-2 rounded w-full"
+              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
             />
           </div>
 
@@ -215,7 +199,7 @@ const ManageMovies: React.FC = () => {
               placeholder="Enter movie synopsis"
               value={newSynopsis}
               onChange={(e) => setNewSynopsis(e.target.value)}
-              className="border p-2 rounded w-full"
+              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
             />
           </div>
 
@@ -227,7 +211,7 @@ const ManageMovies: React.FC = () => {
               min={0}
               value={newChildPrice}
               onChange={(e) => setNewChildPrice(Number(e.target.value))}
-              className="border p-2 rounded w-full"
+              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
             />
           </div>
 
@@ -239,7 +223,7 @@ const ManageMovies: React.FC = () => {
               min={0}
               value={newAdultPrice}
               onChange={(e) => setNewAdultPrice(Number(e.target.value))}
-              className="border p-2 rounded w-full"
+              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
             />
           </div>
 
@@ -251,7 +235,7 @@ const ManageMovies: React.FC = () => {
               min={0}
               value={newSeniorPrice}
               onChange={(e) => setNewSeniorPrice(Number(e.target.value))}
-              className="border p-2 rounded w-full"
+              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
             />
           </div>
 
@@ -263,7 +247,7 @@ const ManageMovies: React.FC = () => {
               min={0}
               value={newOnlineFee}
               onChange={(e) => setNewOnlineFee(Number(e.target.value))}
-              className="border p-2 rounded w-full"
+              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
             />
           </div>
 
@@ -274,7 +258,7 @@ const ManageMovies: React.FC = () => {
               placeholder="Poster URL"
               value={newPosterUrl}
               onChange={(e) => setNewPosterUrl(e.target.value)}
-              className="border p-2 rounded w-full"
+              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
             />
           </div>
 
@@ -285,7 +269,7 @@ const ManageMovies: React.FC = () => {
               placeholder="Trailer ID"
               value={newTrailerUrl}
               onChange={(e) => setNewTrailerUrl(e.target.value)}
-              className="border p-2 rounded w-full"
+              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
             />
           </div>
 
@@ -296,24 +280,22 @@ const ManageMovies: React.FC = () => {
               onChange={(e) => setNewIsRunning(e.target.checked)}
               className="mr-2"
             />
-            <label className="block text-sm font-medium">
-              Currently Running
-            </label>
+            <label className="block text-sm font-medium">Currently Running</label>
           </div>
 
           <div>
             <label className="block text-sm font-medium">Cast Members</label>
-            <div>{newCast.join(", ")}</div>
+            <div>{newCast.join(", ") || "No cast members"}</div>
             <input
               type="text"
               placeholder="Add cast member"
               value={newCastMember}
               onChange={(e) => setNewCastMember(e.target.value)}
-              className="border p-2 rounded w-full"
+              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
             />
             <button
               onClick={addCastMember}
-              className="bg-blue-500 text-white mt-2 px-4 py-2 rounded"
+              className="bg-[#6f42c1] text-white mt-2 px-4 py-2 rounded hover:bg-[#5a32a1]"
             >
               Add Cast Member
             </button>
@@ -321,17 +303,17 @@ const ManageMovies: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium">Categories</label>
-            <div>{newCategory.join(", ")}</div>
+            <div>{newCategory.join(", ") || "No categories"}</div>
             <input
               type="text"
               placeholder="Add category"
               value={newCategoryInput}
               onChange={(e) => setNewCategoryInput(e.target.value)}
-              className="border p-2 rounded w-full"
+              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
             />
             <button
               onClick={addCategory}
-              className="bg-green-500 text-white mt-2 px-4 py-2 rounded"
+              className="bg-[#28a745] text-white mt-2 px-4 py-2 rounded hover:bg-[#218838]"
             >
               Add Category
             </button>
@@ -340,7 +322,7 @@ const ManageMovies: React.FC = () => {
           <div className="sm:col-span-2">
             <button
               onClick={addMovie}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full mt-4"
+              className="bg-[#007bff] hover:bg-[#0056b3] text-white px-4 py-2 rounded w-full mt-4"
             >
               Add Movie
             </button>
@@ -349,24 +331,23 @@ const ManageMovies: React.FC = () => {
       </div>
 
       {/* Movie List */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-bold mb-3">Existing Movies</h2>
+      <div className="bg-[#2a1c2a] p-6 rounded-lg shadow-md">
+        <h2 className="text-xl font-bold mb-3 text-[#fadcd5]">Existing Movies</h2>
         <ul className="divide-y divide-gray-200">
           {movies.map((movie, index) => (
             <li key={movie.id || index} className="py-3">
               <div className="flex justify-between items-center">
                 <div>
-                  <strong>{movie.title}</strong> -{" "}
-                  {movie.category?.join(", ") || "No category"}
-                  <div>Poster URL: {movie.posterUrl}</div>
-                  <div>Trailer YouTube ID: {movie.trailerId}</div>
+                  <strong>{movie.title}</strong> - {movie.category?.join(", ") || "No category"}
+                  <div>Poster URL: {movie.posterUrl || "No poster"}</div>
+                  <div>Trailer YouTube ID: {movie.trailerId || "No trailer"}</div>
                   <div>Cast: {movie.cast?.join(", ") || "No cast"}</div>
                   <div>Review Rating: {movie.reviewRating}</div>
                   <div>Running: {movie.isRunning ? "Yes" : "No"}</div>
                 </div>
                 <button
                   onClick={() => movie.id && deleteMovie(movie.id)}
-                  className="bg-red-500 text-white px-4 py-2 rounded"
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                 >
                   Delete
                 </button>
