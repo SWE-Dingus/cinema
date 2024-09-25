@@ -135,12 +135,12 @@ const ManageMovies: React.FC = () => {
 
   return (
     <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
-      <h1 className="text-3xl font-bold mb-6 text-center">Manage Movies</h1>
-
+      <h1 className="text-4xl font-bold mb-8 text-center">Manage Movies</h1>
+  
       {/* Movie Input Form */}
-      <div className="bg-[#2a1c2a] p-6 rounded-lg shadow-md mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-[#fadcd5]">Add New Movie</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="bg-[#2a1c2a] p-8 rounded-lg shadow-lg mb-10">
+        <h2 className="text-2xl font-semibold mb-5 text-[#fadcd5]">Add New Movie</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium">Movie Title</label>
             <input
@@ -148,10 +148,10 @@ const ManageMovies: React.FC = () => {
               placeholder="Enter movie title"
               value={newMovieTitle}
               onChange={(e) => setNewMovieTitle(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
+              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-
+  
           <div>
             <label className="block text-sm font-medium">Age Rating</label>
             <select
@@ -159,7 +159,7 @@ const ManageMovies: React.FC = () => {
               onChange={(e) => {
                 setNewMovieAgeRating(AgeRating[e.target.value as keyof typeof AgeRating]);
               }}
-              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
+              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             >
               {Object.keys(AgeRating).map((key) => (
                 <option key={key} value={key}>
@@ -168,7 +168,7 @@ const ManageMovies: React.FC = () => {
               ))}
             </select>
           </div>
-
+  
           <div>
             <label className="block text-sm font-medium">Review Rating (0-5)</label>
             <input
@@ -178,10 +178,10 @@ const ManageMovies: React.FC = () => {
               max={5}
               value={newReviewRating}
               onChange={(e) => setNewReviewRating(Number(e.target.value))}
-              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
+              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-
+  
           <div>
             <label className="block text-sm font-medium">Director</label>
             <input
@@ -189,20 +189,20 @@ const ManageMovies: React.FC = () => {
               placeholder="Enter director name"
               value={newDirector}
               onChange={(e) => setNewDirector(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
+              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-
+  
           <div className="sm:col-span-2">
             <label className="block text-sm font-medium">Synopsis</label>
             <textarea
               placeholder="Enter movie synopsis"
               value={newSynopsis}
               onChange={(e) => setNewSynopsis(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
+              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-
+  
           <div>
             <label className="block text-sm font-medium">Child Price</label>
             <input
@@ -211,10 +211,10 @@ const ManageMovies: React.FC = () => {
               min={0}
               value={newChildPrice}
               onChange={(e) => setNewChildPrice(Number(e.target.value))}
-              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
+              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-
+  
           <div>
             <label className="block text-sm font-medium">Adult Price</label>
             <input
@@ -223,10 +223,10 @@ const ManageMovies: React.FC = () => {
               min={0}
               value={newAdultPrice}
               onChange={(e) => setNewAdultPrice(Number(e.target.value))}
-              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
+              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-
+  
           <div>
             <label className="block text-sm font-medium">Senior Price</label>
             <input
@@ -235,10 +235,10 @@ const ManageMovies: React.FC = () => {
               min={0}
               value={newSeniorPrice}
               onChange={(e) => setNewSeniorPrice(Number(e.target.value))}
-              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
+              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-
+  
           <div>
             <label className="block text-sm font-medium">Online Fee</label>
             <input
@@ -247,10 +247,10 @@ const ManageMovies: React.FC = () => {
               min={0}
               value={newOnlineFee}
               onChange={(e) => setNewOnlineFee(Number(e.target.value))}
-              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
+              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-
+  
           <div>
             <label className="block text-sm font-medium">Poster URL</label>
             <input
@@ -258,10 +258,10 @@ const ManageMovies: React.FC = () => {
               placeholder="Poster URL"
               value={newPosterUrl}
               onChange={(e) => setNewPosterUrl(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
+              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-
+  
           <div>
             <label className="block text-sm font-medium">Trailer ID</label>
             <input
@@ -269,11 +269,11 @@ const ManageMovies: React.FC = () => {
               placeholder="Trailer ID"
               value={newTrailerUrl}
               onChange={(e) => setNewTrailerUrl(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
+              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
           </div>
-
-          <div>
+  
+          <div className="flex items-center">
             <input
               type="checkbox"
               checked={newIsRunning}
@@ -282,7 +282,7 @@ const ManageMovies: React.FC = () => {
             />
             <label className="block text-sm font-medium">Currently Running</label>
           </div>
-
+  
           <div>
             <label className="block text-sm font-medium">Cast Members</label>
             <div>{newCast.join(", ") || "No cast members"}</div>
@@ -291,16 +291,16 @@ const ManageMovies: React.FC = () => {
               placeholder="Add cast member"
               value={newCastMember}
               onChange={(e) => setNewCastMember(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
+              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
             <button
               onClick={addCastMember}
-              className="bg-[#6f42c1] text-white mt-2 px-4 py-2 rounded hover:bg-[#5a32a1]"
+              className="bg-[#6f42c1] text-white mt-2 px-4 py-2 rounded hover:bg-[#5a32a1] transition"
             >
               Add Cast Member
             </button>
           </div>
-
+  
           <div>
             <label className="block text-sm font-medium">Categories</label>
             <div>{newCategory.join(", ") || "No categories"}</div>
@@ -309,33 +309,33 @@ const ManageMovies: React.FC = () => {
               placeholder="Add category"
               value={newCategoryInput}
               onChange={(e) => setNewCategoryInput(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full bg-[#3b2d3b] text-white"
+              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             />
             <button
               onClick={addCategory}
-              className="bg-[#28a745] text-white mt-2 px-4 py-2 rounded hover:bg-[#218838]"
+              className="bg-[#28a745] text-white mt-2 px-4 py-2 rounded hover:bg-[#218838] transition"
             >
               Add Category
             </button>
           </div>
-
+  
           <div className="sm:col-span-2">
             <button
               onClick={addMovie}
-              className="bg-[#007bff] hover:bg-[#0056b3] text-white px-4 py-2 rounded w-full mt-4"
+              className="bg-[#007bff] hover:bg-[#0056b3] text-white px-4 py-2 rounded w-full mt-6 transition"
             >
               Add Movie
             </button>
           </div>
         </div>
       </div>
-
+  
       {/* Movie List */}
-      <div className="bg-[#2a1c2a] p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-bold mb-3 text-[#fadcd5]">Existing Movies</h2>
+      <div className="bg-[#2a1c2a] p-6 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold mb-4 text-[#fadcd5]">Existing Movies</h2>
         <ul className="divide-y divide-gray-200">
           {movies.map((movie, index) => (
-            <li key={movie.id || index} className="py-3">
+            <li key={movie.id || index} className="py-4">
               <div className="flex justify-between items-center">
                 <div>
                   <strong>{movie.title}</strong> - {movie.category?.join(", ") || "No category"}
@@ -347,7 +347,7 @@ const ManageMovies: React.FC = () => {
                 </div>
                 <button
                   onClick={() => movie.id && deleteMovie(movie.id)}
-                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
                 >
                   Delete
                 </button>
@@ -358,6 +358,8 @@ const ManageMovies: React.FC = () => {
       </div>
     </div>
   );
+  
+
 };
 
 export default ManageMovies;
