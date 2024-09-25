@@ -7,7 +7,7 @@ const CheckoutPage: React.FC = () => {
 
   const handleCheckout = () => {
     alert(`Successfully booked ${title} at ${showtime}, Seat: ${seat}`);
-    router.push("/"); // After checkout, redirect to the home page or a confirmation page
+    router.push("/orderconfirm"); // After checkout, redirect to the home page or a confirmation page
   };
 
   const handleCancel = () => {
