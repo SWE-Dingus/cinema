@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.DriverManager;
+
 @RestController
 @RequestMapping("/movies")
 class MoviesController {

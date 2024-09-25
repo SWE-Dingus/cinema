@@ -23,7 +23,7 @@ public class Movie {
     NC17,
   }
 
-  @Id @GeneratedValue private long id;
+  @Id @GeneratedValue private long UUID;
 
   @NotEmpty public String title;
 
@@ -36,13 +36,13 @@ public class Movie {
 
   @NotEmpty
   @Column(name = "movieCast")
-  public List<@NotEmpty String> cast;
+  public String[] cast;
 
   @NotEmpty public String director;
 
   @NotEmpty public String synopsis;
 
-  @NotEmpty public List<@NotEmpty String> category;
+  @NotEmpty public String[] category;
 
   @Min(0)
   @NotNull
@@ -72,7 +72,7 @@ public class Movie {
   // TODO Add list for screenshots/clips of movie later
 
   public long getId() {
-    return this.id;
+    return this.UUID;
   }
 
   /**
