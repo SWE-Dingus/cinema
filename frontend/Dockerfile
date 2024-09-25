@@ -8,7 +8,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY src/ src/
-COPY *.json *.mjs *.ts ./
+COPY *.json *.mjs *.ts *.js ./
 
 RUN npm run build
 

@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import '../app/globals.css';
 import Navbar from "../app/components/Navbar";
 import SearchBar from "../app/components/SearchBar";
 import MovieCard from "../app/components/MovieCard";
