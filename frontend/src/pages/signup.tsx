@@ -5,8 +5,21 @@ import Link from "next/link"; // Importing Link from next/link
 const SignupPage: React.FC = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const [cardNumber, setCardNumber] = useState<string>("");
+  const [cardExpiration, setCardExpiration] = useState<string>("");
+  const [cardBillingAddress, setCardBillingAddress] = useState<string>("");
+  const [showPaymentInfo, setShowPaymentInfo] = useState<boolean>(false);
+
+  const [homeAddressStreet, setHomeAddressStreet] = useState<string>("");
+  const [homeAddressCity, setHomeAddressCity] = useState<string>("");
+  const [homeAddressState, setHomeAddressState] = useState<string>("");
+  const [homeAddressZip, setHomeAddressZip] = useState<string>("");
+  const [showHomeAddressInfo, setShowHomeAddressInfo] = useState<boolean>(false);
+
   const [error, setError] = useState<string | null>(null);
 
   const handleSignup = (e: React.FormEvent) => {
@@ -14,6 +27,7 @@ const SignupPage: React.FC = () => {
     console.log("Name:", name, "Email:", email, "Password:", password);
     // Simulating an error for demonstration
     setError("This email is already registered. Please try another.");
+    window.location.replace("/registration-confirm");
   };
 
   const styles = {
@@ -126,6 +140,21 @@ const SignupPage: React.FC = () => {
         </div>
 
         <div style={styles.inputGroup}>
+          <label htmlFor="phoneNumber" style={styles.label}>
+            Phone Number
+          </label>
+          <input
+            id="phoneNumber"
+            type="tel"
+            placeholder="Enter your phone number"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            required
+            style={styles.input}
+          />
+        </div>
+
+        <div style={styles.inputGroup}>
           <label htmlFor="email" style={styles.label}>
             Email
           </label>
@@ -162,6 +191,88 @@ const SignupPage: React.FC = () => {
               {showPassword ? "🙈" : "👁️"}
             </button>
           </div>
+        </div>
+
+        <div style={styles.inputGroup}>
+          <label>
+            <input type="checkbox" checked={showPaymentInfo} onChange={() => setShowPaymentInfo(!showPaymentInfo)} />
+            Enter payment info?
+          </label>
+          {showPaymentInfo && <div>
+            <label>
+              <input
+                placeholder="Enter your credit card number"
+                value={cardNumber}
+                onChange={(e) => setCardNumber(e.target.value)}
+                required={showPaymentInfo}
+                style={styles.input}
+              />
+            </label>
+            <label>
+              <input
+                placeholder="Enter your credit card expiration date"
+                type="date"
+                value={cardExpiration}
+                onChange={(e) => setCardExpiration(e.target.value)}
+                required={showPaymentInfo}
+                style={styles.input}
+              />
+            </label>
+            <label>
+              <input
+                placeholder="Enter your billing address"
+                value={cardBillingAddress}
+                onChange={(e) => setCardBillingAddress(e.target.value)}
+                required={showPaymentInfo}
+                style={styles.input}
+              />
+            </label>
+          </div>}
+        </div>
+
+        <div style={styles.inputGroup}>
+          <label>
+            <input type="checkbox" checked={showHomeAddressInfo} onChange={() => setShowHomeAddressInfo(!showHomeAddressInfo)} />
+            Enter home address info?
+          </label>
+          {showHomeAddressInfo && <div>
+            <label>
+              <input
+                placeholder="Enter your street"
+                value={homeAddressStreet}
+                onChange={(e) => setHomeAddressStreet(e.target.value)}
+                required={showHomeAddressInfo}
+                style={styles.input}
+              />
+            </label>
+            <label>
+              <input
+                placeholder="Enter your city"
+                value={homeAddressCity}
+                onChange={(e) => setHomeAddressCity(e.target.value)}
+                required={showHomeAddressInfo}
+                style={styles.input}
+              />
+            </label>
+            <label>
+              <input
+                placeholder="Enter your state"
+                value={homeAddressState}
+                onChange={(e) => setHomeAddressState(e.target.value)}
+                required={showHomeAddressInfo}
+                style={styles.input}
+              />
+            </label>
+            <label>
+              <input
+                placeholder="Enter your ZIP code"
+                value={homeAddressZip}
+                onChange={(e) => setHomeAddressZip(e.target.value)}
+                required={showHomeAddressInfo}
+                style={styles.input}
+              />
+            </label>
+          </div>}
         </div>
 
         {error && <div style={styles.error}>{error}</div>}
