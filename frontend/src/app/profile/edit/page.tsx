@@ -1,5 +1,6 @@
+"use client"
+
 import React, { useState } from "react";
-import "../../app/globals.css"; 
 
 const EditProfilePage = () => {
   const [firstName, setFirstName] = useState("");
@@ -204,3 +205,5 @@ const EditProfilePage = () => {
     </div>
   );
 };
+
+export default EditProfilePage;

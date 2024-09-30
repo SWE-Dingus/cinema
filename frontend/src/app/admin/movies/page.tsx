@@ -1,7 +1,7 @@
+"use client"
 import React, { useState, useEffect } from "react";
-import Config from "../../../frontend.config";
-import { Movie } from "../../app/models/Movie";
-import "../../app/globals.css";
+import Config from "../../../../frontend.config";
+import { Movie } from "../../models/Movie";
 
 enum AgeRating {
   G = "G",
@@ -32,6 +32,8 @@ const ManageMovies: React.FC = () => {
   const [newCastMember, setNewCastMember] = useState<string>("");
   const [newCategoryInput, setNewCategoryInput] = useState<string>("");
 
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
   useEffect(() => {
     fetchMovies();
   }, []);
@@ -53,7 +55,38 @@ const ManageMovies: React.FC = () => {
     }
   };
 
+  const validateFields = () => {
+    if (!newMovieTitle) {
+      setErrorMessage("Title is required");
+      return false;
+    }
+    if (!newDirector) {
+      setErrorMessage("Director is required");
+      return false;
+    }
+    if (!newSynopsis) {
+      setErrorMessage("Synopsis is required");
+      return false;
+    }
+    if (newReviewRating < 0 || newReviewRating > 5) {
+      setErrorMessage("Review Rating must be between 0 and 5");
+      return false;
+    }
+    if (!newCast.length) {
+      setErrorMessage("Cast must have at least one member");
+      return false;
+    }
+    if (!newCategory.length) {
+      setErrorMessage("Category must have at least one value");
+      return false;
+    }
+    setErrorMessage(""); // Clear error if validation passes
+    return true;
+  }
+
   const addMovie = async () => {
+    if(!validateFields()) return;
+
     const newMovie: Movie = {
       title: newMovieTitle,
       ageRating: newMovieAgeRating,
@@ -89,6 +122,7 @@ const ManageMovies: React.FC = () => {
       resetMovieFields();
     } catch (error) {
       console.error("Error adding movie:", error);
+      setErrorMessage("Failed to add movie, please try again later.");
     }
   };
 
@@ -110,6 +144,8 @@ const ManageMovies: React.FC = () => {
       console.error("Error deleting movie:", error);
     }
   };
+
+  
 
   const resetMovieFields = () => {
     setNewMovieTitle("");
@@ -141,6 +177,12 @@ const ManageMovies: React.FC = () => {
   return (
     <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
       <h1 className="text-4xl font-bold mb-8 text-center">Manage Movies</h1>
+      
+      {errorMessage && (
+        <div className="bg-red-500 text-white p-4 rounded mb-4">
+          {errorMessage}
+        </div>
+      )}
 
       {/* Movie Input Form */}
       <div className="bg-[#2a1c2a] p-8 rounded-lg shadow-lg mb-10">
