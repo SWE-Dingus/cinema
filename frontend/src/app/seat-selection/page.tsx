@@ -1,6 +1,7 @@
+"use client";
+
 import React, { useState } from "react";
-import { useRouter } from "next/router";
-import "../app/globals.css";
+import { useRouter } from "next/navigation"; // Import from next/navigation for App Router
 
 const SeatSelection: React.FC = () => {
   const router = useRouter();

@@ -1,13 +1,17 @@
+"use client";
 import React from "react";
-import { useRouter } from "next/router";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const CheckoutPage: React.FC = () => {
   const router = useRouter();
-  const { title, showtime, seat } = router.query;
+  const searchParams = useSearchParams();
+  const title = searchParams.get("title");
+  const showtime = searchParams.get("showtime");
+  const seat = searchParams.get("seat");
 
   const handleCheckout = () => {
     alert(`Successfully booked ${title} at ${showtime}, Seat: ${seat}`);
-    router.push("/orderconfirm"); // After checkout, redirect to the home page or a confirmation page
+    router.push("/orderconfirm"); // After checkout, redirect to the order confirmation page
   };
 
   const handleCancel = () => {
@@ -56,15 +60,15 @@ const CheckoutPage: React.FC = () => {
       <h1 style={styles.heading}>Checkout</h1>
 
       <p style={styles.info}>
-        <strong>Movie:</strong> {title}
+        <strong>Movie:</strong> {title || "N/A"}
       </p>
 
       <p style={styles.info}>
-        <strong>Showtime:</strong> {showtime}
+        <strong>Showtime:</strong> {showtime || "N/A"}
       </p>
 
       <p style={styles.info}>
-        <strong>Seat:</strong> {seat}
+        <strong>Seat:</strong> {seat || "N/A"}
       </p>
 
       <button

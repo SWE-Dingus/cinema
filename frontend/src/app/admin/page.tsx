@@ -1,3 +1,5 @@
+
+"use client"
 import React, { useState, useEffect } from "react";
 import Link from "next/link"; // Using Link for navigation
 import Config from "../../../frontend.config";

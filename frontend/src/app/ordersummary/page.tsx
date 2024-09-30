@@ -1,6 +1,7 @@
+"use client"
+
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import "../app/globals.css";
+import { useRouter } from "next/navigation"
 
 interface OrderDetails {
   movieTitle: string;

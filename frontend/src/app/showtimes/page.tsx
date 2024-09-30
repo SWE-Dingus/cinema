@@ -1,16 +1,19 @@
+"use client";
+
 import React from "react";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation"; // Use useSearchParams to get query parameters
 import Link from "next/link";
 
 const ShowtimesPage: React.FC = () => {
-  const router = useRouter();
-  const { movieId, title } = router.query; // Get movieId and title from query parameters
+  const searchParams = useSearchParams();
+  const movieId = searchParams.get("movieId");
+  const title = searchParams.get("title");
 
   // Hard-coded showtimes for now
   const showtimes = ["1:00 PM", "3:30 PM", "6:00 PM", "8:30 PM"];
 
   // Check if title is available
-  const movieTitle = typeof title === "string" ? title : "Movie";
+  const movieTitle = title || "Movie";
 
   const styles = {
     container: {
@@ -68,7 +71,9 @@ const ShowtimesPage: React.FC = () => {
         {showtimes.map((time, index) => (
           <li key={index} style={styles.listItem}>
             <Link
-              href={`/seat-selection?movieId=${movieId}&title=${encodeURIComponent(movieTitle)}&showtime=${time}`}
+              href={`/seat-selection?movieId=${movieId}&title=${encodeURIComponent(
+                movieTitle
+              )}&showtime=${time}`}
             >
               <button
                 style={styles.button}

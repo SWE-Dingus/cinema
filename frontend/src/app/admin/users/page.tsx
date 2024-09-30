@@ -1,5 +1,6 @@
+"use client"
+
 import React, { useState } from "react";
-import "../../app/globals.css";
 
 interface User {
   name: string;

@@ -1,9 +1,10 @@
+"use client"
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Navbar from "../../app/components/Navbar";
+import Navbar from "../../components/Navbar";
 import Image from "next/image";
-import Config from "../../../frontend.config";
+import Config from "../../../../frontend.config";
 import { Movie } from "@/app/models/Movie";
 
 const MovieDetailsPage: React.FC = () => {
