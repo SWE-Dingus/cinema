@@ -1,13 +1,14 @@
 "use client";
 import React from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+// import useSearchParams from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const CheckoutPage: React.FC = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const title = searchParams.get("title");
-  const showtime = searchParams.get("showtime");
-  const seat = searchParams.get("seat");
+  // const searchParams = useSearchParams();
+  const title =    "hardcoded title" //searchParams.get("title");
+  const showtime = "hardcoded time"   //searchParams.get("showtime");
+  const seat = "hardcoded seat"   //searchParams.get("seat");
 
   const handleCheckout = () => {
     alert(`Successfully booked ${title} at ${showtime}, Seat: ${seat}`);
