@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
-import React from "react";
-import { useSearchParams } from "next/navigation"; // Use useSearchParams to get query parameters
+import React from 'react';
+// import { useSearchParams } from "next/navigation"; // Use useSearchParams to get query parameters
 import Link from "next/link";
 
 const ShowtimesPage: React.FC = () => {
-  const searchParams = useSearchParams();
-  const movieId = searchParams.get("movieId");
-  const title = searchParams.get("title");
+  // const searchParams = useSearchParams();
+  const movieId = "123";
+  const title = "Hardcoded Movie Title";
 
   // Hard-coded showtimes for now
   const showtimes = ["1:00 PM", "3:30 PM", "6:00 PM", "8:30 PM"];
@@ -71,9 +71,7 @@ const ShowtimesPage: React.FC = () => {
         {showtimes.map((time, index) => (
           <li key={index} style={styles.listItem}>
             <Link
-              href={`/seat-selection?movieId=${movieId}&title=${encodeURIComponent(
-                movieTitle
-              )}&showtime=${time}`}
+              href={`/seat-selection?movieId=${movieId}&title=${encodeURIComponent(movieTitle)}&showtime=${time}`}
             >
               <button
                 style={styles.button}
