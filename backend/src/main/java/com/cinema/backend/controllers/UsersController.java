@@ -32,7 +32,7 @@ public class UsersController {
     @PostMapping("/create")
     public Map<String, String> createUser(@Valid @RequestBody User user) {
         if (userRepository.findById(user.username) != null) {
-            //ToDo: Throw error need a different username
+            return null;
         } else {
             userRepository.save(user);
             return new HashMap<>() {

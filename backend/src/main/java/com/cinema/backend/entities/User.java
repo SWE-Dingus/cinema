@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -13,35 +14,28 @@ import java.util.List;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.context.annotation.Primary;
 
-@Entity
-public class User {
+public abstract class User {
 
-    public static enum userAuth {
-        disabled,
-        suspended,
-        customer,
-        employee,
-        manager,
+    public static enum UserState {
+        ACTIVE,
+        INACTIVE,
+        SUSPENDED,
     }
 
     @NotEmpty
+    @NotNull
+    @NotBlank
     @Id
-    public String username;
+    public long id;
 
     @NotEmpty
-    @Min(0)
-    @Max(5)
-    public userAuth userauth;
+    @NotNull
+    public UserState state;
 
     @NotEmpty
+    @NotNull
+    @NotBlank
     private String password;
-
-    @NotEmpty
-    private boolean verified;
-
-    public String getUsername() {
-        return username;
-    }
 
     public boolean correctPassword(String input) {
         if (password.equals(input)) {
@@ -49,6 +43,14 @@ public class User {
         } else {
             return false;
         }
+    }
+
+    public UserState getState() {
+        return state;
+    }
+
+    public void setUserState(UserState state) {
+        this.state = state;
     }
 
 }
