@@ -28,21 +28,6 @@ public class UsersController {
     public UsersController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
-    @PostMapping("/create")
-    public Map<String, String> createUser(@Valid @RequestBody User user) {
-        if (userRepository.findById(user.username) != null) {
-            return null;
-        } else {
-            userRepository.save(user);
-            return new HashMap<>() {
-                {
-                    this.put("username", user.getUsername());
-            
-                }
-            };
-        }
-    }
     
 
 }
