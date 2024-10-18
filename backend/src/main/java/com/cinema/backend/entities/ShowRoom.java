@@ -8,27 +8,18 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class ShowRoom {
-    
-    @Id
-    @NotNull
-    @NotBlank
-    @NotEmpty
-    private int showRoomID;
 
-    @NotBlank
-    private String showRoomName;
+  @Id @NotNull @NotBlank @NotEmpty private int showRoomID;
 
-    @NotBlank
-    @NotEmpty
-    @NotNull
-    public int numOfSeats;
+  @NotBlank private String showRoomName;
 
-    public String getShowRoomName() {
-        return showRoomName;
-    }
+  @NotBlank @NotEmpty @NotNull public int numOfSeats;
 
-    public void setShowRoomName(String showRoomName) {
-        this.showRoomName = showRoomName;
-    }
+  public String getShowRoomName() {
+    return showRoomName;
+  }
 
+  public void setShowRoomName(String showRoomName) {
+    this.showRoomName = showRoomName;
+  }
 }

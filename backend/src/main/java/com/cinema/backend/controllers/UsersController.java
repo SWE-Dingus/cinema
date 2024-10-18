@@ -1,6 +1,5 @@
 package com.cinema.backend.controllers;
 
-
 import com.cinema.backend.entities.User;
 import com.cinema.backend.repositories.UserRepository;
 import jakarta.validation.Valid;

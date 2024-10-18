@@ -8,24 +8,16 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Promotion {
-    
-    @NotBlank
-    @NotEmpty
-    @NotNull
-    @Id
-    private String code;
 
-    @NotBlank
-    @NotEmpty
-    @NotNull
-    private int discount;
+  @NotBlank @NotEmpty @NotNull @Id private String code;
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+  @NotBlank @NotEmpty @NotNull private int discount;
 
-    public int getDiscount() {
-        return discount;
-    }
+  public void setCode(String code) {
+    this.code = code;
+  }
 
+  public int getDiscount() {
+    return discount;
+  }
 }

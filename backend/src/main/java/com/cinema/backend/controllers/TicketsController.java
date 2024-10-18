@@ -1,5 +1,3 @@
 package com.cinema.backend.controllers;
 
-public class TicketsController {
-    
-}
+public class TicketsController {}
