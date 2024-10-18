@@ -1,7 +1,5 @@
 package com.cinema.backend.entities;
 
-import java.sql.Date;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -10,41 +8,30 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class ShowTime {
+public class Review {
     
     @Id
     @GeneratedValue
-    public int showID;
+    private long reviewID;
 
     /*
      * FK to movie
      */
     @NotBlank
+    @NotNull
     @NotEmpty
     private long movieID;
 
-    /*
-     * FK to ShowRoom
-     */
     @NotBlank
     @NotNull
-    @NotBlank
-    private int showRoomID;
+    private float rating;
 
-    @NotBlank
-    @NotEmpty
-    @NotNull
-    private Date showTime;
-
-    @NotBlank
-    private Date duration;
-
-    public Date getShowTime() {
-        return showTime;
+    public float getRating() {
+        return rating;
     }
 
-    public Date getDuration() {
-        return duration;
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 
 }
