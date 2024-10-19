@@ -7,32 +7,24 @@ import jakarta.validation.constraints.NotNull;
 
 public class Seat {
 
-    @Id
-    @NotNull
-    private String seatNumber;
+  @Id @NotNull private String seatNumber;
 
-    /*
-     * FK to ShowTime
-     */
-    @NotNull
-    @NotBlank
-    @NotEmpty
-    private int showID;
+  /*
+   * FK to ShowTime
+   */
+  @NotNull @NotBlank @NotEmpty private int showID;
 
-    @NotEmpty
-    @NotNull
-    private boolean booked;
+  @NotEmpty @NotNull private boolean booked;
 
-    public boolean isBooked() {
-        return booked;
-    }
+  public boolean isBooked() {
+    return booked;
+  }
 
-    public String getSeatNumber() {
-        return seatNumber;
-    }
+  public String getSeatNumber() {
+    return seatNumber;
+  }
 
-    public void changeStatus(boolean status) {
-        booked = status;
-    }
-
+  public void changeStatus(boolean status) {
+    booked = status;
+  }
 }

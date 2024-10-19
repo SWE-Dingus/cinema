@@ -9,29 +9,21 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Review {
-    
-    @Id
-    @GeneratedValue
-    private long reviewID;
 
-    /*
-     * FK to movie
-     */
-    @NotBlank
-    @NotNull
-    @NotEmpty
-    private long movieID;
+  @Id @GeneratedValue private long reviewID;
 
-    @NotBlank
-    @NotNull
-    private float rating;
+  /*
+   * FK to movie
+   */
+  @NotBlank @NotNull @NotEmpty private long movieID;
 
-    public float getRating() {
-        return rating;
-    }
+  @NotBlank @NotNull private float rating;
 
-    public void setRating(float rating) {
-        this.rating = rating;
-    }
+  public float getRating() {
+    return rating;
+  }
 
+  public void setRating(float rating) {
+    this.rating = rating;
+  }
 }

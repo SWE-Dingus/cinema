@@ -1,50 +1,37 @@
 package com.cinema.backend.entities;
 
-import java.sql.Date;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import java.sql.Date;
 
 @Entity
 public class ShowTime {
-    
-    @Id
-    @GeneratedValue
-    public int showID;
 
-    /*
-     * FK to movie
-     */
-    @NotBlank
-    @NotEmpty
-    private long movieID;
+  @Id @GeneratedValue public int showID;
 
-    /*
-     * FK to ShowRoom
-     */
-    @NotBlank
-    @NotNull
-    @NotBlank
-    private int showRoomID;
+  /*
+   * FK to movie
+   */
+  @NotBlank @NotEmpty private long movieID;
 
-    @NotBlank
-    @NotEmpty
-    @NotNull
-    private Date showTime;
+  /*
+   * FK to ShowRoom
+   */
+  @NotBlank @NotNull @NotBlank private int showRoomID;
 
-    @NotBlank
-    private Date duration;
+  @NotBlank @NotEmpty @NotNull private Date showTime;
 
-    public Date getShowTime() {
-        return showTime;
-    }
+  @NotBlank private Date duration;
 
-    public Date getDuration() {
-        return duration;
-    }
+  public Date getShowTime() {
+    return showTime;
+  }
 
+  public Date getDuration() {
+    return duration;
+  }
 }

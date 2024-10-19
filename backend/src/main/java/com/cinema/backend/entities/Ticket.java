@@ -9,42 +9,32 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Ticket {
-    
-    public enum TicketType {
-        CHILD,
-        ADULT,
-        SENIOR,
-    }
 
-    @NotNull
-    private TicketType type;
+  public enum TicketType {
+    CHILD,
+    ADULT,
+    SENIOR,
+  }
 
-    @Id
-    @GeneratedValue
-    private long ticketID;
+  @NotNull private TicketType type;
 
-    /*
-     * FK to seat
-     */
-    @NotBlank
-    @NotNull
-    @NotEmpty
-    private String seatNumber;
+  @Id @GeneratedValue private long ticketID;
 
-    /*
-     * FK to booking
-     */
-    @NotBlank
-    @NotEmpty
-    @NotNull
-    private int bookingID;
+  /*
+   * FK to seat
+   */
+  @NotBlank @NotNull @NotEmpty private String seatNumber;
 
-    public TicketType getTicketType() {
-        return type;
-    }
+  /*
+   * FK to booking
+   */
+  @NotBlank @NotEmpty @NotNull private int bookingID;
 
-    public String getSeat() {
-        return seatNumber;
-    }
+  public TicketType getTicketType() {
+    return type;
+  }
 
+  public String getSeat() {
+    return seatNumber;
+  }
 }

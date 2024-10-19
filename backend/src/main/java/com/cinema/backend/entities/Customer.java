@@ -10,28 +10,20 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Customer extends User{
-    
-    @Id
-    @GeneratedValue
-    public long custID;
 
-    @NotEmpty
-    @NotNull
-    @NotBlank
-    public String firstName;
+  @Id @GeneratedValue public long custID;
 
-    public String lastName;
+  @NotEmpty @NotNull @NotBlank public String firstName;
 
-    @NotBlank
-    @NotEmpty
-    @NotNull
-    private String email;
+  public String lastName;
 
-    public String getEmail() {
-        return email;
-    }
+  @NotBlank @NotEmpty @NotNull private String email;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
 }

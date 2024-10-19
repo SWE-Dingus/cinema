@@ -7,23 +7,21 @@ import jakarta.persistence.Id;
 @Entity
 public class Admin extends User{
 
-        @Id
-    @GeneratedValue
-    public long adminID;
+  @Id @GeneratedValue public long adminID;
 
-    private void editUser() {}
+  private void editUser() {}
 
-    private void deleteUser() {}
+  private void deleteUser() {}
 
-    private void suspendUser() {}
+  private void suspendUser() {}
 
-    private void editMovie() {}
+  private void editMovie() {}
 
-    private void deleteMovie() {}
+  private void deleteMovie() {}
 
-    private void editPromotion() {}
+  private void editPromotion() {}
 
-    private void deletePromotion() {}
+  private void deletePromotion() {}
 
-    private void setTicketPrice() {}
+  private void setTicketPrice() {}
 }
