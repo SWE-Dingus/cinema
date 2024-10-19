@@ -62,5 +62,4 @@ class MoviesController {
   public void deleteMovie(@PathVariable long id) {
     movieRepository.deleteById(id);
   }
-
 }

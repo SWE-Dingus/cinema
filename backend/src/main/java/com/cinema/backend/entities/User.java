@@ -1,37 +1,36 @@
 package com.cinema.backend.entities;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+@Entity
 public abstract class User {
 
-  public static enum UserState {
+  public enum UserState {
     ACTIVE,
     INACTIVE,
     SUSPENDED,
   }
 
-  @NotEmpty @NotNull @NotBlank @Id public long id;
+  @NotNull @Id public Long id;
+  @NotNull public UserState state;
 
-  @NotEmpty @NotNull public UserState state;
+  @Email public String email;
 
-  @NotEmpty @NotNull @NotBlank private String password;
+  @NotBlank private String password;
 
-  public boolean correctPassword(String input) {
-    if (password.equals(input)) {
-      return true;
-    } else {
-      return false;
-    }
+  public boolean isCorrectPassword(String input) {
+    return password.equals(input);
   }
 
   public UserState getState() {
     return state;
   }
 
-  public void setUserState(UserState state) {
+  public void setState(UserState state) {
     this.state = state;
   }
 }

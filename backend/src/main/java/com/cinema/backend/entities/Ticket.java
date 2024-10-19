@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -18,17 +17,17 @@ public class Ticket {
 
   @NotNull private TicketType type;
 
-  @Id @GeneratedValue private long ticketID;
+  @Id @GeneratedValue @NotNull private Long ticketID;
 
   /*
    * FK to seat
    */
-  @NotBlank @NotNull @NotEmpty private String seatNumber;
+  @NotBlank private String seatNumber;
 
   /*
    * FK to booking
    */
-  @NotBlank @NotEmpty @NotNull private int bookingID;
+  @NotNull private Integer bookingID;
 
   public TicketType getTicketType() {
     return type;

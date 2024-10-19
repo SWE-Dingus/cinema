@@ -1,20 +1,20 @@
 package com.cinema.backend.entities;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
+@Entity
 public class Seat {
 
-  @Id @NotNull private String seatNumber;
+  @Id @NotBlank private String seatNumber;
 
   /*
    * FK to ShowTime
    */
-  @NotNull @NotBlank @NotEmpty private int showID;
+  @NotBlank private int showID;
 
-  @NotEmpty @NotNull private boolean booked;
+  private boolean booked;
 
   public boolean isBooked() {
     return booked;

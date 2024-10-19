@@ -1,14 +1,9 @@
 package com.cinema.backend.entities;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 
 @Entity
-public class Admin extends User{
-
-  @Id @GeneratedValue public long adminID;
-
+public class Admin extends User {
   private void editUser() {}
 
   private void deleteUser() {}
