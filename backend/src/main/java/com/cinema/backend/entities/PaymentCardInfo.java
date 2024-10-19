@@ -3,6 +3,7 @@ package com.cinema.backend.entities;
 import java.sql.Date;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ public class PaymentCardInfo {
     
     @NotBlank
     @NotEmpty
+    @Id
     private String cardNumber;
     
     @NotBlank

@@ -1,6 +1,9 @@
 package com.cinema.backend.entities;
 
+import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -8,6 +11,10 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 public class Customer extends User{
     
+    @Id
+    @GeneratedValue
+    public long custID;
+
     @NotEmpty
     @NotNull
     @NotBlank
