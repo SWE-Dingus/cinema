@@ -25,4 +25,9 @@ public class PaymentCardInfo {
   public void setCardNumber(String cardNumber) {
     this.cardNumber = cardNumber;
   }
+
+  public long getUserId(){
+    return this.userID;
+  }
+
 }

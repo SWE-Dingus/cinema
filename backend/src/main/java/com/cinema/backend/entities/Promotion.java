@@ -18,4 +18,14 @@ public class Promotion {
   public int getDiscount() {
     return discount;
   }
+
+  public String getCode() {
+    return code;
+  }
+
+  public void copy(Promotion newPromotion) {
+    this.code = newPromotion.code;
+    this.discount = newPromotion.discount;
+  }
+
 }

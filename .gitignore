@@ -9,3 +9,5 @@
 
 # Database
 /database/
+backend/pom copy.xml
+backend/src/main/resources/credentials.properties

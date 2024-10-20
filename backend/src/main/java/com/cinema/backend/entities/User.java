@@ -27,4 +27,13 @@ public class User {
   @NotBlank public String name;
   @NotNull public UserState state = UserState.ACTIVE;
   @NotNull public AuthorizationLevel authorizationLevel = AuthorizationLevel.CUSTOMER;
+
+  public void edit(User changes) {
+    this.email = changes.email;
+    this.password = changes.email;
+    this.name = changes.name;
+    this.state = changes.state;
+    this.authorizationLevel = changes.authorizationLevel;
+  }
+
 }
