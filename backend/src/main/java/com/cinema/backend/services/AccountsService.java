@@ -53,6 +53,7 @@ public class AccountsService {
     user.password = passwordEncoder.encode(registrationInfo.password());
     user.name = registrationInfo.name();
     userRepository.save(user);
+    System.out.println("User should have been saved");
   }
 
   public AuthenticationToken login(LoginInfo loginInfo) {
