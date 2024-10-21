@@ -23,7 +23,7 @@ public class Movie {
     NC17,
   }
 
-  @Id @GeneratedValue @NotNull private Long id;
+  @Id @GeneratedValue private Long id;
 
   @NotEmpty public String title;
 
