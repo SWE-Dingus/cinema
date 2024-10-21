@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/account")
 public class AccountController {
 
   private final UserRepository userRepository;
@@ -85,7 +85,7 @@ public class AccountController {
     String registerSubject = "Dingus Account Creation";
     int randomCode = ThreadLocalRandom.current().nextInt(100000, 1000000);
     String emailBody =
-        ("Please use the following code to confirm " + "your account: " + randomCode);
+        ("Please use the following code to confirm your account: " + randomCode);
     try {
       emailService.sendEmail(emailRecipient, registerSubject, emailBody);
     } catch (MessagingException e) {
@@ -93,4 +93,4 @@ public class AccountController {
     }
     return randomCode;
   }
-} //
+}
