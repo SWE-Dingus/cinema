@@ -47,10 +47,8 @@ public class AccountController {
   @PostMapping("register")
   public void register(@RequestBody @Valid RegistrationInfo registrationInfo) {
     int codeToUse = sendRegistrationEmail(registrationInfo.email());
-    if (codeToUse != 0) {
-      Confirmation toAdd = Confirmation.convert(registrationInfo, codeToUse);
-      confirmRepository.save(toAdd);
-    }
+    Confirmation toAdd = Confirmation.convert(registrationInfo, codeToUse);
+    confirmRepository.save(toAdd);
   }
 
   @PostMapping("confirmRegistration") // Used for taking the given code and confirming
