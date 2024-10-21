@@ -82,8 +82,7 @@ public class AccountController {
   public int sendRegistrationEmail(String emailRecipient) {
     String registerSubject = "Dingus Account Creation";
     int randomCode = ThreadLocalRandom.current().nextInt(100000, 1000000);
-    String emailBody =
-        ("Please use the following code to confirm your account: " + randomCode);
+    String emailBody = ("Please use the following code to confirm your account: " + randomCode);
     try {
       emailService.sendEmail(emailRecipient, registerSubject, emailBody);
     } catch (MessagingException e) {
