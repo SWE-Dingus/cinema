@@ -15,6 +15,7 @@ import com.cinema.backend.services.AccountsService;
 import com.cinema.backend.services.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -77,6 +78,11 @@ public class AccountController {
         userRepository.findById(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
     dbUser.edit(user);
     userRepository.save(dbUser);
+  }
+
+  @GetMapping("/getAll")
+  public List<User> getAll() {
+    return userRepository.findAll();
   }
 
   public int sendRegistrationEmail(String emailRecipient) {

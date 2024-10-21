@@ -3,7 +3,9 @@ package com.cinema.backend.controllers;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.PaymentCard;
+import com.cinema.backend.entities.User;
 import com.cinema.backend.repositories.PaymentCardsRepository;
+import com.cinema.backend.repositories.UserRepository;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +24,24 @@ public class PaymentCardsController {
 
   private final PaymentCardsRepository paymentCardsRepository;
 
+  private final UserRepository userRepository;
+
   @Autowired
-  public PaymentCardsController(PaymentCardsRepository paymentCardsRepository) {
+  public PaymentCardsController(
+      PaymentCardsRepository paymentCardsRepository, UserRepository userRepository) {
     this.paymentCardsRepository = paymentCardsRepository;
+    this.userRepository = userRepository;
   }
 
   @PostMapping("/create")
   public void createPaymentCard(@Valid @RequestBody PaymentCard paymentCardInfo) {
     String emailToCheck = paymentCardInfo.getUserEmail();
-
+    User toUse =
+        userRepository
+            .findById(paymentCardInfo.getUserEmail())
+            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
     paymentCardsRepository.save(paymentCardInfo);
+    toUse.addPaymentCard(paymentCardInfo);
   }
 
   @GetMapping("/get/{id}")

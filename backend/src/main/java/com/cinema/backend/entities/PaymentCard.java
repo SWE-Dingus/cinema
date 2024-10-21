@@ -13,7 +13,7 @@ public class PaymentCard {
 
   @NotBlank public String billingAddr;
 
-  @Pattern(regexp = "[0-9]{2}/[0-9]{2}/[20][0-9]{4}")
+  @Pattern(regexp = "[0-9]{2}/[0-9]{4}")
   @NotBlank
   public String expirationDate; // add regex for mm-dd-yyyy
 
