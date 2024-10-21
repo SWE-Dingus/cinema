@@ -1,5 +1,6 @@
 package com.cinema.backend.controllers;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.PaymentCard;
@@ -35,11 +36,12 @@ public class PaymentCardsController {
 
   @PostMapping("/create")
   public void createPaymentCard(@Valid @RequestBody PaymentCard paymentCardInfo) {
-    String emailToCheck = paymentCardInfo.getUserEmail();
+    // String emailToCheck = paymentCardInfo.getUserEmail();
     User toUse =
         userRepository
             .findById(paymentCardInfo.getUserEmail())
-            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+            .orElseThrow(() -> new ResponseStatusException(BAD_REQUEST));
+    // The above throws a BAD_REQUEST error if the User does not exist
     paymentCardsRepository.save(paymentCardInfo);
     toUse.addPaymentCard(paymentCardInfo);
   }
