@@ -62,11 +62,23 @@ public class AccountController {
 
   @PostMapping("login") // Modify login for confirmation
   public AuthenticationToken login(@RequestBody @Valid LoginInfo loginInfo) {
-    Confirmation isInactive =
-        confirmRepository
-            .findById(loginInfo.email())
-            .orElseThrow(() -> new ResponseStatusException(BAD_REQUEST));
-    if (isInactive.state != User.UserState.ACTIVE) {
+    Confirmation isInactive = new Confirmation();
+    User isActive = new User();
+    try {
+      isInactive =
+          confirmRepository
+              .findById(loginInfo.email())
+              .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+    } catch (ResponseStatusException e) {
+      isActive =
+          userRepository
+              .findById(loginInfo.email())
+              .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+    }
+
+    // Returns NOT_FOUND if the user does not exist
+    // Returns BAD_REQUEST if the user state is inactive
+    if (isInactive.state != User.UserState.ACTIVE && isActive.state != User.UserState.ACTIVE) {
       throw new ResponseStatusException(BAD_REQUEST);
     }
     return accountsService.login(loginInfo);
