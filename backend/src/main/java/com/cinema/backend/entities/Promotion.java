@@ -27,5 +27,4 @@ public class Promotion {
     this.code = newPromotion.code;
     this.discount = newPromotion.discount;
   }
-
 }

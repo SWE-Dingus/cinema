@@ -2,18 +2,18 @@ package com.cinema.backend.controllers;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-import com.cinema.backend.repositories.PromotionsRepository;
 import com.cinema.backend.entities.Promotion;
+import com.cinema.backend.repositories.PromotionsRepository;
 import jakarta.validation.Valid;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +42,9 @@ public class PromotionsController {
 
   @GetMapping("/get/{id}")
   public Promotion getPromotion(@PathVariable long id) {
-    return promotionsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+    return promotionsRepository
+        .findById(id)
+        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
   }
 
   @GetMapping("/getAll")
@@ -53,7 +55,7 @@ public class PromotionsController {
   @PutMapping("/update/{id}")
   public void updatePaymentCard(@PathVariable long id, @Valid @RequestBody Promotion promotion) {
     var dbPromotion =
-      promotionsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+        promotionsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
     dbPromotion.copy(promotion);
     promotionsRepository.save(dbPromotion);
   }

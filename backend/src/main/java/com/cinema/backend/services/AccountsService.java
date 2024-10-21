@@ -2,6 +2,7 @@ package com.cinema.backend.services;
 
 import com.cinema.backend.entities.AuthenticationToken;
 import com.cinema.backend.entities.User;
+import com.cinema.backend.records.AccountCredentialsInfo;
 import com.cinema.backend.records.LoginInfo;
 import com.cinema.backend.records.LogoutInfo;
 import com.cinema.backend.records.RegistrationInfo;
@@ -78,5 +79,19 @@ public class AccountsService {
       throw new BadCredentialsException("Incorrect token");
     }
     authenticationTokenRepository.delete(token);
+  }
+
+  public void verifyToken(AccountCredentialsInfo credentials) throws BadCredentialsException {
+    var user =
+        userRepository
+            .findById(credentials.userEmail)
+            .orElseThrow(() -> new BadCredentialsException("User not found"));
+    var token =
+        authenticationTokenRepository
+            .findById(user.email)
+            .orElseThrow(() -> new BadCredentialsException("User not found"));
+    if (!passwordEncoder.matches(user.password, token.token)) {
+      throw new BadCredentialsException("Incorrect token");
+    }
   }
 }

@@ -2,11 +2,11 @@ package com.cinema.backend.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import com.cinema.backend.entities.PaymentCardInfo;
 import java.util.List;
 
 @Entity
@@ -29,7 +29,9 @@ public class User {
   @NotBlank public String name;
   @NotNull public UserState state = UserState.ACTIVE;
   @NotNull public AuthorizationLevel authorizationLevel = AuthorizationLevel.CUSTOMER;
-  public List<PaymentCardInfo> userCards;
+
+  @OneToMany(mappedBy = "userEmail")
+  private List<PaymentCard> userCards;
 
   public void edit(User changes) {
     this.email = changes.email;
@@ -40,8 +42,8 @@ public class User {
   }
 
   // Returns true if the payment card can be added, false if too many
-  public boolean addPaymentCard(PaymentCardInfo paymentCard) {
-    if (userCards.size() < 4) {
+  public boolean addPaymentCard(PaymentCard paymentCard) {
+    if (userCards.size() < 3) {
       this.userCards.add(paymentCard);
       return true;
     } else {
@@ -49,8 +51,7 @@ public class User {
     }
   }
 
-  public List<PaymentCardInfo> getUserCards() {
+  public List<PaymentCard> getUserCards() {
     return userCards;
   }
-
 }
