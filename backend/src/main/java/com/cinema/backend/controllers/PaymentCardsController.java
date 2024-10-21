@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/paymentCards")
 public class PaymentCardsController {
@@ -28,6 +30,8 @@ public class PaymentCardsController {
 
   @PostMapping("/create")
   public void createPaymentCard(@Valid @RequestBody PaymentCard paymentCardInfo) {
+    String emailToCheck = paymentCardInfo.getUserEmail();
+
     paymentCardsRepository.save(paymentCardInfo);
   }
 
@@ -36,6 +40,11 @@ public class PaymentCardsController {
     return paymentCardsRepository
         .findById(id)
         .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+  }
+
+  @GetMapping("/getAll")
+  public List<PaymentCard> getAll() {
+    return paymentCardsRepository.findAll();
   }
 
   @DeleteMapping("/delete/{id}")

@@ -4,25 +4,24 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import java.sql.Date;
 
 @Entity
 public class PaymentCard {
 
-  @Id @NotBlank private String cardNumber;
+  @Id @NotBlank public String cardNumber;
 
-  @NotBlank private String billingAddr;
+  @NotBlank public String billingAddr;
 
-  @NotBlank private Date experirationDate;
+  @Pattern(regexp = "[0-9]{2}/[0-9]{2}/[20][0-9]{4}")
+  @NotBlank public String expirationDate; // add regex for mm-dd-yyyy
 
   /** FK to user */
-  @Email private String userEmail;
+  @Email public String userEmail;
 
-  public String getCardNumber() {
-    return cardNumber;
+  public String getUserEmail() {
+    return this.userEmail;
   }
 
-  public void setCardNumber(String cardNumber) {
-    this.cardNumber = cardNumber;
-  }
 }
