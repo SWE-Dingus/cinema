@@ -35,7 +35,7 @@ public class PromotionsController {
     promotionsRepository.save(promotion);
     return new HashMap<>() {
       {
-        this.put("id", promotion.getCode());
+        this.put("id", promotion.code);
       }
     };
   }
