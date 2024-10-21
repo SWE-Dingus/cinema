@@ -23,4 +23,9 @@ public class PaymentCard {
   public String getUserEmail() {
     return this.userEmail;
   }
+
+  public void update(PaymentCard paymentCard) {
+    this.billingAddr = paymentCard.billingAddr;
+    this.expirationDate = paymentCard.expirationDate;
+  }
 }

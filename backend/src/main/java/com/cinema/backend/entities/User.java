@@ -1,5 +1,6 @@
 package com.cinema.backend.entities;
 
+import com.cinema.backend.records.AccountPersonalInfo;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -26,19 +27,20 @@ public class User {
 
   @Id @Email public String email;
   @NotBlank public String password;
-  @NotBlank public String name;
+  @NotBlank public String firstName;
+  @NotBlank public String lastName;
+  @NotBlank public String address;
   @NotNull public UserState state = UserState.ACTIVE;
   @NotNull public AuthorizationLevel authorizationLevel = AuthorizationLevel.CUSTOMER;
 
   @OneToMany(mappedBy = "userEmail")
   private List<PaymentCard> userCards;
 
-  public void edit(User changes) {
-    this.email = changes.email;
-    this.password = changes.email;
-    this.name = changes.name;
-    this.state = changes.state;
-    this.authorizationLevel = changes.authorizationLevel;
+  public void edit(AccountPersonalInfo changes) {
+    this.firstName = changes.firstName;
+    this.lastName = changes.lastName;
+    this.address = changes.billingAddr;
+    this.userCards = changes.getUserCards();
   }
 
   // Returns true if the payment card can be added, false if too many

@@ -1,14 +1,12 @@
 package com.cinema.backend.controllers;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.AuthenticationToken;
 import com.cinema.backend.entities.Confirmation;
 import com.cinema.backend.entities.User;
-import com.cinema.backend.records.AccountConfirmationInfo;
-import com.cinema.backend.records.LoginInfo;
-import com.cinema.backend.records.LogoutInfo;
-import com.cinema.backend.records.RegistrationInfo;
+import com.cinema.backend.records.*;
 import com.cinema.backend.repositories.ConfirmationRepository;
 import com.cinema.backend.repositories.UserRepository;
 import com.cinema.backend.services.AccountsService;
@@ -64,6 +62,13 @@ public class AccountController {
 
   @PostMapping("login") // Modify login for confirmation
   public AuthenticationToken login(@RequestBody @Valid LoginInfo loginInfo) {
+    Confirmation isInactive =
+        confirmRepository
+            .findById(loginInfo.email())
+            .orElseThrow(() -> new ResponseStatusException(BAD_REQUEST));
+    if (isInactive.state != User.UserState.ACTIVE) {
+      throw new ResponseStatusException(BAD_REQUEST);
+    }
     return accountsService.login(loginInfo);
   }
 
@@ -73,11 +78,13 @@ public class AccountController {
   }
 
   @PutMapping("/edit/{email}")
-  public void editProfile(@PathVariable String email, @Valid @RequestBody User user) {
+  public void editProfile(
+      @PathVariable String email, @Valid @RequestBody AccountPersonalInfo accountPersonalInfo) {
     var dbUser =
         userRepository.findById(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
-    dbUser.edit(user);
+    dbUser.edit(accountPersonalInfo);
     userRepository.save(dbUser);
+    sendProfileChangeInfo(dbUser.email);
   }
 
   @GetMapping("/getAll")
@@ -95,5 +102,16 @@ public class AccountController {
       throw new ResponseStatusException(NOT_FOUND);
     }
     return randomCode;
+  }
+
+  public void sendProfileChangeInfo(String emailRecipient) {
+    String registerSubject = "Dingus Profile Information Changed";
+    String emailBody =
+        ("This is a reminder to let you know that information has changed about your account.");
+    try {
+      emailService.sendEmail(emailRecipient, registerSubject, emailBody);
+    } catch (MessagingException e) {
+      throw new ResponseStatusException(NOT_FOUND);
+    }
   }
 }

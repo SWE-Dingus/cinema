@@ -36,19 +36,27 @@ public class PaymentCardsController {
             .findById(paymentCardInfo.getUserEmail())
             .orElseThrow(() -> new ResponseStatusException(BAD_REQUEST));
     // The above throws a BAD_REQUEST error if the User does not exist
-    paymentCardsRepository.save(paymentCardInfo);
-    toUse.addPaymentCard(paymentCardInfo);
+    if (toUse.getUserCards().size() < 3) {
+      paymentCardsRepository.save(paymentCardInfo);
+      toUse.addPaymentCard(paymentCardInfo);
+    }
   }
 
   @GetMapping("/get/{id}")
-  public PaymentCard getPaymentCard(@PathVariable long id) {
+  public PaymentCard getPaymentCard(@PathVariable String id) {
     return paymentCardsRepository
         .findById(id)
         .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
   }
 
   @PutMapping("/edit")
-  public void setPaymentCard(@PathVariable long id) {}
+  public void setPaymentCard(@Valid @RequestBody PaymentCard paymentCard) {
+    PaymentCard cardToChange =
+        paymentCardsRepository
+            .findById(paymentCard.cardNumber)
+            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+    cardToChange.update(paymentCard);
+  }
 
   @GetMapping("/getAll")
   public List<PaymentCard> getAll() {
@@ -56,7 +64,7 @@ public class PaymentCardsController {
   }
 
   @DeleteMapping("/delete/{id}")
-  public void deletePaymentCard(@PathVariable long id) {
+  public void deletePaymentCard(@PathVariable String id) {
     paymentCardsRepository.deleteById(id);
   }
 }

@@ -1,5 +1,7 @@
 package com.cinema.backend.services;
 
+import static com.cinema.backend.entities.User.UserState.ACTIVE;
+
 import com.cinema.backend.entities.AuthenticationToken;
 import com.cinema.backend.entities.User;
 import com.cinema.backend.records.AccountCredentialsInfo;
@@ -52,7 +54,9 @@ public class AccountsService {
     var user = new User();
     user.email = registrationInfo.email();
     user.password = passwordEncoder.encode(registrationInfo.password());
-    user.name = registrationInfo.name();
+    user.firstName = registrationInfo.firstName();
+    user.lastName = registrationInfo.lastName();
+    user.state = ACTIVE;
     userRepository.save(user);
     System.out.println("User should have been saved");
   }
