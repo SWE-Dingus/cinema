@@ -12,7 +12,7 @@ public class AccountPersonalInfo {
 
   public String billingAddr;
 
-  @NotBlank public String phonenumber;
+  @NotBlank public String phoneNumber;
 
   @OneToMany(mappedBy = "userEmail")
   private List<PaymentCard> userCards;
