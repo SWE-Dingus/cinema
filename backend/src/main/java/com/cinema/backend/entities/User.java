@@ -15,8 +15,11 @@ import java.util.List;
 public class User {
 
   public enum UserState {
+    /** User is confirmed and is not suspended */
     ACTIVE,
+    /** User is pending confirmation */
     INACTIVE,
+    /** User has been suspended by an admin */
     SUSPENDED,
   }
 

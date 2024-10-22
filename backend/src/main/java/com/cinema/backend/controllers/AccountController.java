@@ -43,7 +43,7 @@ public class AccountController {
     int codeToUse = sendRegistrationEmail(registrationInfo.email());
     var newUser = new User();
     newUser.email = registrationInfo.email();
-    newUser.password = registrationInfo.password();
+    newUser.password = AccountsService.passwordEncoder.encode(registrationInfo.password());
     newUser.firstName = registrationInfo.firstName();
     newUser.lastName = registrationInfo.lastName();
     newUser.lastConfirmationCode = codeToUse;
@@ -58,34 +58,17 @@ public class AccountController {
     userRepository.save(newUser);
   }
 
-  @PostMapping("resetPassword")
-  public void resetPassword(@RequestBody @Valid PasswordResetInfo passwordResetInfo)
-      throws MessagingException {
-    var user =
-        userRepository
-            .findById(passwordResetInfo.email())
-            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    var newPassword = RandomStringUtils.secure().nextAlphanumeric(16);
-    user.password = AccountsService.passwordEncoder.encode(newPassword);
-    userRepository.save(user);
-    emailService.sendEmail(
-        user.email,
-        "Password reset for Cinema E-Booking System",
-        "Your password has been reset to the below value. Please use this new password to log in, and then change your password as soon as possible.\n\n"
-            + newPassword);
-  }
-
   @PostMapping("confirmRegistration") // Used for taking the given code and confirming
   public void confirmAccount(@RequestBody @Valid AccountConfirmationInfo confirmationInfo) {
-    // Take confirmation info, compare to code in User, and go
-    // lastConfirmationCode
     User toConfirm =
         userRepository
             .findById(confirmationInfo.userEmail())
             .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
-    if (confirmationInfo.confirmationCode() == toConfirm.lastConfirmationCode) {
-      toConfirm.state = User.UserState.ACTIVE;
+    if (confirmationInfo.confirmationCode() != toConfirm.lastConfirmationCode) {
+      throw new ResponseStatusException(BAD_REQUEST, "Invalid confirmation code");
     }
+    toConfirm.state = UserState.ACTIVE;
+    userRepository.save(toConfirm);
   }
 
   @PostMapping("login") // Modify login for confirmation
@@ -93,12 +76,12 @@ public class AccountController {
     User isActive =
         userRepository
             .findById(loginInfo.email())
-            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "User not found"));
 
     // Returns NOT_FOUND if the user does not exist
     // Returns BAD_REQUEST if the user state is inactive
     if (isActive.state != User.UserState.ACTIVE) {
-      throw new ResponseStatusException(BAD_REQUEST);
+      throw new ResponseStatusException(BAD_REQUEST, "User has not confirmed their email");
     }
     return accountsService.login(loginInfo);
   }
@@ -116,6 +99,23 @@ public class AccountController {
     dbUser.edit(accountPersonalInfo);
     userRepository.save(dbUser);
     sendProfileChangeInfo(dbUser.email);
+  }
+
+  @PostMapping("resetPassword")
+  public void resetPassword(@RequestBody @Valid PasswordResetInfo passwordResetInfo)
+      throws MessagingException {
+    var user =
+        userRepository
+            .findById(passwordResetInfo.email())
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    var newPassword = RandomStringUtils.secure().nextAlphanumeric(16);
+    user.password = AccountsService.passwordEncoder.encode(newPassword);
+    userRepository.save(user);
+    emailService.sendEmail(
+        user.email,
+        "Password reset for Cinema E-Booking System",
+        "Your password has been reset to the below value. Please use this new password to log in, and then change your password as soon as possible.\n\n"
+            + newPassword);
   }
 
   @GetMapping("/getAll")
