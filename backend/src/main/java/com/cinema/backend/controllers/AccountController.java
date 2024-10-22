@@ -104,6 +104,22 @@ public class AccountController {
     return userRepository.findAll();
   }
 
+  @PutMapping("/changePassword")
+  public void changePassword(@RequestBody @Valid PasswordChangeInfo passwordChangeInfo) {
+    // This should only be called when a user is LOGGED IN
+    // This should be called when a user is changing their password
+    User toChange =
+        userRepository
+            .findById(passwordChangeInfo.userEmail())
+            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+    boolean areSame =
+        AccountsService.passwordEncoder.matches(
+            passwordChangeInfo.oldPassword(), toChange.password);
+    if (areSame) {
+      toChange.password = AccountsService.passwordEncoder.encode(passwordChangeInfo.newPassword());
+    }
+  }
+
   public int sendRegistrationEmail(String emailRecipient) {
     String registerSubject = "Dingus Account Creation";
     int randomCode = ThreadLocalRandom.current().nextInt(100000, 1000000);

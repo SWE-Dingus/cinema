@@ -1,6 +1,5 @@
 package com.cinema.backend.services;
 
-
 import com.cinema.backend.entities.AuthenticationToken;
 import com.cinema.backend.records.AccountCredentialsInfo;
 import com.cinema.backend.records.LoginInfo;
@@ -34,7 +33,7 @@ public class AccountsService {
 
   UserRepository userRepository;
   AuthenticationTokenRepository authenticationTokenRepository;
-  PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+  public static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
   @Autowired
   public AccountsService(
