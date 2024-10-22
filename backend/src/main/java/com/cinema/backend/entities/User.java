@@ -29,9 +29,10 @@ public class User {
   @NotBlank public String password;
   @NotBlank public String firstName;
   @NotBlank public String lastName;
-  @NotBlank public String address;
-  @NotNull public UserState state = UserState.ACTIVE;
+  public String address;
+  @NotNull public UserState state = UserState.INACTIVE;
   @NotNull public AuthorizationLevel authorizationLevel = AuthorizationLevel.CUSTOMER;
+  public int lastConfirmationCode;
 
   @OneToMany(mappedBy = "userEmail")
   private List<PaymentCard> userCards;
