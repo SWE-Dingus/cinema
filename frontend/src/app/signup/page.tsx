@@ -3,7 +3,8 @@ import React, { useState, FormEvent } from "react";
 import Link from "next/link";
 
 const SignupPage: React.FC = () => {
-  const [name, setName] = useState<string>("");
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -21,7 +22,7 @@ const SignupPage: React.FC = () => {
 
   const handleSignup = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Name:", name, "Email:", email, "Password:", password);
+    console.log("First Name:", firstName, "Last Name:", lastName, "Email:", email, "Password:", password);
     setError("This email is already registered. Please try another.");
     window.location.replace("/registration-confirm");
   };
@@ -39,16 +40,29 @@ const SignupPage: React.FC = () => {
           <div className="space-y-4">
             <h3 className="text-xl font-semibold text-gray-700 mb-4">Basic Information</h3>
             
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-              <input
-                type="text"
-                placeholder="Enter your name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="w-full p-2 border rounded-md"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter first name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                  className="w-full p-2 border rounded-md text-inputText"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter last name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                  className="w-full p-2 border rounded-md text-inputText"
+                />
+              </div>
             </div>
 
             <div>
@@ -59,7 +73,7 @@ const SignupPage: React.FC = () => {
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 required
-                className="w-full p-2 border rounded-md"
+                className="w-full p-2 border rounded-md text-inputText"
               />
             </div>
 
@@ -71,7 +85,7 @@ const SignupPage: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full p-2 border rounded-md"
+                className="w-full p-2 border rounded-md text-inputText"
               />
             </div>
 
@@ -84,7 +98,7 @@ const SignupPage: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-2 border rounded-md text-inputText"
                 />
                 <button
                   type="button"
@@ -118,7 +132,7 @@ const SignupPage: React.FC = () => {
                     value={cardNumber}
                     onChange={(e) => setCardNumber(e.target.value)}
                     required={showPaymentInfo}
-                    className="w-full p-2 border rounded-md"
+                    className="w-full p-2 border rounded-md text-inputText"
                   />
                   <input
                     type="date"
@@ -126,14 +140,14 @@ const SignupPage: React.FC = () => {
                     value={cardExpiration}
                     onChange={(e) => setCardExpiration(e.target.value)}
                     required={showPaymentInfo}
-                    className="w-full p-2 border rounded-md"
+                    className="w-full p-2 border rounded-md text-inputText"
                   />
                   <input
                     placeholder="Billing address"
                     value={cardBillingAddress}
                     onChange={(e) => setCardBillingAddress(e.target.value)}
                     required={showPaymentInfo}
-                    className="w-full p-2 border rounded-md"
+                    className="w-full p-2 border rounded-md text-inputText"
                   />
                 </div>
               )}
@@ -158,7 +172,7 @@ const SignupPage: React.FC = () => {
                     value={homeAddressStreet}
                     onChange={(e) => setHomeAddressStreet(e.target.value)}
                     required={showHomeAddressInfo}
-                    className="w-full p-2 border rounded-md"
+                    className="w-full p-2 border rounded-md text-inputText"
                   />
                   <div className="grid grid-cols-2 gap-3">
                     <input
@@ -166,14 +180,14 @@ const SignupPage: React.FC = () => {
                       value={homeAddressCity}
                       onChange={(e) => setHomeAddressCity(e.target.value)}
                       required={showHomeAddressInfo}
-                      className="w-full p-2 border rounded-md"
+                      className="w-full p-2 border rounded-md text-inputText"
                     />
                     <input
                       placeholder="State"
                       value={homeAddressState}
                       onChange={(e) => setHomeAddressState(e.target.value)}
                       required={showHomeAddressInfo}
-                      className="w-full p-2 border rounded-md"
+                      className="w-full p-2 border rounded-md text-inputText"
                     />
                   </div>
                   <input
@@ -181,7 +195,7 @@ const SignupPage: React.FC = () => {
                     value={homeAddressZip}
                     onChange={(e) => setHomeAddressZip(e.target.value)}
                     required={showHomeAddressInfo}
-                    className="w-full p-2 border rounded-md"
+                    className="w-full p-2 border rounded-md text-inputText"
                   />
                 </div>
               )}
