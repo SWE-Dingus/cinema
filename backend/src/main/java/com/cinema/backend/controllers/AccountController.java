@@ -64,7 +64,9 @@ public class AccountController {
         userRepository
             .findById(confirmationInfo.userEmail())
             .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
-    if (confirmationInfo.confirmationCode() != toConfirm.lastConfirmationCode) {
+    if (toConfirm.state != UserState.INACTIVE) {
+      throw new ResponseStatusException(BAD_REQUEST, "Account has already been confirmed");
+    } else if (confirmationInfo.confirmationCode() != toConfirm.lastConfirmationCode) {
       throw new ResponseStatusException(BAD_REQUEST, "Invalid confirmation code");
     }
     toConfirm.state = UserState.ACTIVE;
