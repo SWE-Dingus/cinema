@@ -70,8 +70,7 @@ public class AccountController {
 
   @PostMapping("login") // Modify login for confirmation
   public AuthenticationToken login(@RequestBody @Valid LoginInfo loginInfo) {
-    User isActive = new User();
-    isActive =
+    User isActive =
         userRepository
             .findById(loginInfo.email())
             .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));

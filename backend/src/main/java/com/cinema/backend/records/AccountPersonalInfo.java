@@ -10,7 +10,9 @@ public class AccountPersonalInfo {
 
   @NotBlank public String lastName;
 
-  @NotBlank public String billingAddr;
+  public String billingAddr;
+
+  @NotBlank public String phonenumber;
 
   @OneToMany(mappedBy = "userEmail")
   private List<PaymentCard> userCards;

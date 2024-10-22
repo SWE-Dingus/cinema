@@ -45,12 +45,9 @@ public class User {
   }
 
   // Returns true if the payment card can be added, false if too many
-  public boolean addPaymentCard(PaymentCard paymentCard) {
+  public void addPaymentCard(PaymentCard paymentCard) {
     if (userCards.size() < 3) {
       this.userCards.add(paymentCard);
-      return true;
-    } else {
-      return false;
     }
   }
 
