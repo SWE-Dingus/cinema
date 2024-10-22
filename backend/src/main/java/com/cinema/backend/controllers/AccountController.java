@@ -4,11 +4,9 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.AuthenticationToken;
-import com.cinema.backend.entities.Confirmation;
 import com.cinema.backend.entities.User;
 import com.cinema.backend.entities.User.UserState;
 import com.cinema.backend.records.*;
-import com.cinema.backend.repositories.ConfirmationRepository;
 import com.cinema.backend.repositories.UserRepository;
 import com.cinema.backend.services.AccountsService;
 import com.cinema.backend.services.EmailService;
@@ -26,22 +24,16 @@ public class AccountController {
 
   private final UserRepository userRepository;
 
-  private final ConfirmationRepository confirmRepository;
-
   private final EmailService emailService;
 
   AccountsService accountsService;
 
   @Autowired
   public AccountController(
-      AccountsService accountsService,
-      EmailService emailService,
-      UserRepository userRepository,
-      ConfirmationRepository confirmRepository) {
+      AccountsService accountsService, EmailService emailService, UserRepository userRepository) {
     this.accountsService = accountsService;
     this.emailService = emailService;
     this.userRepository = userRepository;
-    this.confirmRepository = confirmRepository;
   }
 
   @PostMapping("register")
