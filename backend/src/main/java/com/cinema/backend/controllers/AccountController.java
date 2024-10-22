@@ -14,7 +14,9 @@ import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -54,6 +56,23 @@ public class AccountController {
       accountsService.savePaymentCard(newUser.email, registrationInfo.paymentCard());
     }
     userRepository.save(newUser);
+  }
+
+  @PostMapping("resetPassword")
+  public void resetPassword(@RequestBody @Valid PasswordResetInfo passwordResetInfo)
+      throws MessagingException {
+    var user =
+        userRepository
+            .findById(passwordResetInfo.email())
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    var newPassword = RandomStringUtils.secure().nextAlphanumeric(16);
+    user.password = newPassword;
+    userRepository.save(user);
+    emailService.sendEmail(
+        user.email,
+        "Password reset for Cinema E-Booking System",
+        "Your password has been reset to the below value. Please use this new password to log in, and then change your password as soon as possible.\n\n"
+            + newPassword);
   }
 
   @PostMapping("confirmRegistration") // Used for taking the given code and confirming
