@@ -1,5 +1,6 @@
 package com.cinema.backend.entities;
 
+import com.cinema.backend.entities.User.AuthorizationLevel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
@@ -15,4 +16,6 @@ public class AuthenticationToken {
   public String token;
 
   @NotNull public Instant expires;
+
+  @NotNull public AuthorizationLevel authorizationLevel;
 }

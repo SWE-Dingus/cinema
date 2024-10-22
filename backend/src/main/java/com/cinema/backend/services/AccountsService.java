@@ -83,6 +83,7 @@ public class AccountsService {
     authToken.userEmail = user.email;
     authToken.token = RandomStringUtils.secure().nextAlphanumeric(64);
     authToken.expires = Instant.now().plus(Duration.ofDays(1));
+    authToken.authorizationLevel = user.authorizationLevel;
     authenticationTokenRepository.save(authToken);
     return authToken;
   }
