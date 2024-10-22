@@ -66,7 +66,7 @@ public class AccountController {
             .findById(passwordResetInfo.email())
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     var newPassword = RandomStringUtils.secure().nextAlphanumeric(16);
-    user.password = newPassword;
+    user.password = AccountsService.passwordEncoder.encode(newPassword);
     userRepository.save(user);
     emailService.sendEmail(
         user.email,
