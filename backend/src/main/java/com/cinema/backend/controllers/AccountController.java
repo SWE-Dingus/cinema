@@ -52,12 +52,15 @@ public class AccountController {
 
   @PostMapping("confirmRegistration") // Used for taking the given code and confirming
   public void confirmAccount(@RequestBody @Valid AccountConfirmationInfo confirmationInfo) {
-    Confirmation toAdd =
-        confirmRepository
+    // Take confirmation info, compare to code in User, and go
+    // lastConfirmationCode
+    User toConfirm =
+        userRepository
             .findById(confirmationInfo.userEmail())
             .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
-    confirmRepository.delete(toAdd);
-    accountsService.registerUser(Confirmation.deconvert(toAdd));
+    if (confirmationInfo.confirmationCode() == toConfirm.lastConfirmationCode) {
+      toConfirm.state = User.UserState.ACTIVE;
+    }
   }
 
   @PostMapping("login") // Modify login for confirmation
