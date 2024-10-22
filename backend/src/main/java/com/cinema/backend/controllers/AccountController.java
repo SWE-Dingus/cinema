@@ -46,6 +46,7 @@ public class AccountController {
     newUser.lastName = registrationInfo.lastName();
     newUser.lastConfirmationCode = codeToUse;
     newUser.state = UserState.INACTIVE;
+    newUser.wantsMarketingEmails = registrationInfo.wantsMarketingEmails();
     if (registrationInfo.homeAddress() != null && !registrationInfo.homeAddress().isBlank()) {
       newUser.address = registrationInfo.homeAddress();
     }

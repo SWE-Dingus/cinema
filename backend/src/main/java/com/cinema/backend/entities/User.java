@@ -33,6 +33,7 @@ public class User {
   @NotNull public UserState state = UserState.INACTIVE;
   @NotNull public AuthorizationLevel authorizationLevel = AuthorizationLevel.CUSTOMER;
   public int lastConfirmationCode;
+  public boolean wantsMarketingEmails;
 
   @OneToMany(mappedBy = "userEmail")
   private List<PaymentCard> userCards;

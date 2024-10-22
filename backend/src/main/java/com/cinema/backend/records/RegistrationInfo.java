@@ -10,4 +10,5 @@ public record RegistrationInfo(
     @Email String email,
     @NotBlank String password,
     PaymentCardInfo paymentCard,
-    String homeAddress) {}
+    String homeAddress,
+    boolean wantsMarketingEmails) {}
