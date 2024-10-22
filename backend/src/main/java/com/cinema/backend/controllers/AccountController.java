@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import com.cinema.backend.entities.AuthenticationToken;
 import com.cinema.backend.entities.Confirmation;
 import com.cinema.backend.entities.User;
+import com.cinema.backend.entities.User.UserState;
 import com.cinema.backend.records.*;
 import com.cinema.backend.repositories.ConfirmationRepository;
 import com.cinema.backend.repositories.UserRepository;
@@ -46,8 +47,20 @@ public class AccountController {
   @PostMapping("register")
   public void register(@RequestBody @Valid RegistrationInfo registrationInfo) {
     int codeToUse = sendRegistrationEmail(registrationInfo.email());
-    Confirmation toAdd = Confirmation.convert(registrationInfo, codeToUse);
-    confirmRepository.save(toAdd);
+    var newUser = new User();
+    newUser.email = registrationInfo.email();
+    newUser.password = registrationInfo.password();
+    newUser.firstName = registrationInfo.firstName();
+    newUser.lastName = registrationInfo.lastName();
+    newUser.lastConfirmationCode = codeToUse;
+    newUser.state = UserState.INACTIVE;
+    if (registrationInfo.homeAddress() != null && !registrationInfo.homeAddress().isBlank()) {
+      newUser.address = registrationInfo.homeAddress();
+    }
+    if (registrationInfo.paymentCard() != null) {
+      accountsService.savePaymentCard(newUser.email, registrationInfo.paymentCard());
+    }
+    userRepository.save(newUser);
   }
 
   @PostMapping("confirmRegistration") // Used for taking the given code and confirming

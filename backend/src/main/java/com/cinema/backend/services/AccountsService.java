@@ -7,9 +7,12 @@ import com.cinema.backend.entities.User;
 import com.cinema.backend.records.AccountCredentialsInfo;
 import com.cinema.backend.records.LoginInfo;
 import com.cinema.backend.records.LogoutInfo;
+import com.cinema.backend.records.PaymentCardInfo;
 import com.cinema.backend.records.RegistrationInfo;
 import com.cinema.backend.repositories.AuthenticationTokenRepository;
+import com.cinema.backend.repositories.PaymentCardsRepository;
 import com.cinema.backend.repositories.UserRepository;
+import jakarta.validation.constraints.Email;
 import java.time.Duration;
 import java.time.Instant;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -23,6 +26,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Service
 public class AccountsService {
+
+  private final PaymentCardsRepository paymentCardsRepository;
+
   @ResponseStatus(code = HttpStatus.CONFLICT, reason = "User already exists")
   static class UserExistsException extends RuntimeException {}
 
@@ -35,9 +41,12 @@ public class AccountsService {
 
   @Autowired
   public AccountsService(
-      UserRepository userRepository, AuthenticationTokenRepository authenticationTokenRepository) {
+      UserRepository userRepository,
+      AuthenticationTokenRepository authenticationTokenRepository,
+      PaymentCardsRepository paymentCardsRepository) {
     this.userRepository = userRepository;
     this.authenticationTokenRepository = authenticationTokenRepository;
+    this.paymentCardsRepository = paymentCardsRepository;
   }
 
   /**
@@ -59,6 +68,10 @@ public class AccountsService {
     user.state = ACTIVE;
     userRepository.save(user);
     System.out.println("User should have been saved");
+  }
+
+  public void savePaymentCard(@Email String email, PaymentCardInfo paymentCardInfo) {
+    paymentCardsRepository.save(paymentCardInfo.toEntity());
   }
 
   public AuthenticationToken login(LoginInfo loginInfo) {
