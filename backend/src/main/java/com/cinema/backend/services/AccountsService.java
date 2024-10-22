@@ -1,14 +1,11 @@
 package com.cinema.backend.services;
 
-import static com.cinema.backend.entities.User.UserState.ACTIVE;
 
 import com.cinema.backend.entities.AuthenticationToken;
-import com.cinema.backend.entities.User;
 import com.cinema.backend.records.AccountCredentialsInfo;
 import com.cinema.backend.records.LoginInfo;
 import com.cinema.backend.records.LogoutInfo;
 import com.cinema.backend.records.PaymentCardInfo;
-import com.cinema.backend.records.RegistrationInfo;
 import com.cinema.backend.repositories.AuthenticationTokenRepository;
 import com.cinema.backend.repositories.PaymentCardsRepository;
 import com.cinema.backend.repositories.UserRepository;
@@ -47,27 +44,6 @@ public class AccountsService {
     this.userRepository = userRepository;
     this.authenticationTokenRepository = authenticationTokenRepository;
     this.paymentCardsRepository = paymentCardsRepository;
-  }
-
-  /**
-   * Register a user in the database
-   *
-   * @param registrationInfo The information of the user to register
-   * @throws UserExistsException If the email in {@code registrationInfo} is already associated with
-   *     an account
-   */
-  public void registerUser(RegistrationInfo registrationInfo) {
-    if (userRepository.findById(registrationInfo.email()).isPresent()) {
-      throw new UserExistsException();
-    }
-    var user = new User();
-    user.email = registrationInfo.email();
-    user.password = passwordEncoder.encode(registrationInfo.password());
-    user.firstName = registrationInfo.firstName();
-    user.lastName = registrationInfo.lastName();
-    user.state = ACTIVE;
-    userRepository.save(user);
-    System.out.println("User should have been saved");
   }
 
   public void savePaymentCard(@Email String email, PaymentCardInfo paymentCardInfo) {
