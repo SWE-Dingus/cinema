@@ -93,14 +93,22 @@ public class AccountController {
     accountsService.logout(logoutInfo);
   }
 
-  @PutMapping("/edit/{email}")
-  public void editProfile(
-      @PathVariable String email, @Valid @RequestBody AccountPersonalInfo accountPersonalInfo) {
+  @PutMapping("/edit/")
+  public void editProfile(@Valid @RequestBody AccountPersonalInfo accountPersonalInfo) {
     var dbUser =
-        userRepository.findById(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+        userRepository
+            .findById(accountPersonalInfo.email)
+            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
     dbUser.edit(accountPersonalInfo);
     userRepository.save(dbUser);
     sendProfileChangeInfo(dbUser.email);
+  }
+
+  @GetMapping("/fetchUser")
+  public User fetchUser(@Valid @RequestBody AccountPersonalInfo accountPersonalInfo) {
+    return userRepository
+        .findById(accountPersonalInfo.email)
+        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
   }
 
   @PostMapping("resetPassword")
