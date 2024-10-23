@@ -88,6 +88,10 @@ const ProfilePage: React.FC = () => {
     router.push("/login");
   };
 
+  const handleEditProfile = () => {
+    router.push("/profile/edit");
+  };
+
   if (!isMounted) {
     return null;
   }
@@ -151,6 +155,12 @@ const ProfilePage: React.FC = () => {
             ) : (
               <p>No payment cards available.</p>
             )}
+             <button
+              onClick={handleEditProfile}
+              className="bg-blue-500 text-white py-2 px-4 rounded mt-4 mr-4"
+            >
+              Edit Profile
+            </button>
 
             <button
               onClick={handleLogout}
