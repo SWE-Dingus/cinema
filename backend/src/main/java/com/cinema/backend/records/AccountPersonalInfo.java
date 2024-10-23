@@ -13,6 +13,8 @@ public class AccountPersonalInfo {
 
   public String billingAddr;
 
+  public String phoneNumber;
+
   public AuthorizationLevel authorizationLevel;
 
   public Boolean wantsMarketingEmails;

@@ -32,6 +32,7 @@ public class User {
   @NotBlank public String password;
   @NotBlank public String firstName;
   @NotBlank public String lastName;
+  @NotBlank public String phoneNumber;
   public String address;
   @NotNull public UserState state = UserState.INACTIVE;
   @NotNull public AuthorizationLevel authorizationLevel = AuthorizationLevel.CUSTOMER;
@@ -45,6 +46,7 @@ public class User {
     this.firstName = changes.firstName;
     this.lastName = changes.lastName;
     this.address = changes.billingAddr;
+    this.phoneNumber = changes.phoneNumber;
   }
 
   // Returns true if the payment card can be added, false if too many
