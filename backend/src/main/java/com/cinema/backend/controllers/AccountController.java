@@ -63,7 +63,7 @@ public class AccountController {
     User toConfirm =
         userRepository
             .findById(confirmationInfo.userEmail())
-            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "User does not exist."));
     if (toConfirm.state != UserState.INACTIVE) {
       throw new ResponseStatusException(BAD_REQUEST, "Account has already been confirmed");
     } else if (confirmationInfo.confirmationCode() != toConfirm.lastConfirmationCode) {
@@ -164,7 +164,7 @@ public class AccountController {
   public void sendProfileChangeInfo(String emailRecipient) {
     String registerSubject = "Dingus Profile Information Changed";
     String emailBody =
-        ("This is a reminder to let you know that information has changed about your account.\nPlease log in to check, and contact support with any questions.");
+        ("This is a reminder to let you know that information has changed about your account.\nPlease log in to check, and contact Dingus support with any questions.");
     try {
       emailService.sendEmail(emailRecipient, registerSubject, emailBody);
     } catch (MessagingException e) {
