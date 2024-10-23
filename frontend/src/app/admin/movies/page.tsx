@@ -117,8 +117,11 @@ const ManageMovies: React.FC = () => {
         throw new Error("Failed to add movie");
       }
 
-      const savedMovie = await response.json();
-      setMovies((prevMovies) => [...prevMovies, savedMovie]);
+      //const savedMovie = await response.json();
+      //setMovies((prevMovies) => [...prevMovies, savedMovie]);
+      const updatedMoviesResponse = await fetch(`${Config.apiRoot}/movies/getAll`);
+      const newData = await updatedMoviesResponse.json();
+      setMovies(newData);
       resetMovieFields();
     } catch (error) {
       console.error("Error adding movie:", error);
