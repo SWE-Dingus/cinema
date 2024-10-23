@@ -76,7 +76,7 @@ const UserControl: React.FC<UserControlProps> = ({ user }) => {
             type="checkbox"
             id="promotions"
             checked={promotions}
-            onChange={(_) => {setPromotions(!promotions)}}
+            onChange={(e) => {setPromotions(e.target.checked)}}
           />
         </td>
         <td>
