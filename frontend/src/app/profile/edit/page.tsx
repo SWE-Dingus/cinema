@@ -41,7 +41,7 @@ const EditProfilePage: React.FC = () => {
         lastName: lastName,
       };
       await fetch(`${Config.apiRoot}/account/edit`, {
-        method: "POST",
+        method: "PUT",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify(updates),
       })
