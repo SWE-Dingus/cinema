@@ -39,6 +39,8 @@ const LoginPage: React.FC = () => {
         const data = await response.json();
         localStorage.setItem("accountToken", data.token); // Assuming the response contains a token
         localStorage.setItem("accountEmail", email); // Optionally, store email too
+        localStorage.setItem("expires", data.expires);
+
         window.location.replace("/"); // Redirect to the dashboard or home page after login
       } else {
         const errorMessage = await response.text();

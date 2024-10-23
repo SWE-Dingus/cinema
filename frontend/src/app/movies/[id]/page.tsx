@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
@@ -9,8 +9,36 @@ import { Movie } from "@/app/models/Movie";
 
 const MovieDetailsPage: React.FC = () => {
   const [movie, setMovie] = useState<Movie | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const router = useRouter();
   const { id } = router.query;
+
+  useEffect(() => {
+    const token = localStorage.getItem("accountToken");
+    const expires = localStorage.getItem("expires");
+
+    if (token && expires) {
+      const expiryDate = new Date(expires);
+      const currentDate = new Date();
+
+      // Check if the token is still valid
+      if (expiryDate > currentDate) {
+        setIsLoggedIn(true);
+      } else {
+        handleLogout(); // Token is expired, log out the user
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("accountToken");
+    localStorage.removeItem("accountEmail");
+    localStorage.removeItem("authorizationLevel");
+    localStorage.removeItem("expires");
+
+    setIsLoggedIn(false);
+    window.location.replace("/login");
+  };
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -26,7 +54,7 @@ const MovieDetailsPage: React.FC = () => {
     if (id) {
       fetchMovieDetails();
     }
-  }, [id]); // Now `id` is the only dependency
+  }, [id]);
 
   if (!movie) {
     return <p>Loading...</p>;
@@ -34,7 +62,8 @@ const MovieDetailsPage: React.FC = () => {
 
   return (
     <div>
-      <Navbar />
+      {/* Pass the required props to Navbar */}
+      <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
       <div className="p-5">
         <div className="flex">
           <Image src={movie.posterUrl} alt={movie.title} className="w-1/3" />
