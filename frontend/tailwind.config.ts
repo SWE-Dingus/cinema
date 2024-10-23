@@ -9,6 +9,7 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        inputText: "#333333",
         text: "var(--text)",
       },
       width: {

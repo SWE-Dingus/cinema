@@ -11,7 +11,7 @@ public class PaymentCard {
 
   @Id @NotBlank public String cardNumber;
 
-  @NotBlank public String billingAddr;
+  @NotBlank public String billingAddress;
 
   @Pattern(regexp = "[0-9]{2}/[0-9]{4}")
   @NotBlank
@@ -22,5 +22,10 @@ public class PaymentCard {
 
   public String getUserEmail() {
     return this.userEmail;
+  }
+
+  public void update(PaymentCard paymentCard) {
+    this.billingAddress = paymentCard.billingAddress;
+    this.expirationDate = paymentCard.expirationDate;
   }
 }

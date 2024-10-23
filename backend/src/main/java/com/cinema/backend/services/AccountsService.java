@@ -1,13 +1,14 @@
 package com.cinema.backend.services;
 
 import com.cinema.backend.entities.AuthenticationToken;
-import com.cinema.backend.entities.User;
 import com.cinema.backend.records.AccountCredentialsInfo;
 import com.cinema.backend.records.LoginInfo;
 import com.cinema.backend.records.LogoutInfo;
-import com.cinema.backend.records.RegistrationInfo;
+import com.cinema.backend.records.PaymentCardInfo;
 import com.cinema.backend.repositories.AuthenticationTokenRepository;
+import com.cinema.backend.repositories.PaymentCardsRepository;
 import com.cinema.backend.repositories.UserRepository;
+import jakarta.validation.constraints.Email;
 import java.time.Duration;
 import java.time.Instant;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -21,6 +22,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Service
 public class AccountsService {
+
+  private final PaymentCardsRepository paymentCardsRepository;
+
   @ResponseStatus(code = HttpStatus.CONFLICT, reason = "User already exists")
   static class UserExistsException extends RuntimeException {}
 
@@ -29,32 +33,20 @@ public class AccountsService {
 
   UserRepository userRepository;
   AuthenticationTokenRepository authenticationTokenRepository;
-  PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+  public static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
   @Autowired
   public AccountsService(
-      UserRepository userRepository, AuthenticationTokenRepository authenticationTokenRepository) {
+      UserRepository userRepository,
+      AuthenticationTokenRepository authenticationTokenRepository,
+      PaymentCardsRepository paymentCardsRepository) {
     this.userRepository = userRepository;
     this.authenticationTokenRepository = authenticationTokenRepository;
+    this.paymentCardsRepository = paymentCardsRepository;
   }
 
-  /**
-   * Register a user in the database
-   *
-   * @param registrationInfo The information of the user to register
-   * @throws UserExistsException If the email in {@code registrationInfo} is already associated with
-   *     an account
-   */
-  public void registerUser(RegistrationInfo registrationInfo) {
-    if (userRepository.findById(registrationInfo.email()).isPresent()) {
-      throw new UserExistsException();
-    }
-    var user = new User();
-    user.email = registrationInfo.email();
-    user.password = passwordEncoder.encode(registrationInfo.password());
-    user.name = registrationInfo.name();
-    userRepository.save(user);
-    System.out.println("User should have been saved");
+  public void savePaymentCard(@Email String email, PaymentCardInfo paymentCardInfo) {
+    paymentCardsRepository.save(paymentCardInfo.toEntity());
   }
 
   public AuthenticationToken login(LoginInfo loginInfo) {
@@ -66,6 +58,7 @@ public class AccountsService {
     authToken.userEmail = user.email;
     authToken.token = RandomStringUtils.secure().nextAlphanumeric(64);
     authToken.expires = Instant.now().plus(Duration.ofDays(1));
+    authToken.authorizationLevel = user.authorizationLevel;
     authenticationTokenRepository.save(authToken);
     return authToken;
   }
