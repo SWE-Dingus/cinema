@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, FormEvent } from "react";
+import Config from "../../../frontend.config";
 import Link from "next/link";
 
 const SignupPage: React.FC = () => {
@@ -45,7 +46,7 @@ const SignupPage: React.FC = () => {
 
     try {
       // Send the POST request to your API endpoint
-      const response = await fetch('/api/account/register', {
+      const response = await fetch(`${Config.apiRoot}/account/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
