@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.URL;
 @Entity
 public class Movie {
 
-  public static enum AgeRating {
+  public enum AgeRating {
     G,
     PG,
     PG13,

@@ -9,3 +9,6 @@
 
 # Database
 /database/
+backend/pom copy.xml
+backend/src/main/resources/credentials.properties
+backend/src/main/java/com.cinema.backend/controllers/EmailController.java

@@ -27,7 +27,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      # set to `update` if you want changes to persist across container restarts
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
     depends_on:
       database:
         condition: service_healthy

@@ -1,30 +1,26 @@
-"use client"
+"use client";
 
-import React, { useState } from "react";
-
-interface User {
-  name: string;
-  email: string;
-}
+import React, { useState, useEffect } from "react";
+import { User } from "@/app/models/User";
+import Config from "@/../frontend.config";
+import UserControl from "@/app/components/UserControl";
 
 const ManageUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [newUserName, setNewUserName] = useState<string>("");
-  const [newUserEmail, setNewUserEmail] = useState<string>("");
 
-  const addUser = () => {
-    const newUser: User = {
-      name: newUserName,
-      email: newUserEmail,
-    };
-    setUsers([...users, newUser]);
-    setNewUserName("");
-    setNewUserEmail("");
+  const fetchUserData = async () => {
+    try {
+      const usersResponse = await fetch(`${Config.apiRoot}/admin/getAllUsers`);
+      const users: User[] = await usersResponse.json();
+      setUsers(users);
+    } catch (error) {
+      console.error("Error fetching users", error);
+    }
   };
 
-  const deleteUser = (index: number) => {
-    setUsers(users.filter((_, i) => i !== index));
-  };
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   const styles = {
     container: {
@@ -69,14 +65,6 @@ const ManageUsers: React.FC = () => {
       width: "100%",
       textAlign: "left" as const,
     },
-    userItem: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      padding: "0.5rem 0",
-      borderBottom: "1px solid #e2e8f0",
-      color: "#e2e8f0", // Light color for better visibility
-    },
     deleteButton: {
       marginLeft: "1rem",
       color: "#e74c3c", // Red color for delete button
@@ -90,51 +78,13 @@ const ManageUsers: React.FC = () => {
     <div style={styles.container}>
       <h1 style={styles.heading}>Manage Users</h1>
 
-      <div>
-        <input
-          type="text"
-          placeholder="Enter user name"
-          value={newUserName}
-          onChange={(e) => setNewUserName(e.target.value)}
-          style={styles.input}
-        />
-        <input
-          type="email"
-          placeholder="Enter user email"
-          value={newUserEmail}
-          onChange={(e) => setNewUserEmail(e.target.value)}
-          style={styles.input}
-        />
-        <button
-          onClick={addUser}
-          style={styles.button}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.backgroundColor =
-              styles.buttonHover.backgroundColor)
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.backgroundColor = styles.button.background)
-          }
-        >
-          Add User
-        </button>
-      </div>
-
       <div style={styles.userList}>
         <h2 style={{ ...styles.heading, fontSize: "1.5rem" }}>
           Existing Users
         </h2>
         <ul style={{ padding: 0 }}>
           {users.map((user, index) => (
-            <li key={index} style={styles.userItem}>
-              {user.name} - {user.email}
-              <button
-                onClick={() => deleteUser(index)}
-                style={styles.deleteButton}
-              >
-                Delete
-              </button>
-            </li>
+            <UserControl user={user} key={index} />
           ))}
         </ul>
       </div>
