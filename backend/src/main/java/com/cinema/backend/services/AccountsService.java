@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AccountsService {
@@ -52,7 +53,7 @@ public class AccountsService {
   public AuthenticationToken login(LoginInfo loginInfo) {
     var user = userRepository.findById(loginInfo.email()).orElseThrow(UserNotFoundException::new);
     if (!passwordEncoder.matches(loginInfo.password(), user.password)) {
-      throw new BadCredentialsException("Incorrect password");
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect password");
     }
     var authToken = new AuthenticationToken();
     authToken.userEmail = user.email;
