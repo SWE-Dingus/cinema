@@ -106,9 +106,7 @@ public class AccountController {
 
   @GetMapping("/fetchUser")
   public User fetchUser(@Valid @RequestParam("email") String email) {
-    return userRepository
-        .findById(email)
-        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+    return userRepository.findById(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
   }
 
   @PostMapping("resetPassword")
