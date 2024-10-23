@@ -4,7 +4,7 @@ import Config from "../../../../frontend.config";
 
 const RegistrationConfirmation: React.FC = () => {
   const [confirmationCode, setConfirmationCode] = useState<string>("");
-  const [userEmail, setUserEmail] = useState<string>(""); // Email will be loaded from localStorage
+  const [userEmail, setUserEmail] = useState<string>(""); // Email can be entered manually or loaded from localStorage
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [countdown, setCountdown] = useState<number>(5); // Set initial countdown to 5 seconds
@@ -14,8 +14,6 @@ const RegistrationConfirmation: React.FC = () => {
     const storedEmail = localStorage.getItem("accountEmail");
     if (storedEmail) {
       setUserEmail(storedEmail);
-    } else {
-      setError("Email not found. Please register again.");
     }
   }, []);
 
@@ -65,10 +63,23 @@ const RegistrationConfirmation: React.FC = () => {
   return (
     <div className="h-full w-full text-2xl m-4">
       <h1 className="text-4xl mb-6">Account Confirmation</h1>
-      <p className="mb-4">We sent you a confirmation email. Please enter the code here:</p>
+      <p className="mb-4">We sent you a confirmation email. Please enter your email and the confirmation code here:</p>
       
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* No need for the email input field since we have the email in localStorage */}
+        {/* Email input field */}
+        <div>
+          <label className="block mb-2">Email</label>
+          <input
+            type="email"
+            value={userEmail}
+            onChange={(e) => setUserEmail(e.target.value)}
+            required
+            className="w-full p-2 border rounded-md text-inputText"
+            placeholder="Enter your email"
+          />
+        </div>
+
+        {/* Confirmation Code input field */}
         <div>
           <label className="block mb-2">Confirmation Code</label>
           <input
