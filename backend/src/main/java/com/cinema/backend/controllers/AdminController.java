@@ -62,5 +62,6 @@ public class AdminController {
       user.authorizationLevel = userUpdates.authorizationLevel;
     if (userUpdates.wantsMarketingEmails != null)
       user.wantsMarketingEmails = userUpdates.wantsMarketingEmails;
+    userRepository.save(user);
   }
 }
