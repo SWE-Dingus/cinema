@@ -1,11 +1,9 @@
-"use client"
+"use client";
 
-import React, { useState } from "react";
-
-interface User {
-  name: string;
-  email: string;
-}
+import React, { useState, useEffect } from "react";
+import { AuthorizationLevel, User } from "@/app/models/User";
+import Config from "@/../frontend.config";
+import UserControl from "@/app/components/UserControl";
 
 const ManageUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -14,17 +12,31 @@ const ManageUsers: React.FC = () => {
 
   const addUser = () => {
     const newUser: User = {
-      name: newUserName,
+      lastName: newUserName,
+      firstName: newUserName,
       email: newUserEmail,
+      address: "test",
+      authorizationLevel: AuthorizationLevel.Customer,
+      wantsMarketingEmails: false,
     };
     setUsers([...users, newUser]);
     setNewUserName("");
     setNewUserEmail("");
   };
 
-  const deleteUser = (index: number) => {
-    setUsers(users.filter((_, i) => i !== index));
+  const fetchUserData = async () => {
+    try {
+      const usersResponse = await fetch(`${Config.apiRoot}/admin/getAllUsers`);
+      const users: User[] = await usersResponse.json();
+      setUsers(users);
+    } catch (error) {
+      console.error("Error fetching users", error);
+    }
   };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   const styles = {
     container: {
@@ -68,14 +80,6 @@ const ManageUsers: React.FC = () => {
       marginTop: "1.5rem",
       width: "100%",
       textAlign: "left" as const,
-    },
-    userItem: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      padding: "0.5rem 0",
-      borderBottom: "1px solid #e2e8f0",
-      color: "#e2e8f0", // Light color for better visibility
     },
     deleteButton: {
       marginLeft: "1rem",
@@ -126,15 +130,7 @@ const ManageUsers: React.FC = () => {
         </h2>
         <ul style={{ padding: 0 }}>
           {users.map((user, index) => (
-            <li key={index} style={styles.userItem}>
-              {user.name} - {user.email}
-              <button
-                onClick={() => deleteUser(index)}
-                style={styles.deleteButton}
-              >
-                Delete
-              </button>
-            </li>
+            <UserControl user={user} key={index} />
           ))}
         </ul>
       </div>
