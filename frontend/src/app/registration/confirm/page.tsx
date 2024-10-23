@@ -7,7 +7,7 @@ const RegistrationConfirmation: React.FC = () => {
   const [userEmail, setUserEmail] = useState<string>(""); // Email can be entered manually or loaded from localStorage
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [countdown, setCountdown] = useState<number>(5); // Set initial countdown to 5 seconds
+  const [countdown, setCountdown] = useState<number>(3); // Set initial countdown to 5 seconds
 
   // Load email from localStorage when the component mounts
   useEffect(() => {
