@@ -9,6 +9,11 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        text: "var(--text)",
+      },
+      width: {
+        '1/10': '10%',
+        '9/10': '90%',
       },
     },
   },

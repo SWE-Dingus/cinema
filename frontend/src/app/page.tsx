@@ -9,6 +9,7 @@ import { Movie } from "@/app/models/Movie";
 const HomePage: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]); // State to store movies fetched from API
   const [searchTerm, setSearchTerm] = useState<string>(""); // State to track the search input
+  const [genreTerm, setGenreTerm] = useState<string>("");
 
   // Fetch movies from the backend when the component mounts
   useEffect(() => {
@@ -28,17 +29,20 @@ const HomePage: React.FC = () => {
   // Filter movies based on the search term
   const filteredMovies = movies.filter(
     (movie) =>
-      movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       movie.category
         .join(", ")
         .toLowerCase()
-        .includes(searchTerm.toLowerCase()),
+        .includes(searchTerm.toLowerCase())) &&
+      (movie.category
+        .includes(genreTerm) ||
+        genreTerm==="")
   );
 
   return (
     <div>
       <Navbar />
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} genreTerm={genreTerm} setGenreTerm={setGenreTerm}/>
 
       <section className="p-5">
         <h2 className="text-2xl font-bold">Currently Running</h2>
@@ -50,7 +54,7 @@ const HomePage: React.FC = () => {
             ))}
         </div>
       </section>
-
+            
       <section className="p-5">
         <h2 className="text-2xl font-bold">Coming Soon</h2>
         <div className="grid grid-cols-4 gap-4">
