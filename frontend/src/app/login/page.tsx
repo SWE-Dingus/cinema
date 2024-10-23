@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Config from "../../../frontend.config"; // If you need to use the config API root
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -7,10 +8,46 @@ const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = (e: React.FormEvent) => {
+  // Retrieve email from localStorage if redirected from confirmation page
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("accountEmail");
+    if (storedEmail) {
+      setEmail(storedEmail); // Autofill email field if it exists
+    }
+  }, []);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Email:", email, "Password:", password);
-    setError("Invalid email or password. Please try again.");
+
+    // Prepare the login data
+    const loginData = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      // Send the POST request to the login API endpoint
+      const response = await fetch(`${Config.apiRoot}/account/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("accountToken", data.token); // Assuming the response contains a token
+        localStorage.setItem("accountEmail", email); // Optionally, store email too
+        window.location.replace("/"); // Redirect to the dashboard or home page after login
+      } else {
+        const errorMessage = await response.text();
+        setError(errorMessage || "Invalid email or password. Please try again.");
+      }
+    } catch (error) {
+      const errorMessage = (error as Error).message || 'There was a problem connecting to the server.';
+      setError(errorMessage);
+    }
   };
 
   const styles = {
@@ -115,6 +152,7 @@ const LoginPage: React.FC = () => {
             id="email"
             type="email"
             placeholder="Enter your email"
+            className="w-full p-2 border rounded-md text-inputText"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -132,6 +170,7 @@ const LoginPage: React.FC = () => {
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
+              className="w-full p-2 border rounded-md text-inputText"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

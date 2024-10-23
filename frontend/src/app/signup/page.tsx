@@ -19,6 +19,7 @@ const SignupPage: React.FC = () => {
   const [homeAddressState, setHomeAddressState] = useState<string>("");
   const [homeAddressZip, setHomeAddressZip] = useState<string>("");
   const [showHomeAddressInfo, setShowHomeAddressInfo] = useState<boolean>(false);
+  const [wantsMarketingEmails, setWantsMarketingEmails] = useState<boolean>(false); // New state for promotional emails
   const [error, setError] = useState<string | null>(null);
 
   const handleSignup = async (e: FormEvent<HTMLFormElement>) => {
@@ -31,17 +32,22 @@ const SignupPage: React.FC = () => {
       phoneNumber,
       email,
       password,
-      paymentCard: showPaymentInfo ? {
-        cardNumber: cardNumber || null,
-        expirationDate: cardExpiration || null,
-        billingAddress: cardBillingAddress || null,
-      } : null,
-      homeAddress: showHomeAddressInfo ? {
-        street: homeAddressStreet || null,
-        city: homeAddressCity || null,
-        state: homeAddressState || null,
-        zip: homeAddressZip || null,
-      } : null,
+      wantsMarketingEmails, // Include the promotional email preference
+      paymentCard: showPaymentInfo
+        ? {
+            cardNumber: cardNumber || null,
+            expirationDate: cardExpiration || null,
+            billingAddress: cardBillingAddress || null,
+          }
+        : null,
+      homeAddress: showHomeAddressInfo
+        ? {
+            street: homeAddressStreet || null,
+            city: homeAddressCity || null,
+            state: homeAddressState || null,
+            zip: homeAddressZip || null,
+          }
+        : null,
     };
 
     try {
@@ -55,6 +61,7 @@ const SignupPage: React.FC = () => {
       });
 
       if (response.ok) {
+        localStorage.setItem('accountEmail', email);
         // If registration is successful, redirect to the confirmation page
         window.location.replace('/registration/confirm');
       } else {
@@ -66,7 +73,7 @@ const SignupPage: React.FC = () => {
       const errorMessage = (error as Error).message || 'There was a problem connecting to the server.';
       setError(errorMessage);
     }
-};
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-400 to-orange-200 p-6">
@@ -149,6 +156,19 @@ const SignupPage: React.FC = () => {
                   {showPassword ? "🙈" : "👁️"}
                 </button>
               </div>
+            </div>
+            
+            {/* Checkbox for Promotional Emails */}
+            <div className="pt-4">
+              <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-4">
+                <input
+                  type="checkbox"
+                  checked={wantsMarketingEmails}
+                  onChange={() => setWantsMarketingEmails(!wantsMarketingEmails)}
+                  className="rounded text-orange-500"
+                />
+                <span>Sign up for promotional emails</span>
+              </label>
             </div>
           </div>
 
