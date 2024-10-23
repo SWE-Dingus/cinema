@@ -44,7 +44,11 @@ const LoginPage: React.FC = () => {
         localStorage.setItem("accountEmail", email); // Optionally, store email too
         localStorage.setItem("expires", data.expires);
 
-        window.location.replace("/"); // Redirect to the dashboard or home page after login
+        if (data.authorizationLevel == "ADMIN") {
+          window.location.replace("/admin")
+        } else {
+          window.location.replace("/"); // Redirect to the dashboard or home page after login
+        }
       } else {
         const errorMessage = await response.text();
         setError(errorMessage || "Invalid email or password. Please try again.");
