@@ -20,12 +20,52 @@ const SignupPage: React.FC = () => {
   const [showHomeAddressInfo, setShowHomeAddressInfo] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSignup = (e: FormEvent<HTMLFormElement>) => {
+  const handleSignup = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("First Name:", firstName, "Last Name:", lastName, "Email:", email, "Password:", password);
-    setError("This email is already registered. Please try another.");
-    window.location.replace("/registration-confirm");
-  };
+
+    // Prepare the registration data to be sent to the API
+    const registrationData = {
+      firstName,
+      lastName,
+      phoneNumber,
+      email,
+      password,
+      paymentCard: showPaymentInfo ? {
+        cardNumber: cardNumber || null,
+        expirationDate: cardExpiration || null,
+        billingAddress: cardBillingAddress || null,
+      } : null,
+      homeAddress: showHomeAddressInfo ? {
+        street: homeAddressStreet || null,
+        city: homeAddressCity || null,
+        state: homeAddressState || null,
+        zip: homeAddressZip || null,
+      } : null,
+    };
+
+    try {
+      // Send the POST request to your API endpoint
+      const response = await fetch('/api/account/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(registrationData),
+      });
+
+      if (response.ok) {
+        // If registration is successful, redirect to the confirmation page
+        window.location.replace('/registration/confirm');
+      } else {
+        // Handle non-200 responses
+        const errorMessage = await response.text();
+        setError(errorMessage || 'Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      const errorMessage = (error as Error).message || 'There was a problem connecting to the server.';
+      setError(errorMessage);
+    }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-400 to-orange-200 p-6">
