@@ -44,14 +44,15 @@ const ProfilePage: React.FC = () => {
 
     const fetchUserData = async () => {
         const accountEmail = localStorage.getItem("accountEmail");
-      
+        
         if (!accountEmail) {
           setError("No account email found.");
           return;
         }
       
+        // Correct usage of query params for GET request
         const queryParams = new URLSearchParams({
-          email: accountEmail, // This should match the "email" parameter expected by @RequestParam
+          email: accountEmail, // This matches the expected email parameter in the backend
         });
       
         try {

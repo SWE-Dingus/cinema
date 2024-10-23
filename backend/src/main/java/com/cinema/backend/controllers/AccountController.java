@@ -105,9 +105,9 @@ public class AccountController {
   }
 
   @GetMapping("/fetchUser")
-  public User fetchUser(@Valid @RequestBody EmailInfo emailInfo) {
+  public User fetchUser(@Valid @RequestParam("email") String email) {
     return userRepository
-        .findById(emailInfo.email)
+        .findById(email)
         .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
   }
 
