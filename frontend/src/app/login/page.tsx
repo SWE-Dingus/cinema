@@ -50,7 +50,7 @@ const LoginPage: React.FC = () => {
           window.location.replace("/"); // Redirect to the dashboard or home page after login
         }
       } else {
-        const errorMessage = await response.text();
+        const errorMessage = (await response.json()).message;
         setError(errorMessage || "Invalid email or password. Please try again.");
       }
     } catch (error) {
