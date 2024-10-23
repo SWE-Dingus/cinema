@@ -164,7 +164,7 @@ public class AccountController {
   public void sendProfileChangeInfo(String emailRecipient) {
     String registerSubject = "Dingus Profile Information Changed";
     String emailBody =
-        ("This is a reminder to let you know that information has changed about your account.");
+        ("This is a reminder to let you know that information has changed about your account.\nPlease log in to check, and contact support with any questions.");
     try {
       emailService.sendEmail(emailRecipient, registerSubject, emailBody);
     } catch (MessagingException e) {
