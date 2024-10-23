@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AuthorizationLevel, User } from "@/app/models/User";
+import Config from "@/../frontend.config";
 
 interface UserControlProps {
   user: User;
@@ -11,6 +12,23 @@ const UserControl: React.FC<UserControlProps> = ({ user }) => {
   const [address, setAddress] = useState<string>(user.address);
   const [authLevel, setAuthLevel] = useState<AuthorizationLevel>(user.authorizationLevel);
   const [promotions, setPromotions] = useState<boolean>(user.wantsMarketingEmails);
+
+  const saveUserChanges = async () => {
+    fetch(`${Config.apiRoot}/admin/updateUser`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          firstName: firstName,
+          lastName: lastName,
+          billingAddr: address,
+          authorizationLevel: authLevel,
+          wantsMarketingEmails: promotions,
+        }),
+      })
+  };
 
   return (
     <table className="border-separate border-spacing-5">
@@ -80,7 +98,7 @@ const UserControl: React.FC<UserControlProps> = ({ user }) => {
           />
         </td>
         <td>
-          <button className="bg-white text-black rounded">Save</button>
+          <button className="bg-white text-black rounded" onClick={saveUserChanges}>Save</button>
         </td>
       </tr>
       </tbody>

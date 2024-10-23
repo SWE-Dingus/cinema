@@ -1,28 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { AuthorizationLevel, User } from "@/app/models/User";
+import { User } from "@/app/models/User";
 import Config from "@/../frontend.config";
 import UserControl from "@/app/components/UserControl";
 
 const ManageUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [newUserName, setNewUserName] = useState<string>("");
-  const [newUserEmail, setNewUserEmail] = useState<string>("");
-
-  const addUser = () => {
-    const newUser: User = {
-      lastName: newUserName,
-      firstName: newUserName,
-      email: newUserEmail,
-      address: "test",
-      authorizationLevel: AuthorizationLevel.Customer,
-      wantsMarketingEmails: false,
-    };
-    setUsers([...users, newUser]);
-    setNewUserName("");
-    setNewUserEmail("");
-  };
 
   const fetchUserData = async () => {
     try {
@@ -93,36 +77,6 @@ const ManageUsers: React.FC = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.heading}>Manage Users</h1>
-
-      <div>
-        <input
-          type="text"
-          placeholder="Enter user name"
-          value={newUserName}
-          onChange={(e) => setNewUserName(e.target.value)}
-          style={styles.input}
-        />
-        <input
-          type="email"
-          placeholder="Enter user email"
-          value={newUserEmail}
-          onChange={(e) => setNewUserEmail(e.target.value)}
-          style={styles.input}
-        />
-        <button
-          onClick={addUser}
-          style={styles.button}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.backgroundColor =
-              styles.buttonHover.backgroundColor)
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.backgroundColor = styles.button.background)
-          }
-        >
-          Add User
-        </button>
-      </div>
 
       <div style={styles.userList}>
         <h2 style={{ ...styles.heading, fontSize: "1.5rem" }}>

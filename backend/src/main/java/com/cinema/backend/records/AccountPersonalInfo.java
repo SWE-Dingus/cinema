@@ -1,27 +1,19 @@
 package com.cinema.backend.records;
 
-import com.cinema.backend.entities.PaymentCard;
-import jakarta.persistence.OneToMany;
+import com.cinema.backend.entities.User.AuthorizationLevel;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import java.util.List;
 
 public class AccountPersonalInfo {
 
   @Email public String email;
 
-  @NotBlank public String firstName;
+  public String firstName;
 
-  @NotBlank public String lastName;
+  public String lastName;
 
   public String billingAddr;
 
-  @NotBlank public String phoneNumber;
+  public AuthorizationLevel authorizationLevel;
 
-  @OneToMany(mappedBy = "userEmail")
-  private List<PaymentCard> userCards;
-
-  public List<PaymentCard> getUserCards() {
-    return userCards;
-  }
+  public Boolean wantsMarketingEmails;
 }

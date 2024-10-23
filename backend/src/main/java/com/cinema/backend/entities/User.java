@@ -45,7 +45,6 @@ public class User {
     this.firstName = changes.firstName;
     this.lastName = changes.lastName;
     this.address = changes.billingAddr;
-    this.userCards = changes.getUserCards();
   }
 
   // Returns true if the payment card can be added, false if too many
