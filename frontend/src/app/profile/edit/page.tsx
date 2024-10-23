@@ -34,6 +34,19 @@ const EditProfilePage: React.FC = () => {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // State to check if the user is logged in
 
+    const postUpdates = async () => {
+      const updates = {
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+      };
+      await fetch(`${Config.apiRoot}/account/edit`, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(updates),
+      })
+    };
+
   useEffect(() => {
     const accountEmail = localStorage.getItem("accountEmail");
 
@@ -211,8 +224,8 @@ const EditProfilePage: React.FC = () => {
 
           <div className="mt-8 space-y-4">
             <button
-              type="submit"
               className="w-full bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition-colors font-medium"
+              onClick={postUpdates}
             >
               Save Changes
             </button>

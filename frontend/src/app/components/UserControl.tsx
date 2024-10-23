@@ -10,7 +10,7 @@ const UserControl: React.FC<UserControlProps> = ({ user }) => {
   const [firstName, setFirstName] = useState<string>(user.firstName);
   const [lastName, setLastName] = useState<string>(user.lastName);
   const [address, setAddress] = useState<string>(user.address);
-  const [authLevel, setAuthLevel] = useState<AuthorizationLevel>(user.authorizationLevel);
+  const [authLevel, setAuthLevel] = useState<string>(user.authorizationLevel);
   const [promotions, setPromotions] = useState<boolean>(user.wantsMarketingEmails);
 
   const saveUserChanges = async () => {
@@ -77,7 +77,7 @@ const UserControl: React.FC<UserControlProps> = ({ user }) => {
           <select
               value={authLevel}
               onChange={(e) => {
-                setAuthLevel(AuthorizationLevel[e.target.value as keyof typeof AuthorizationLevel]);
+                setAuthLevel(e.target.value);
               }}
               className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
             >

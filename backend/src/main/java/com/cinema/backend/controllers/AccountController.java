@@ -93,7 +93,7 @@ public class AccountController {
     accountsService.logout(logoutInfo);
   }
 
-  @PutMapping("/edit/")
+  @PutMapping("/edit")
   public void editProfile(@Valid @RequestBody AccountPersonalInfo accountPersonalInfo) {
     var dbUser =
         userRepository
