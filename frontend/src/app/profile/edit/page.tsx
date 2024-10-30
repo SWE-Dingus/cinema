@@ -26,14 +26,15 @@ const EditProfilePage: React.FC = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [wantsMarketingEmails, setWantsMarketingEmails] = useState<boolean>(false);
+  const [wantsMarketingEmails, setWantsMarketingEmails] =
+    useState<boolean>(false);
   const [homeAddress, setHomeAddress] = useState("");
   const [paymentCards, setPaymentCards] = useState<PaymentCard[]>([]);
   const [newCard, setNewCard] = useState<PaymentCard | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // State to check if the user is logged in
-
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const postProfileUpdates = async () => {
     try {
@@ -42,7 +43,7 @@ const EditProfilePage: React.FC = () => {
         firstName: firstName,
         lastName: lastName,
         phoneNumber: phoneNumber,
-        billingAddr: homeAddress,  // Home address also serves as billing address
+        billingAddr: homeAddress, // Home address also serves as billing address
         wantsMarketingEmails: wantsMarketingEmails,
       };
 
@@ -55,8 +56,13 @@ const EditProfilePage: React.FC = () => {
       if (!response.ok) {
         throw new Error("Failed to update profile information.");
       }
+
+      setSuccessMessage("Profile updated successfully!"); // Set success message
+      setTimeout(() => setSuccessMessage(null), 3000); // Clear message after 3 seconds
     } catch (err) {
-      setError((err as Error).message || "Something went wrong while updating profile.");
+      setError(
+        (err as Error).message || "Something went wrong while updating profile."
+      );
     }
   };
 
@@ -72,26 +78,37 @@ const EditProfilePage: React.FC = () => {
         throw new Error("Failed to add payment card.");
       }
     } catch (err) {
-      setError((err as Error).message || "Something went wrong while adding the payment card.");
+      setError(
+        (err as Error).message ||
+          "Something went wrong while adding the payment card."
+      );
     }
   };
 
   const handleRemovePaymentCard = async (cardNumber: string) => {
     try {
-      const response = await fetch(`${Config.apiRoot}/paymentCards/delete/${cardNumber}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${Config.apiRoot}/paymentCards/delete/${cardNumber}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to remove payment card.");
       }
 
-      setPaymentCards(paymentCards.filter((card) => card.cardNumber !== cardNumber));
+      setPaymentCards(
+        paymentCards.filter((card) => card.cardNumber !== cardNumber)
+      );
     } catch (err) {
-      setError((err as Error).message || "There was a problem removing the payment card.");
+      setError(
+        (err as Error).message ||
+          "There was a problem removing the payment card."
+      );
     }
   };
 
@@ -114,12 +131,15 @@ const EditProfilePage: React.FC = () => {
       });
 
       try {
-        const response = await fetch(`${Config.apiRoot}/account/fetchUser?${queryParams.toString()}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `${Config.apiRoot}/account/fetchUser?${queryParams.toString()}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (!response.ok) {
           const errorMessage = await response.text();
@@ -137,7 +157,10 @@ const EditProfilePage: React.FC = () => {
         setPaymentCards(data.userCards);
         setWantsMarketingEmails(data.wantsMarketingEmails || false); // Load the marketing email preference
       } catch (err) {
-        setError((err as Error).message || "There was a problem connecting to the server.");
+        setError(
+          (err as Error).message ||
+            "There was a problem connecting to the server."
+        );
       }
     };
 
@@ -161,25 +184,34 @@ const EditProfilePage: React.FC = () => {
   return (
     <>
       {/* Navbar at the top of the page */}
-      <Navbar isLoggedIn={isLoggedIn} handleLogout={() => router.push("/login")} />
+      <Navbar
+        isLoggedIn={isLoggedIn}
+        handleLogout={() => router.push("/login")}
+      />
 
       <div className="min-h-screen bg-gradient-to-br from-orange-400 to-orange-200 p-6">
         <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-8">
           {/* Profile Form */}
           <form onSubmit={handleSaveProfileChanges}>
             <div className="mb-8 text-center">
-              <h2 className="text-3xl font-bold text-gray-800 mb-2">Edit Your Profile</h2>
+              <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                Edit Your Profile
+              </h2>
               <p className="text-gray-600">Update your personal details</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Personal Info */}
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-gray-700 mb-4">Personal Information</h3>
+                <h3 className="text-xl font-semibold text-gray-700 mb-4">
+                  Personal Information
+                </h3>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      First Name
+                    </label>
                     <input
                       type="text"
                       value={firstName}
@@ -189,7 +221,9 @@ const EditProfilePage: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Last Name
+                    </label>
                     <input
                       type="text"
                       value={lastName}
@@ -201,7 +235,9 @@ const EditProfilePage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone Number
+                  </label>
                   <input
                     type="tel"
                     value={phoneNumber}
@@ -211,7 +247,9 @@ const EditProfilePage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Email
+                  </label>
                   <input
                     type="email"
                     value={email}
@@ -223,7 +261,9 @@ const EditProfilePage: React.FC = () => {
 
               {/* Home Address */}
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-gray-700 mb-4">Home Address</h3>
+                <h3 className="text-xl font-semibold text-gray-700 mb-4">
+                  Home Address
+                </h3>
                 <input
                   type="text"
                   value={homeAddress}
@@ -239,7 +279,9 @@ const EditProfilePage: React.FC = () => {
                 <input
                   type="checkbox"
                   checked={wantsMarketingEmails}
-                  onChange={() => setWantsMarketingEmails(!wantsMarketingEmails)}
+                  onChange={() =>
+                    setWantsMarketingEmails(!wantsMarketingEmails)
+                  }
                   className="rounded text-orange-500"
                 />
                 <span>Sign up for promotional emails</span>
@@ -255,18 +297,31 @@ const EditProfilePage: React.FC = () => {
               </button>
             </div>
           </form>
-          
-          
+
+          {successMessage && (
+            <div className="mt-6 bg-green-50 border-l-4 border-green-400 p-4 rounded">
+              <p className="text-green-700">{successMessage}</p>
+            </div>
+          )}
 
           {/* Payment Cards Form */}
           <form onSubmit={handleSavePaymentCard} className="mt-16">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Payment Information</h3>
+            <h3 className="text-xl font-bold text-gray-800 mb-4">
+              Payment Information
+            </h3>
 
             {paymentCards.length > 0 ? (
               paymentCards.map((card, index) => (
-                <div key={index} className="mb-4 p-4 border rounded-md bg-gray-50">
-                  <p><strong>Card Number:</strong> {card.cardNumber}</p>
-                  <p><strong>Expiration Date:</strong> {card.expirationDate}</p>
+                <div
+                  key={index}
+                  className="mb-4 p-4 border rounded-md bg-gray-50"
+                >
+                  <p>
+                    <strong>Card Number:</strong> {card.cardNumber}
+                  </p>
+                  <p>
+                    <strong>Expiration Date:</strong> {card.expirationDate}
+                  </p>
                   <button
                     type="button"
                     onClick={() => handleRemovePaymentCard(card.cardNumber)}
@@ -281,18 +336,24 @@ const EditProfilePage: React.FC = () => {
             )}
 
             {/* Add new card section */}
-            <h3 className="text-lg font-semibold text-gray-700 mb-4">Add a new payment card</h3>
+            <h3 className="text-lg font-semibold text-gray-700 mb-4">
+              Add a new payment card
+            </h3>
             <input
               type="text"
               value={newCard?.cardNumber || ""}
-              onChange={(e) => setNewCard({ ...newCard!, cardNumber: e.target.value })}
+              onChange={(e) =>
+                setNewCard({ ...newCard!, cardNumber: e.target.value })
+              }
               placeholder="New Card Number"
               className="w-full p-2 border rounded-md text-inputText"
             />
             <input
               type="text"
               value={newCard?.expirationDate || ""}
-              onChange={(e) => setNewCard({ ...newCard!, expirationDate: e.target.value })}
+              onChange={(e) =>
+                setNewCard({ ...newCard!, expirationDate: e.target.value })
+              }
               placeholder="New Expiration Date"
               className="w-full p-2 border rounded-md text-inputText"
             />
