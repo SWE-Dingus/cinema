@@ -104,6 +104,8 @@ public class AccountController {
     sendProfileChangeInfo(dbUser.email);
   }
 
+  // Add PutMapping for Editing PaymentCards
+
   @GetMapping("/fetchUser")
   public User fetchUser(@Valid @RequestParam("email") String email) {
     return userRepository.findById(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));

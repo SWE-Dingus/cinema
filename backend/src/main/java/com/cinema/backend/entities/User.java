@@ -46,6 +46,7 @@ public class User {
     this.firstName = changes.firstName;
     this.lastName = changes.lastName;
     this.address = changes.billingAddr;
+    this.wantsMarketingEmails = changes.wantsMarketingEmails;
     // this.phoneNumber = changes.phoneNumber;
   }
 
