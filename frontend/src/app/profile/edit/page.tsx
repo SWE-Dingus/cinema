@@ -12,6 +12,7 @@ interface PaymentCard {
 }
 
 interface UserData {
+  wantsMarketingEmails: boolean;
   firstName: string;
   lastName: string;
   email: string;
@@ -25,12 +26,14 @@ const EditProfilePage: React.FC = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [wantsMarketingEmails, setWantsMarketingEmails] = useState<boolean>(false);
   const [homeAddress, setHomeAddress] = useState("");
   const [paymentCards, setPaymentCards] = useState<PaymentCard[]>([]);
   const [newCard, setNewCard] = useState<PaymentCard | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // State to check if the user is logged in
+
 
   const postProfileUpdates = async () => {
     try {
@@ -40,6 +43,7 @@ const EditProfilePage: React.FC = () => {
         lastName: lastName,
         phoneNumber: phoneNumber,
         billingAddr: homeAddress,  // Home address also serves as billing address
+        wantsMarketingEmails: wantsMarketingEmails,
       };
 
       const response = await fetch(`${Config.apiRoot}/account/edit`, {
@@ -131,6 +135,7 @@ const EditProfilePage: React.FC = () => {
         setPhoneNumber(data.phoneNumber || "");
         setHomeAddress(data.address || "");
         setPaymentCards(data.userCards);
+        setWantsMarketingEmails(data.wantsMarketingEmails || false); // Load the marketing email preference
       } catch (err) {
         setError((err as Error).message || "There was a problem connecting to the server.");
       }
@@ -229,6 +234,18 @@ const EditProfilePage: React.FC = () => {
               </div>
             </div>
 
+            <div className="pt-4">
+              <label className="flex items-center space-x-2 text-sm font-medium text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={wantsMarketingEmails}
+                  onChange={() => setWantsMarketingEmails(!wantsMarketingEmails)}
+                  className="rounded text-orange-500"
+                />
+                <span>Sign up for promotional emails</span>
+              </label>
+            </div>
+
             <div className="mt-8 space-y-4">
               <button
                 type="submit"
@@ -238,6 +255,8 @@ const EditProfilePage: React.FC = () => {
               </button>
             </div>
           </form>
+          
+          
 
           {/* Payment Cards Form */}
           <form onSubmit={handleSavePaymentCard} className="mt-16">
