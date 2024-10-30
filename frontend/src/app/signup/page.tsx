@@ -11,7 +11,8 @@ const SignupPage: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [cardNumber, setCardNumber] = useState<string>("");
-  const [cardExpiration, setCardExpiration] = useState<string>("");
+  const [cardExpirationMonth, setCardExpirationMonth] = useState<string>("");
+  const [cardExpirationYear, setCardExpirationYear] = useState<string>("");
   const [cardBillingAddress, setCardBillingAddress] = useState<string>("");
   const [showPaymentInfo, setShowPaymentInfo] = useState<boolean>(false);
   const [homeAddressStreet, setHomeAddressStreet] = useState<string>("");
@@ -35,17 +36,17 @@ const SignupPage: React.FC = () => {
       wantsMarketingEmails, // Include the promotional email preference
       paymentCard: showPaymentInfo
         ? {
-            cardNumber: cardNumber || null,
-            expirationDate: cardExpiration || null,
-            billingAddress: cardBillingAddress || null,
+            cardNumber: cardNumber,
+            expirationDate: `${cardExpirationMonth}/${cardExpirationYear}`,
+            billingAddress: cardBillingAddress,
           }
         : null,
       homeAddress: showHomeAddressInfo
         ? {
-            street: homeAddressStreet || null,
-            city: homeAddressCity || null,
-            state: homeAddressState || null,
-            zip: homeAddressZip || null,
+            street: homeAddressStreet,
+            city: homeAddressCity,
+            state: homeAddressState,
+            zip: homeAddressZip,
           }
         : null,
     };
@@ -195,14 +196,40 @@ const SignupPage: React.FC = () => {
                     required={showPaymentInfo}
                     className="w-full p-2 border rounded-md text-inputText"
                   />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Expiration Month</label>
                   <input
-                    type="date"
-                    placeholder="Expiration date"
-                    value={cardExpiration}
-                    onChange={(e) => setCardExpiration(e.target.value)}
-                    required={showPaymentInfo}
+                    type="text"
+                    value={cardExpirationMonth}
+                    onChange={(e) => {
+                      // Allow only numbers and limit to 2 characters
+                      const input = e.target.value;
+                      if (/^\d*$/.test(input) && input.length <= 2) {
+                        setCardExpirationMonth(input);
+                      }
+                    }}
+                    placeholder="MM"
+                    maxLength={2}
+                    inputMode="numeric"
                     className="w-full p-2 border rounded-md text-inputText"
                   />
+
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Expiration Year</label>
+                  <input
+                    type="text"
+                    value={cardExpirationYear}
+                    onChange={(e) => {
+                      // Allow only numbers and limit to 4 characters
+                      const input = e.target.value;
+                      if (/^\d*$/.test(input) && input.length <= 4) {
+                        setCardExpirationYear(input);
+                      }
+                    }}
+                    placeholder="YYYY"
+                    maxLength={4}
+                    inputMode="numeric"
+                    className="w-full p-2 border rounded-md text-inputText"
+                  />
+
                   <input
                     placeholder="Billing address"
                     value={cardBillingAddress}
