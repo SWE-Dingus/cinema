@@ -15,8 +15,6 @@ public class Promotion {
   @Max(100)
   public double discountPercent;
 
-  public void copy(Promotion newPromotion) {
-    this.code = newPromotion.code;
-    this.discountPercent = newPromotion.discountPercent;
-  }
+  /** True if this promotion has already been sent out to users via email, false otherwise */
+  public boolean sent;
 }
