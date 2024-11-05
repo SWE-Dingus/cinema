@@ -69,6 +69,8 @@ public class Movie {
 
   @NotNull public Boolean isRunning;
 
+  public List<ShowTime> shows;
+
   // TODO Add list for screenshots/clips of movie later
 
   public long getId() {
@@ -95,5 +97,6 @@ public class Movie {
     this.posterUrl = other.posterUrl;
     this.trailerId = other.trailerId;
     this.isRunning = other.isRunning;
+    this.shows = other.shows;
   }
 }

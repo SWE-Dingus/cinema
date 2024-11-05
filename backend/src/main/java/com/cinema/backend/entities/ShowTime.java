@@ -32,4 +32,24 @@ public class ShowTime {
   public Date getDuration() {
     return duration;
   }
+
+  public void setMovieID(long id) {
+    this.movieID = id;
+  }
+
+  public void setShowRoom(Integer id) {
+    this.showRoomID = id;
+  }
+
+  public void setShowTime(Date showTime) {
+    this.showTime = showTime;
+  }
+
+  public void setDuration(Date duration) {
+    this.duration = duration;
+  }
+
+  public long getMovieID() {
+    return this.movieID;
+  }
 }
