@@ -1,8 +1,10 @@
 package com.cinema.backend.controllers;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.Promotion;
+import com.cinema.backend.records.PromotionInfo;
 import com.cinema.backend.repositories.PromotionsRepository;
 import com.cinema.backend.repositories.UserRepository;
 import com.cinema.backend.services.AccountsService;
@@ -47,9 +49,13 @@ public class PromotionsController {
   }
 
   @PostMapping("/create")
-  public void createPromotion(@Valid @RequestBody Promotion promotion) {
+  public void createPromotion(@Valid @RequestBody PromotionInfo promotion) {
     accountsService.ensureAdmin(request);
-    promotionsRepository.save(promotion);
+    var dbPromotion = new Promotion();
+    dbPromotion.discountPercent = promotion.discountPercent();
+    dbPromotion.code = promotion.code();
+    dbPromotion.sent = false;
+    promotionsRepository.save(dbPromotion);
   }
 
   @GetMapping("/getAll")
@@ -59,11 +65,18 @@ public class PromotionsController {
   }
 
   @PutMapping("/update/{id}")
-  public void updatePaymentCard(@PathVariable String id, @Valid @RequestBody Promotion promotion) {
+  public void updatePaymentCard(
+      @PathVariable String id, @Valid @RequestBody PromotionInfo promotion) {
     accountsService.ensureAdmin(request);
     var dbPromotion =
         promotionsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
-    dbPromotion.copy(promotion);
+    if (dbPromotion.sent) {
+      throw new ResponseStatusException(
+          BAD_REQUEST,
+          String.format("Promotion with ID %s had been sent to users, cannot modify", id));
+    }
+    dbPromotion.discountPercent = promotion.discountPercent();
+    dbPromotion.code = promotion.code();
     promotionsRepository.save(dbPromotion);
   }
 
@@ -82,7 +95,13 @@ public class PromotionsController {
             .orElseThrow(
                 () ->
                     new ResponseStatusException(
-                        NOT_FOUND, String.format("Promotion with ID %d not found", id)));
+                        NOT_FOUND, String.format("Promotion with ID %s not found", id)));
+
+    if (dbPromotion.sent) {
+      throw new ResponseStatusException(
+          BAD_REQUEST, String.format("Promotion with ID %s already sent", id));
+    }
+
     userRepository.findAll().stream()
         .filter(u -> u.wantsMarketingEmails)
         .forEach(
@@ -100,5 +119,8 @@ public class PromotionsController {
                     "Failed to send promotion notification email to user " + u.email);
               }
             });
+
+    dbPromotion.sent = true;
+    promotionsRepository.save(dbPromotion);
   }
 }
