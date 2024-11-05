@@ -4,9 +4,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.ShowRoom;
 import com.cinema.backend.records.ShowRoomInfo;
-import com.cinema.backend.repositories.MovieRepository;
 import com.cinema.backend.repositories.ShowRoomRepository;
-import com.cinema.backend.repositories.ShowTimeRepository;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +15,10 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/rooms")
 public class ShowRoomsController {
 
-  private final MovieRepository movieRepository;
-
-  private final ShowTimeRepository showTimeRepository;
-
   private final ShowRoomRepository showRoomRepository;
 
   @Autowired
-  public ShowRoomsController(
-      MovieRepository movieRepository,
-      ShowTimeRepository showTimeRepository,
-      ShowRoomRepository showRoomRepository) {
-    this.movieRepository = movieRepository;
-    this.showTimeRepository = showTimeRepository;
+  public ShowRoomsController(ShowRoomRepository showRoomRepository) {
     this.showRoomRepository = showRoomRepository;
   }
 
