@@ -146,7 +146,11 @@ public class AccountController {
         AccountsService.passwordEncoder.matches(
             passwordChangeInfo.oldPassword(), toChange.password);
     if (areSame) {
-      toChange.password = AccountsService.passwordEncoder.encode(passwordChangeInfo.newPassword());
+      userRepository
+              .findById(passwordChangeInfo.userEmail())
+              .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))
+              .password =
+          AccountsService.passwordEncoder.encode(passwordChangeInfo.newPassword());
     }
   }
 
