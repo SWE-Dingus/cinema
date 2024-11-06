@@ -20,6 +20,15 @@ public class Movie {
     NC17,
   }
 
+  public enum Genre {
+    ACTION,
+    ADVENTURE,
+    COMEDY,
+    CRIME,
+    DOCUMENTARY,
+    DRAMA,
+  }
+
   @Id @GeneratedValue private long id;
 
   @NotEmpty public String title;
@@ -39,7 +48,7 @@ public class Movie {
 
   @NotEmpty public String synopsis;
 
-  @NotEmpty public List<@NotEmpty String> category;
+  @NotEmpty public List<@NotNull Genre> category;
 
   @Min(0)
   @NotNull
