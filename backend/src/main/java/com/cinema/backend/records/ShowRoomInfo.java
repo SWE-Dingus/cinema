@@ -1,12 +1,8 @@
 package com.cinema.backend.records;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-@Entity
-public class ShowRoomInfo {
-
-  @NotBlank public String showRoomName;
-
-  public Integer numOfSeats;
-}
+public record ShowRoomInfo(
+    @Id @NotNull Integer showRoomID, @NotBlank String showRoomName, Integer numOfSeats) {}

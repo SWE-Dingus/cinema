@@ -40,37 +40,48 @@ public class ShowTimesController {
 
   @PostMapping("add")
   public void addShowTime(@RequestBody @Valid ShowTimeInfo showTimeInfo) {
-    ShowTime toAdd = new ShowTime();
-    toAdd.setShowTime(showTimeInfo.showTime);
-    toAdd.setDuration(showTimeInfo.duration);
-    toAdd.setShowRoom(showTimeInfo.showRoomID);
-    if (showTimeInfo.movieID != 0) {
-      movieRepository
-          .findById(showTimeInfo.movieID)
-          .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))
-          .shows
-          .add(toAdd);
-      toAdd.setMovieID(showTimeInfo.movieID);
+    ShowTime toAdd = showTimeInfo.toEntity();
+    List<ShowTime> showTimesConflicts = showTimeRepository.findAll();
+    boolean conflictFound = false;
+    for (ShowTime showTimesConflict : showTimesConflicts) {
+      if (showTimesConflict.getShowTime() == toAdd.getShowTime()) {
+        conflictFound = true;
+        break;
+      }
     }
-    showTimeRepository.save(toAdd);
+    if (!conflictFound) {
+      //      toAdd.setShowTime(showTimeInfo.showTime);
+      ////      toAdd.setDuration(showTimeInfo.duration);
+      ////      toAdd.setShowRoom(convertedEntity.getShowRoom());
+      if (toAdd.getMovieID() != 0) {
+        movieRepository
+            .findById(toAdd.getMovieID())
+            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))
+            .shows
+            .add(toAdd);
+        toAdd.setMovieID(toAdd.getMovieID());
+      }
+      showTimeRepository.save(toAdd);
+    }
   }
 
   @PutMapping("update")
   public void changeShowTime(@RequestBody @Valid ShowTimeInfo showTimeInfo) {
+    ShowTime convertedEntity = showTimeInfo.toEntity();
     ShowTime toChange =
         showTimeRepository
-            .findById(showTimeInfo.showID)
+            .findById(convertedEntity.showID)
             .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
     movieRepository
         .findById(toChange.getMovieID())
         .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))
         .shows
         .remove(toChange);
-    toChange.setMovieID(showTimeInfo.movieID);
+    toChange.setMovieID(convertedEntity.getMovieID());
     // NEED TO ADD CHECKS FOR IF THE MOVIE DOESN'T WORK, AND UPDATE MOVIE LIST AS BELOW
-    toChange.setDuration(showTimeInfo.duration);
-    toChange.setShowRoom(showTimeInfo.showRoomID);
-    toChange.setShowTime(showTimeInfo.showTime);
+    toChange.setDuration(convertedEntity.getDuration());
+    toChange.setShowRoom(convertedEntity.getShowRoomID());
+    toChange.setShowTime(convertedEntity.getShowTime());
     movieRepository
         .findById(toChange.getMovieID())
         .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))

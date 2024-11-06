@@ -14,6 +14,7 @@ public class ShowTime {
   /*
    * FK to movie
    */
+
   private long movieID;
 
   /*
@@ -51,5 +52,9 @@ public class ShowTime {
 
   public long getMovieID() {
     return this.movieID;
+  }
+
+  public Integer getShowRoomID() {
+    return this.showRoomID;
   }
 }

@@ -1,9 +1,6 @@
 package com.cinema.backend.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -69,6 +66,7 @@ public class Movie {
 
   @NotNull public Boolean isRunning;
 
+  @OneToMany(mappedBy = "movieID")
   public List<ShowTime> shows;
 
   // TODO Add list for screenshots/clips of movie later

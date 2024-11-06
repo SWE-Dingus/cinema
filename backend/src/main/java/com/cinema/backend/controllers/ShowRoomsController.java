@@ -3,9 +3,7 @@ package com.cinema.backend.controllers;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.ShowRoom;
-import com.cinema.backend.records.ShowRoomInfo;
 import com.cinema.backend.repositories.ShowRoomRepository;
-import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +25,14 @@ public class ShowRoomsController {
     return showRoomRepository.findAll();
   }
 
+  /*
   @PostMapping("add")
   public void addShowTime(@RequestBody @Valid ShowRoomInfo showRoomInfo) {
     ShowRoom toAdd = new ShowRoom();
     toAdd.setShowRoomName(showRoomInfo.showRoomName);
     toAdd.setNumOfSeats(showRoomInfo.numOfSeats);
   }
+  */
 
   @DeleteMapping("delete")
   public void removeShowTime(@PathVariable Integer roomID) {
