@@ -26,6 +26,10 @@ public class ShowRoom {
     this.numOfSeats = numSeats;
   }
 
+  public void setShowRoomID(Integer newID) {
+    this.showRoomID = newID;
+  }
+
   public Integer getNumOfSeats() {
     return this.numOfSeats;
   }
