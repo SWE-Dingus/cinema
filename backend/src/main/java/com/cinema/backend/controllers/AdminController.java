@@ -34,6 +34,7 @@ public class AdminController {
     var admin = new User();
     admin.firstName = "admin";
     admin.lastName = "admin";
+    admin.phoneNumber = "555-555-5555";
     admin.email = "admin@admin.com";
     admin.password = AccountsService.passwordEncoder.encode("admin");
     admin.state = UserState.ACTIVE;
