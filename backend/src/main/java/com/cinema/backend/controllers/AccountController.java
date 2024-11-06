@@ -46,6 +46,7 @@ public class AccountController {
     newUser.password = AccountsService.passwordEncoder.encode(registrationInfo.password());
     newUser.firstName = registrationInfo.firstName();
     newUser.lastName = registrationInfo.lastName();
+    newUser.phoneNumber = registrationInfo.phoneNumber();
     newUser.lastConfirmationCode = codeToUse;
     newUser.state = UserState.INACTIVE;
     newUser.wantsMarketingEmails = registrationInfo.wantsMarketingEmails();
