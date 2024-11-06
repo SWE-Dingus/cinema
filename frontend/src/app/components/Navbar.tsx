@@ -8,7 +8,12 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, handleLogout }) => {
   return (
-    <nav className="flex justify-between items-center p-5 bg-gray-800 text-white">
+    <nav 
+      className="flex justify-between items-center p-5 text-white"
+      style={{
+        background: "linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%)",
+      }}
+    >
       {/* Make the title a clickable link */}
       <Link href="/">
         <h1 className="text-xl font-bold cursor-pointer">Cinema E-Booking</h1>
