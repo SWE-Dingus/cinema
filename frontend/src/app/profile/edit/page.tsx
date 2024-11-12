@@ -36,6 +36,51 @@ const EditProfilePage: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // State to check if the user is logged in
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+  const handleChangePassword = async () => {
+    if (newPassword !== confirmNewPassword) {
+      setError("New passwords do not match.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${Config.apiRoot}/account/changePassword`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userEmail: email,
+          oldPassword: oldPassword,
+          newPassword: newPassword
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to change password.");
+      }
+
+      setSuccessMessage("Password changed successfully!");
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
+      setTimeout(() => setSuccessMessage(null), 3000);
+    } catch (err) {
+      setError((err as Error).message || "Something went wrong.");
+    }
+  };
+
+  // Inline validation for confirmNewPassword
+  const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPassword(e.target.value);
+    if (confirmNewPassword && e.target.value !== confirmNewPassword) {
+      setError("New passwords do not match.");
+    } else {
+      setError(null);
+    }
+  };
+
   const postProfileUpdates = async () => {
     try {
       const updates = {
@@ -303,6 +348,68 @@ const EditProfilePage: React.FC = () => {
               <p className="text-green-700">{successMessage}</p>
             </div>
           )}
+
+          {/* Change Password Form */}
+          <div className="mt-16">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">Change Password</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Old Password
+                </label>
+                <input
+                  type="password"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  className="w-full p-2 border rounded-md"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={handleNewPasswordChange} // Use the new handler here
+                  className="w-full p-2 border rounded-md"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Confirm New Password
+                </label>
+                <input
+                  type="password"
+                  value={confirmNewPassword}
+                  onChange={(e) => setConfirmNewPassword(e.target.value)}
+                  className="w-full p-2 border rounded-md"
+                  required
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleChangePassword}
+                className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors font-medium mt-4"
+              >
+                Change Password
+              </button>
+            </div>
+            
+            {/* Success/Error Message */}
+            {successMessage && (
+              <div className="mt-6 bg-green-50 border-l-4 border-green-400 p-4 rounded">
+                <p className="text-green-700">{successMessage}</p>
+              </div>
+            )}
+            {error && (
+              <div className="mt-6 bg-red-50 border-l-4 border-red-400 p-4 rounded">
+                <p className="text-red-700">{error}</p>
+              </div>
+            )}
+          </div>
 
           {/* Payment Cards Form */}
           <form onSubmit={handleSavePaymentCard} className="mt-16">
