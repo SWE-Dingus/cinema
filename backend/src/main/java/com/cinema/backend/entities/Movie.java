@@ -8,6 +8,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import org.hibernate.validator.constraints.URL;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class Movie {
@@ -33,6 +36,8 @@ public class Movie {
     MUSICAL,
     MYSTERY,
     ROMANCE,
+
+    @JsonProperty("SCI-FI")
     SCI_FI,      // Short for "Science Fiction"
     THRILLER,
     WAR,
