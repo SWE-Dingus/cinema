@@ -11,8 +11,8 @@ const HomePage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [genreTerm, setGenreTerm] = useState<string>("");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [genres, setGenres] = useState<string[]>([]);
 
-  // Check if user is logged in by checking for the token in localStorage
   useEffect(() => {
     const token = localStorage.getItem("accountToken");
     const expires = localStorage.getItem("expires");
@@ -21,11 +21,10 @@ const HomePage: React.FC = () => {
       const expiryDate = new Date(expires);
       const currentDate = new Date();
 
-      // Check if the token is still valid
       if (expiryDate > currentDate) {
         setIsLoggedIn(true);
       } else {
-        handleLogout(); // Token is expired, log out the user
+        handleLogout();
       }
     }
   }, []);
@@ -37,6 +36,16 @@ const HomePage: React.FC = () => {
       setMovies(data);
     } catch (error) {
       console.error("Error fetching movies:", error);
+    }
+  };
+
+  const fetchGenres = async () => {
+    try {
+      const response = await fetch(`${Config.apiRoot}/movies/genres`);
+      const data = await response.json();
+      setGenres(data);
+    } catch (error) {
+      console.error("Error fetching genres:", error);
     }
   };
 
@@ -52,6 +61,7 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     fetchMovies();
+    fetchGenres();
   }, []);
 
   const filteredMovies = movies.filter(
@@ -67,7 +77,13 @@ const HomePage: React.FC = () => {
   return (
     <div>
       <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} genreTerm={genreTerm} setGenreTerm={setGenreTerm} />
+      <SearchBar 
+        searchTerm={searchTerm} 
+        setSearchTerm={setSearchTerm} 
+        genreTerm={genreTerm} 
+        setGenreTerm={setGenreTerm} 
+        genreOptions={genres}  // Pass genres here
+      />
       
       <section className="p-5">
         <h2 className="text-2xl font-bold">Currently Running</h2>

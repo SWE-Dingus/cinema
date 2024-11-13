@@ -23,10 +23,24 @@ public class Movie {
   public enum Genre {
     ACTION,
     ADVENTURE,
+    ANIMATION,
     COMEDY,
     CRIME,
     DOCUMENTARY,
     DRAMA,
+    FANTASY,
+    HORROR,
+    MUSICAL,
+    MYSTERY,
+    ROMANCE,
+    SCI_FI,      // Short for "Science Fiction"
+    THRILLER,
+    WAR,
+    WESTERN,
+    BIOGRAPHY,
+    FAMILY,
+    HISTORY,
+    SPORT,
   }
 
   @Id @GeneratedValue private long id;
