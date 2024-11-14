@@ -1,5 +1,6 @@
 package com.cinema.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -8,9 +9,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import org.hibernate.validator.constraints.URL;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class Movie {
@@ -38,7 +36,7 @@ public class Movie {
     ROMANCE,
 
     @JsonProperty("SCI-FI")
-    SCI_FI,      // Short for "Science Fiction"
+    SCI_FI, // Short for "Science Fiction"
     THRILLER,
     WAR,
     WESTERN,

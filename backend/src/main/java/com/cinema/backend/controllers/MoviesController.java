@@ -6,13 +6,11 @@ import com.cinema.backend.entities.Movie;
 import com.cinema.backend.entities.Movie.Genre;
 import com.cinema.backend.repositories.MovieRepository;
 import jakarta.validation.Valid;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,11 +66,9 @@ class MoviesController {
     movieRepository.deleteById(id);
   }
 
-  //endpoint to get the list of genres
+  // endpoint to get the list of genres
   @GetMapping("/genres")
   public List<String> getGenres() {
-    return Arrays.stream(Genre.values())
-                 .map(Enum::name)
-                 .collect(Collectors.toList());
+    return Arrays.stream(Genre.values()).map(Enum::name).collect(Collectors.toList());
   }
 }
