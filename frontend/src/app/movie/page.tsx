@@ -1,17 +1,19 @@
 "use client";
-import { useRouter } from "next/router";
+import { Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Navbar from "../../components/Navbar";
+import Navbar from "../components/Navbar";
 import Image from "next/image";
-import Config from "../../../../frontend.config";
+import Config from "../../../frontend.config";
 import { Movie } from "@/app/models/Movie";
 
 const MovieDetailsPage: React.FC = () => {
   const [movie, setMovie] = useState<Movie | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
   const router = useRouter();
-  const { id } = router.query;
 
   useEffect(() => {
     const token = localStorage.getItem("accountToken");
@@ -25,7 +27,7 @@ const MovieDetailsPage: React.FC = () => {
       if (expiryDate > currentDate) {
         setIsLoggedIn(true);
       } else {
-        handleLogout(); // Token is expired, log out the user
+        handleLogout();
       }
     }
   }, []);
@@ -37,24 +39,31 @@ const MovieDetailsPage: React.FC = () => {
     localStorage.removeItem("expires");
 
     setIsLoggedIn(false);
-    window.location.replace("/login");
+    router.push("/login");
   };
 
   useEffect(() => {
+    if (!id) {
+      router.push("/");
+      return;
+    }
+
     const fetchMovieDetails = async () => {
       try {
         const response = await fetch(`${Config.apiRoot}/movies/get/${id}`);
+        if (!response.ok) {
+          throw new Error("Movie not found");
+        }
         const data = await response.json();
         setMovie(data);
       } catch (error) {
         console.error("Error fetching movie details:", error);
+        router.push("/");
       }
     };
 
-    if (id) {
-      fetchMovieDetails();
-    }
-  }, [id]);
+    fetchMovieDetails();
+  }, [id, router]);
 
   if (!movie) {
     return <p>Loading...</p>;
@@ -62,11 +71,18 @@ const MovieDetailsPage: React.FC = () => {
 
   return (
     <div>
-      {/* Pass the required props to Navbar */}
       <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
       <div className="p-5">
         <div className="flex">
-          <Image src={movie.posterUrl} alt={movie.title} className="w-1/3" />
+          <div className="relative w-1/3 h-96">
+            <Image 
+              src={movie.posterUrl} 
+              alt={movie.title} 
+              layout="fill"
+              objectFit="cover"
+              className="rounded"
+            />
+          </div>
           <div className="ml-5">
             <h1 className="text-4xl font-bold">{movie.title}</h1>
             <p>
@@ -108,4 +124,10 @@ const MovieDetailsPage: React.FC = () => {
   );
 };
 
-export default MovieDetailsPage;
+const SuspendedMovieDetailsPage = () => (
+  <Suspense fallback={<p>Loading movie details...</p>}>
+    <MovieDetailsPage />
+  </Suspense>
+);
+
+export default SuspendedMovieDetailsPage;

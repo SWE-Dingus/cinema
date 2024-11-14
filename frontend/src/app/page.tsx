@@ -13,7 +13,6 @@ const HomePage: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [genres, setGenres] = useState<string[]>([]);
 
-  // Refs for the scrollable containers
   const runningMoviesRef = useRef<HTMLDivElement>(null);
   const comingSoonMoviesRef = useRef<HTMLDivElement>(null);
 
@@ -102,9 +101,9 @@ const HomePage: React.FC = () => {
       />
 
       {/* Currently Running Section */}
-      <section className="p-8 relative">
+      <section className="p-12 relative"> {/* Increased padding */}
         <h2 className="text-2xl font-bold mb-6">Currently Running</h2>
-        <div className="relative overflow-visible">
+        <div className="relative overflow-visible px-12"> {/* Add padding to allow space around the cards */}
           <button 
             onClick={() => scrollLeft(runningMoviesRef)} 
             className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-2 z-10"
@@ -113,7 +112,7 @@ const HomePage: React.FC = () => {
           </button>
           <div
             ref={runningMoviesRef}
-            className="flex overflow-x-auto space-x-8 px-8 py-4 scrollbar-hide"
+            className="flex overflow-x-auto space-x-12 scrollbar-hide" // Adjusted space between cards
           >
             {filteredMovies
               .filter((movie) => movie.isRunning)
@@ -131,9 +130,9 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Coming Soon Section */}
-      <section className="p-8 relative">
+      <section className="p-12 relative"> {/* Increased padding */}
         <h2 className="text-2xl font-bold mb-6">Coming Soon</h2>
-        <div className="relative overflow-visible">
+        <div className="relative overflow-visible px-12"> {/* Add padding to allow space around the cards */}
           <button 
             onClick={() => scrollLeft(comingSoonMoviesRef)} 
             className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-2 z-10"
@@ -142,7 +141,7 @@ const HomePage: React.FC = () => {
           </button>
           <div
             ref={comingSoonMoviesRef}
-            className="flex overflow-x-auto space-x-8 px-8 py-4 scrollbar-hide"
+            className="flex overflow-x-auto space-x-12 scrollbar-hide" // Adjusted space between cards
           >
             {filteredMovies
               .filter((movie) => !movie.isRunning)

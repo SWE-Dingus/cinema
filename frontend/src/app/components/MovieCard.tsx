@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Movie } from "@/app/models/Movie";
+import Image from "next/image";
+import infoIcon from "@/app/images/info.png"; // Adjust path if necessary
 
 interface MovieCardProps {
   movie: Movie;
@@ -11,6 +14,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   const [positionClass, setPositionClass] = useState("origin-center"); // Default to center
   const cardRef = useRef<HTMLDivElement>(null);
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
+  const router = useRouter();
 
   // Determine initial position of the card on mount
   useEffect(() => {
@@ -41,6 +45,10 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
     }
     setIsHovered(false);
     setShowTrailer(false); // Revert back to poster
+  };
+
+  const handleInfoClick = () => {
+    router.push(`/movie?id=${movie.id}`);
   };
 
   return (
@@ -76,11 +84,27 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
         ></iframe>
       )}
 
-      {/* Book Tickets Button (conditionally rendered on hover) */}
+      {/* Movie Title and Rating (conditionally rendered on hover) */}
+      {isHovered && (
+        <div className="text-center mb-3">
+          <h3 className="text-lg font-semibold">{movie.title}</h3>
+          <p className="text-sm text-gray-400"> Rating: {movie.ageRating}</p>
+        </div>
+      )}
+
+      {/* Book Tickets and Info Buttons (conditionally rendered on hover) */}
       {movie.isRunning && isHovered && (
-        <button className="mt-3 bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded">
-          Book Tickets
-        </button>
+        <div className="flex space-x-2 mt-3 justify-center">
+          <button className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded">
+            Book Tickets
+          </button>
+          <button
+            onClick={handleInfoClick}
+            className="bg-gray-500 hover:bg-gray-600 text-white py-1 px-3 rounded flex items-center"
+          >
+            <Image src={infoIcon} alt="Info" className="w-4 h-4 mr-1" /> Info
+          </button>
+        </div>
       )}
     </div>
   );
