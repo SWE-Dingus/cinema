@@ -50,6 +50,11 @@ public class ShowTimesController {
       }
     }
     if (!conflictFound) {
+      toAdd.setSeatsList(
+          showRoomRepository
+              .findById(toAdd.getShowRoomID())
+              .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))
+              .getNumOfSeats());
       //      toAdd.setShowTime(showTimeInfo.showTime);
       ////      toAdd.setDuration(showTimeInfo.duration);
       ////      toAdd.setShowRoom(convertedEntity.getShowRoom());
@@ -88,6 +93,15 @@ public class ShowTimesController {
         .shows
         .add(toChange);
   }
+
+  /*
+  @PutMapping("updateSeats")
+  public void updateSeat(@RequestBody @Valid ShowTimeInfo showTimeInfo, Integer seatToChange) {
+    ShowTime toChange = showTimeInfo.toEntity();
+    // when booked, will add seats
+    // not a moment before nor after
+  }
+  */
 
   @DeleteMapping("delete")
   public void removeShowTime(@PathVariable Integer showID) {

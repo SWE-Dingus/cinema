@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 public class ShowTime {
@@ -16,6 +17,8 @@ public class ShowTime {
    */
 
   private long movieID;
+
+  private List<Boolean> seatsList;
 
   /*
    * FK to ShowRoom
@@ -32,6 +35,27 @@ public class ShowTime {
 
   public Date getDuration() {
     return duration;
+  }
+
+  public void setSeatsList(Integer amountSeats) {
+    for (int i = 0; i < amountSeats; i++) {
+      seatsList.add(false);
+    }
+  }
+
+  public List<Boolean> getSeatsList() {
+    return seatsList;
+  }
+
+  public List<Boolean> updateSeat(Integer newSeat) {
+    seatsList.set(newSeat, true);
+    return seatsList;
+  }
+
+  public List<Boolean> updateSeat(Integer oldSeat, Integer newSeat) {
+    seatsList.set(oldSeat, false);
+    seatsList.set(newSeat, true);
+    return seatsList;
   }
 
   public void setMovieID(long id) {
