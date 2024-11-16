@@ -5,11 +5,13 @@ import { useRouter } from "next/navigation";
 
 const SeatSelection: React.FC = () => {
   const router = useRouter();
-  const [isUnauthorized, setIsUnauthorized] = useState(false);
+
   const seats = ["A1", "A2", "A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5"];
   const ageCategories = ["Child", "Adult", "Senior"];
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [seatAgeCategories, setSeatAgeCategories] = useState<{ [seat: string]: string }>({});
+  
+  const [isUnauthorized, setIsUnauthorized] = useState(false);
 
   useEffect(() => {
     const accountEmail = localStorage.getItem("accountEmail");

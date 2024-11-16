@@ -1,117 +1,83 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-const CheckoutPage: React.FC = () => {
+const CheckoutPage = () => {
   const router = useRouter();
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const [isUnauthorized, setIsUnauthorized] = useState(false);
 
   useEffect(() => {
-    // Check for authorization (e.g., based on a token)
-    const authToken = localStorage.getItem("authToken");
-    if (!authToken) {
-      // If no auth token, redirect to login
-      router.push("/login");
-    } else {
-      setIsAuthorized(true);
+    const accountEmail = localStorage.getItem("accountEmail");
+    if (!accountEmail) {
+      setIsUnauthorized(true);
     }
-  }, [router]);
+  }, []);
 
   const title = "Superbad";
   const showtime = "3:00 P.M";
   const seat = "B5";
 
   const handleCheckout = () => {
-    router.push("/orderconfirm"); // After checkout, redirect to the order confirmation page
+    router.push("/orderconfirm");
   };
 
   const handleCancel = () => {
     router.push("/");
   };
 
-  const styles = {
-    container: {
-      display: "flex",
-      flexDirection: "column" as const,
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100vh",
-      background: "#1b0c1a", // Darker beige background
-      padding: "2rem",
-    },
-    heading: {
-      fontSize: "2rem",
-      color: "#ffffff", // White text for contrast
-      fontWeight: "bold",
-      marginBottom: "1.5rem",
-    },
-    info: {
-      fontSize: "1.2rem",
-      color: "#e2e8f0", // Light color for better visibility
-      marginBottom: "1rem",
-    },
-    button: {
-      padding: "0.75rem 1.5rem",
-      fontSize: "1.1rem",
-      color: "#1b0c1a", // Darker color for text
-      background: "#fadcd5", // Pinkish button color
-      border: "none",
-      borderRadius: "8px",
-      cursor: "pointer",
-      transition: "background-color 0.3s",
-      marginTop: "2rem",
-    },
-    buttonHover: {
-      backgroundColor: "#e0c2a0", // Slightly darker shade for hover
-    },
-  };
-
-  if (!isAuthorized) {
-    // If the user is not authorized, render nothing until redirected
-    return null;
+  if (isUnauthorized) {
+    return (
+      <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
+        <h1 className="text-4xl font-bold mb-6 text-center">
+          401 - Unauthorized
+        </h1>
+        <p className="text-center text-red-600">
+          You are not authorized to view this page. Please{" "}
+          <a href="/login" className="text-blue-500 underline">
+            login
+          </a>{" "}
+          to access checkout.
+        </p>
+      </div>
+    );
   }
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.heading}>Checkout</h1>
+    <div className="flex flex-col justify-center items-center h-screen bg-[#1b0c1a] p-8">
+      <h1 className="text-4xl font-bold text-white mb-6">Checkout</h1>
 
-      <p style={styles.info}>
-        <strong>Movie:</strong> {title || "N/A"}
-      </p>
+      <div className="bg-[#2d1f2d] p-6 rounded-lg shadow-lg">
+        <p className="text-lg text-gray-200 mb-4">
+          <strong>Movie:</strong> {title || "N/A"}
+        </p>
 
-      <p style={styles.info}>
-        <strong>Showtime:</strong> {showtime || "N/A"}
-      </p>
+        <p className="text-lg text-gray-200 mb-4">
+          <strong>Showtime:</strong> {showtime || "N/A"}
+        </p>
 
-      <p style={styles.info}>
-        <strong>Seat:</strong> {seat || "N/A"}
-      </p>
+        <p className="text-lg text-gray-200 mb-4">
+          <strong>Seat:</strong> {seat || "N/A"}
+        </p>
 
-      <button
-        onClick={handleCheckout}
-        style={styles.button}
-        onMouseEnter={(e) =>
-          (e.currentTarget.style.backgroundColor = styles.buttonHover.backgroundColor)
-        }
-        onMouseLeave={(e) =>
-          (e.currentTarget.style.backgroundColor = styles.button.background)
-        }
-      >
-        Confirm and Pay
-      </button>
+        <div className="flex flex-col gap-4 mt-6">
+          <button
+            onClick={handleCheckout}
+            className="px-6 py-3 text-lg bg-[#fadcd5] text-[#1b0c1a] rounded-lg 
+                     hover:bg-[#e0c2a0] transition-colors duration-300"
+          >
+            Confirm and Pay
+          </button>
 
-      <button
-        onClick={handleCancel}
-        style={styles.button}
-        onMouseEnter={(e) =>
-          (e.currentTarget.style.backgroundColor = styles.buttonHover.backgroundColor)
-        }
-        onMouseLeave={(e) =>
-          (e.currentTarget.style.backgroundColor = styles.button.background)
-        }
-      >
-        Cancel
-      </button>
+          <button
+            onClick={handleCancel}
+            className="px-6 py-3 text-lg bg-[#fadcd5] text-[#1b0c1a] rounded-lg 
+                     hover:bg-[#e0c2a0] transition-colors duration-300"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,4 @@
 "use client";
-// This code ensures that only logged-in users can access the seat selection page. 
-// Unauthorized users are redirected to the login page if they attempt to access this page without logging in.
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -21,23 +19,20 @@ interface OrderDetails {
 const OrderSummary: React.FC = () => {
   const router = useRouter();
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const [isUnauthorized, setIsUnauthorized] = useState(false);
 
   useEffect(() => {
-    // Check for authorization (e.g., based on a token)
-    const authToken = localStorage.getItem("authToken");
-    if (!authToken) {
-      // If no auth token, redirect to login
-      router.push("/login");
+    const accountEmail = localStorage.getItem("accountEmail");
+    if (!accountEmail) {
+      setIsUnauthorized(true);
     } else {
-      setIsAuthorized(true);
       // Load order details if authorized
       const savedOrderDetails = localStorage.getItem("orderDetails");
       if (savedOrderDetails) {
         setOrderDetails(JSON.parse(savedOrderDetails));
       }
     }
-  }, [router]);
+  }, []);
 
   const handleProceedToCheckout = () => {
     router.push("/checkout");
@@ -59,9 +54,21 @@ const OrderSummary: React.FC = () => {
     }
   };
 
-  if (!isAuthorized) {
-    // If the user is not authorized, render nothing until redirected
-    return null;
+  if (isUnauthorized) {
+    return (
+      <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
+        <h1 className="text-4xl font-bold mb-6 text-center">
+          401 - Unauthorized
+        </h1>
+        <p className="text-center text-red-600">
+          You are not authorized to view this page. Please{" "}
+          <a href="/login" className="text-blue-500 underline">
+            login
+          </a>{" "}
+          to access order summary.
+        </p>
+      </div>
+    );
   }
 
   return (
