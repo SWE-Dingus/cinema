@@ -5,20 +5,31 @@ import { useRouter } from "next/navigation";
 
 const SeatSelection: React.FC = () => {
   const router = useRouter();
+  const [movieDetails, setMovieDetails] = useState<{ movieId: string; title: string; showtime: string }>({
+    movieId: '',
+    title: '',
+    showtime: '',
+  });
 
   const seats = ["A1", "A2", "A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5"];
   const ageCategories = ["Child", "Adult", "Senior"];
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [seatAgeCategories, setSeatAgeCategories] = useState<{ [seat: string]: string }>({});
-  
   const [isUnauthorized, setIsUnauthorized] = useState(false);
 
   useEffect(() => {
+    // Parse query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const movieId = urlParams.get('movieId') || '';
+    const title = urlParams.get('title') || '';
+    const showtime = urlParams.get('showtime') || '';
+
+    setMovieDetails({ movieId, title, showtime });
+
+    // Check for authorization
     const accountEmail = localStorage.getItem("accountEmail");
-    console.log("accountEmail:", accountEmail); // Check if this is null or a valid email
     if (!accountEmail) {
       setIsUnauthorized(true);
-      console.log("in the statement checking"); // Will only print if `accountEmail` is null or undefined
     }
   }, []);
 
@@ -56,11 +67,20 @@ const SeatSelection: React.FC = () => {
   };
 
   const handleProceedToOrderSummary = () => {
-    const selectedSeatsWithAgeCategories = selectedSeats.map((seat) => ({
-      seat,
-      ageCategory: seatAgeCategories[seat] || "Adult",
-    }));
-    localStorage.setItem("order", JSON.stringify(selectedSeatsWithAgeCategories));
+    const selectedSeatsWithAgeCategories = selectedSeats.map((seat) => {
+      const ageCategory = seatAgeCategories[seat] || "Adult";
+      const price = ageCategory === "Child" ? 8 : ageCategory === "Senior" ? 10 : 12;
+      return { seat, ageCategory, price };
+    });
+
+    const orderDetails = {
+      movieTitle: movieDetails.title || "Default Movie Title", // Fallback if title is not found
+      showtime: movieDetails.showtime || "Default Showtime", // Fallback if showtime is not found
+      selectedSeats: selectedSeatsWithAgeCategories,
+      total: selectedSeatsWithAgeCategories.reduce((sum, s) => sum + s.price, 0),
+    };
+
+    localStorage.setItem("orderDetails", JSON.stringify(orderDetails));
     router.push("/ordersummary");
   };
 

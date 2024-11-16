@@ -1,9 +1,9 @@
-"use client";
+"use client"; // Marking this as a Client Component
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-interface SeatSelection {
+interface Seat {
   seat: string;
   ageCategory: string;
   price: number;
@@ -12,7 +12,7 @@ interface SeatSelection {
 interface OrderDetails {
   movieTitle: string;
   showtime: string;
-  selectedSeats: SeatSelection[];
+  selectedSeats: Seat[];
   total: number;
 }
 
@@ -21,52 +21,40 @@ const OrderSummary: React.FC = () => {
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const [isUnauthorized, setIsUnauthorized] = useState(false);
 
+  // Load order details from localStorage and check authorization
   useEffect(() => {
     const accountEmail = localStorage.getItem("accountEmail");
     if (!accountEmail) {
-      setIsUnauthorized(true);
-    } else {
-      // Load order details if authorized
-      const savedOrderDetails = localStorage.getItem("orderDetails");
-      if (savedOrderDetails) {
-        setOrderDetails(JSON.parse(savedOrderDetails));
-      }
+      setIsUnauthorized(true); // User is not logged in
+      return;
+    }
+
+    const storedOrderDetails = localStorage.getItem("orderDetails");
+    if (storedOrderDetails) {
+      setOrderDetails(JSON.parse(storedOrderDetails));
     }
   }, []);
-
-  const handleProceedToCheckout = () => {
-    router.push("/checkout");
-  };
-
-  const handleDeleteTicket = (index: number) => {
-    if (orderDetails) {
-      const updatedSeats = [...orderDetails.selectedSeats];
-      updatedSeats.splice(index, 1);
-
-      const updatedOrderDetails = {
-        ...orderDetails,
-        selectedSeats: updatedSeats,
-        total: updatedSeats.reduce((sum, seat) => sum + seat.price, 0),
-      };
-
-      setOrderDetails(updatedOrderDetails);
-      localStorage.setItem("orderDetails", JSON.stringify(updatedOrderDetails));
-    }
-  };
 
   if (isUnauthorized) {
     return (
       <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
-        <h1 className="text-4xl font-bold mb-6 text-center">
-          401 - Unauthorized
-        </h1>
+        <h1 className="text-4xl font-bold mb-6 text-center">401 - Unauthorized</h1>
         <p className="text-center text-red-600">
           You are not authorized to view this page. Please{" "}
           <a href="/login" className="text-blue-500 underline">
             login
           </a>{" "}
-          to access order summary.
+          to access the order summary.
         </p>
+      </div>
+    );
+  }
+
+  if (!orderDetails) {
+    return (
+      <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
+        <h1 className="text-4xl font-bold mb-6 text-center">Order Summary</h1>
+        <p className="text-center text-red-600">No order details found. Please select your seats first.</p>
       </div>
     );
   }
@@ -74,42 +62,32 @@ const OrderSummary: React.FC = () => {
   return (
     <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
       <h1 className="text-4xl font-bold mb-6 text-center">Order Summary</h1>
+      <div className="bg-[#2a1c2a] p-6 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-4">{orderDetails.movieTitle}</h2>
+        <p className="mb-4">Showtime: <span className="font-semibold">{orderDetails.showtime}</span></p>
 
-      {orderDetails ? (
-        <div className="bg-[#2a1c2a] border p-6 rounded-lg shadow-md max-w-lg mx-auto">
-          <h2 className="text-2xl font-bold mb-4">{orderDetails.movieTitle}</h2>
-          <p className="mb-2">Showtime: {orderDetails.showtime}</p>
-          <p className="mb-2">
-            Seats: {orderDetails.selectedSeats.map(seat => seat.seat).join(", ")}
-          </p>
-          <p className="mb-2 font-semibold">Ticket Details:</p>
-          <ul className="list-disc ml-5">
-            {orderDetails.selectedSeats.map((seat, index) => (
-              <li key={index} className="flex justify-between mb-2">
-                <span>
-                  Seat {seat.seat} ({seat.ageCategory}): ${seat.price.toFixed(2)}
-                </span>
-                <button
-                  onClick={() => handleDeleteTicket(index)}
-                  className="text-red-500 hover:underline"
-                >
-                  Delete
-                </button>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-4 font-bold">Total: ${orderDetails.total.toFixed(2)}</p>
+        <h3 className="text-xl font-bold mb-2">Selected Seats</h3>
+        <ul>
+          {orderDetails.selectedSeats.map((seat) => (
+            <li key={seat.seat} className="flex justify-between mb-1">
+              <span>{seat.seat} - {seat.ageCategory}</span>
+              <span>${seat.price}</span>
+            </li>
+          ))}
+        </ul>
 
-          <button
-            className="bg-[#28a745] text-white px-6 py-3 rounded mt-4 hover:bg-[#218838] transition-all duration-200"
-            onClick={handleProceedToCheckout}
-          >
-            Proceed to Checkout
-          </button>
+        <div className="flex justify-between font-bold text-xl mt-4">
+          <span>Total:</span>
+          <span>${orderDetails.total}</span>
         </div>
-      ) : (
-        <p className="text-center text-white">Loading order details...</p>
-      )}
+
+        <button
+          className="mt-6 bg-[#28a745] text-white px-6 py-3 rounded hover:bg-[#218838] transition"
+          onClick={() => router.push("/checkout")}
+        >
+          Proceed to Checkout
+        </button>
+      </div>
     </div>
   );
 };
