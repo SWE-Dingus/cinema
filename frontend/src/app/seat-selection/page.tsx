@@ -1,49 +1,64 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation"; // Import from next/navigation for App Router
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const SeatSelection: React.FC = () => {
   const router = useRouter();
-
-  const seats = ["A1", "A2", "A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5"]; // Example seat list
+  const [isUnauthorized, setIsUnauthorized] = useState(false);
+  const seats = ["A1", "A2", "A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5"];
   const ageCategories = ["Child", "Adult", "Senior"];
-
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
-  const [seatAgeCategories, setSeatAgeCategories] = useState<{
-    [seat: string]: string;
-  }>({});
+  const [seatAgeCategories, setSeatAgeCategories] = useState<{ [seat: string]: string }>({});
+
+  useEffect(() => {
+    const accountEmail = localStorage.getItem("accountEmail");
+    console.log("accountEmail:", accountEmail); // Check if this is null or a valid email
+    if (!accountEmail) {
+      setIsUnauthorized(true);
+      console.log("in the statement checking"); // Will only print if `accountEmail` is null or undefined
+    }
+  }, []);
+
+  if (isUnauthorized) {
+    return (
+      <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
+        <h1 className="text-4xl font-bold mb-6 text-center">401 - Unauthorized</h1>
+        <p className="text-center text-red-600">
+          You are not authorized to view this page. Please{" "}
+          <a href="/login" className="text-blue-500 underline">
+            login
+          </a>{" "}
+          to access seat selection.
+        </p>
+      </div>
+    );
+  }
 
   const toggleSeatSelection = (seat: string) => {
     if (selectedSeats.includes(seat)) {
       setSelectedSeats(selectedSeats.filter((s) => s !== seat));
-      const newCategories = { ...seatAgeCategories };
-      delete newCategories[seat]; // Remove age category when seat is deselected
-      setSeatAgeCategories(newCategories);
+      const updatedCategories = { ...seatAgeCategories };
+      delete updatedCategories[seat];
+      setSeatAgeCategories(updatedCategories);
     } else {
       setSelectedSeats([...selectedSeats, seat]);
     }
   };
 
   const handleAgeCategoryChange = (seat: string, ageCategory: string) => {
-    setSeatAgeCategories({
-      ...seatAgeCategories,
+    setSeatAgeCategories((prev) => ({
+      ...prev,
       [seat]: ageCategory,
-    });
+    }));
   };
 
   const handleProceedToOrderSummary = () => {
     const selectedSeatsWithAgeCategories = selectedSeats.map((seat) => ({
       seat,
-      ageCategory: seatAgeCategories[seat] || "Adult", // Default to adult if not selected
+      ageCategory: seatAgeCategories[seat] || "Adult",
     }));
-
-    // Example of passing this data to the order summary page
-    localStorage.setItem(
-      "order",
-      JSON.stringify(selectedSeatsWithAgeCategories),
-    );
-
+    localStorage.setItem("order", JSON.stringify(selectedSeatsWithAgeCategories));
     router.push("/ordersummary");
   };
 
@@ -57,9 +72,7 @@ const SeatSelection: React.FC = () => {
             key={seat}
             onClick={() => toggleSeatSelection(seat)}
             className={`p-4 border rounded-lg transition-colors ${
-              selectedSeats.includes(seat)
-                ? "bg-[#6f42c1] text-white"
-                : "bg-[#2a1c2a] text-white"
+              selectedSeats.includes(seat) ? "bg-[#6f42c1]" : "bg-[#2a1c2a]"
             } hover:bg-[#5a32a1]`}
           >
             {seat}

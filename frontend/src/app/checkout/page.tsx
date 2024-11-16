@@ -1,17 +1,27 @@
 "use client";
-import React from "react";
-// import useSearchParams from "next/navigation";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const CheckoutPage: React.FC = () => {
   const router = useRouter();
-  // const searchParams = useSearchParams();
-  const title =    "hardcoded title" //searchParams.get("title");
-  const showtime = "hardcoded time"   //searchParams.get("showtime");
-  const seat = "hardcoded seat"   //searchParams.get("seat");
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+
+  useEffect(() => {
+    // Check for authorization (e.g., based on a token)
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+      // If no auth token, redirect to login
+      router.push("/login");
+    } else {
+      setIsAuthorized(true);
+    }
+  }, [router]);
+
+  const title = "Superbad";
+  const showtime = "3:00 P.M";
+  const seat = "B5";
 
   const handleCheckout = () => {
-    alert(`Successfully booked ${title} at ${showtime}, Seat: ${seat}`);
     router.push("/orderconfirm"); // After checkout, redirect to the order confirmation page
   };
 
@@ -56,6 +66,11 @@ const CheckoutPage: React.FC = () => {
     },
   };
 
+  if (!isAuthorized) {
+    // If the user is not authorized, render nothing until redirected
+    return null;
+  }
+
   return (
     <div style={styles.container}>
       <h1 style={styles.heading}>Checkout</h1>
@@ -76,8 +91,7 @@ const CheckoutPage: React.FC = () => {
         onClick={handleCheckout}
         style={styles.button}
         onMouseEnter={(e) =>
-          (e.currentTarget.style.backgroundColor =
-            styles.buttonHover.backgroundColor)
+          (e.currentTarget.style.backgroundColor = styles.buttonHover.backgroundColor)
         }
         onMouseLeave={(e) =>
           (e.currentTarget.style.backgroundColor = styles.button.background)
@@ -90,8 +104,7 @@ const CheckoutPage: React.FC = () => {
         onClick={handleCancel}
         style={styles.button}
         onMouseEnter={(e) =>
-          (e.currentTarget.style.backgroundColor =
-            styles.buttonHover.backgroundColor)
+          (e.currentTarget.style.backgroundColor = styles.buttonHover.backgroundColor)
         }
         onMouseLeave={(e) =>
           (e.currentTarget.style.backgroundColor = styles.button.background)
