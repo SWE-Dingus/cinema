@@ -172,9 +172,17 @@ const ManageMovies: React.FC = () => {
     setNewCastMember("");
   };
 
+  const deleteCastMember = (castMember:string) => {
+    setNewCast(newCast.filter((cast) => cast != castMember))
+  };
+
   const addCategory = () => {
-    setNewCategory([...newCategory, newCategoryInput]);
+    setNewCategory([...newCategory, newCategoryInput.toUpperCase()]);
     setNewCategoryInput("");
+  };
+
+  const deleteCategory = (cat:string) => {
+    setNewCategory(newCategory.filter((cats) => cat.toUpperCase() != cats))
   };
 
   return (
@@ -329,21 +337,22 @@ const ManageMovies: React.FC = () => {
             />
           </div>
 
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              checked={newIsRunning}
-              onChange={(e) => setNewIsRunning(e.target.checked)}
-              className="mr-2"
-            />
-            <label className="block text-sm font-medium">
-              Currently Running
-            </label>
-          </div>
-
           <div>
             <label className="block text-sm font-medium">Cast Members</label>
-            <div>{newCast.join(", ") || "No cast members"}</div>
+            <ul
+              className="flex list-none p-0 m-0"
+            >{newCast.length != 0 ?
+              newCast.map(castMem => {
+              return <li
+                key={castMem}
+                className="hover:text-red-800 mr-10 cursor-pointer"
+                onClick={() => deleteCastMember(castMem)}>
+                  {castMem}
+              </li>
+            }) : <li>No cast members</li>}
+            </ul> 
+            
+            
             <input
               type="text"
               placeholder="Add cast member"
@@ -361,7 +370,19 @@ const ManageMovies: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium">Categories</label>
-            <div>{newCategory.join(", ") || "No categories"}</div>
+            <ul
+            className="flex list-none p-0 m-0"
+            >
+              {newCategory.length != 0 ? newCategory.map(category => {
+                return <li
+                  key={category}
+                  className="hover:text-red-800 mr-10 cursor-pointer"
+                  onClick={() => deleteCategory(category)}
+                  >
+                {category}
+              </li>;}) : <li>No categories</li>
+            }</ul>
+ 
             <input
               type="text"
               placeholder="Add category"
@@ -375,6 +396,18 @@ const ManageMovies: React.FC = () => {
             >
               Add Category
             </button>
+          </div>
+
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              checked={newIsRunning}
+              onChange={(e) => setNewIsRunning(e.target.checked)}
+              className="mr-2"
+            />
+            <label className="block text-sm font-medium">
+              Currently Running
+            </label>
           </div>
 
           <div className="sm:col-span-2">

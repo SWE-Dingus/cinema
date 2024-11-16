@@ -246,6 +246,7 @@ const ManagePromotions: React.FC = () => {
           onChange={(e) => setNewPromotion(e.target.value)}
           style={styles.input}
           disabled={editIndex>=0}
+          className={editIndex>=0 ? "cursor-not-allowed" : ""}
         />
         <input
           type="text"
@@ -314,7 +315,7 @@ const ManagePromotions: React.FC = () => {
                 <button
                   onClick={() => sendPromotion(String(promotion.code))}>
                   Send
-                </button> : <button disabled>
+                </button> : <button disabled className="cursor-not-allowed">
                   Sent
                 </button>
               }
