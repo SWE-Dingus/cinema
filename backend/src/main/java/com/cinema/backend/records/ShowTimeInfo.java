@@ -9,12 +9,12 @@ public record ShowTimeInfo(
     long movieID,
     @NotNull Integer showRoomID,
     @NotNull Date showTime,
-    @NotNull Date duration) {
+    @NotNull long durationMinutes) {
   public ShowTime toEntity() {
     var showTimes = new ShowTime();
     showTimes.setMovieID(movieID);
     showTimes.setShowTime(showTime);
-    showTimes.setDuration(duration);
+    showTimes.setDurationMinutes(durationMinutes);
     showTimes.setShowRoom(showRoomID);
     return showTimes;
   }
