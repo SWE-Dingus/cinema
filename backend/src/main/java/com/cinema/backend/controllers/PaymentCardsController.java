@@ -10,6 +10,7 @@ import com.cinema.backend.repositories.UserRepository;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,17 +30,20 @@ public class PaymentCardsController {
   }
 
   @PostMapping("/create")
-  public void createPaymentCard(@Valid @RequestBody PaymentCard paymentCardInfo) {
+  public ResponseEntity<String> createPaymentCard(@Valid @RequestBody PaymentCard paymentCardInfo) {
     // String emailToCheck = paymentCardInfo.getUserEmail();
     User toUse =
         userRepository
             .findById(paymentCardInfo.getUserEmail())
             .orElseThrow(() -> new ResponseStatusException(BAD_REQUEST));
     // The above throws a BAD_REQUEST error if the User does not exist
-    if (toUse.getUserCards().size() < 3) {
-      paymentCardsRepository.save(paymentCardInfo);
-      toUse.addPaymentCard(paymentCardInfo);
+    if (toUse.getUserCards().size() >= 3) {
+        return ResponseEntity.status(BAD_REQUEST).body("User cannot add more than 3 payment cards");
     }
+
+    paymentCardsRepository.save(paymentCardInfo);
+    toUse.addPaymentCard(paymentCardInfo);
+    return ResponseEntity.ok("Payment card added successfully");
   }
 
   @GetMapping("/get/{id}")

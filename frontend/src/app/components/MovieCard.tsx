@@ -92,12 +92,14 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
         </div>
       )}
 
-      {/* Book Tickets and Info Buttons (conditionally rendered on hover) */}
-      {movie.isRunning && isHovered && (
+      {/* Buttons (conditionally rendered on hover) */}
+      {isHovered && (
         <div className="flex space-x-2 mt-3 justify-center">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded">
-            Book Tickets
-          </button>
+          {movie.isRunning && (
+            <button className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded">
+              Book Tickets
+            </button>
+          )}
           <button
             onClick={handleInfoClick}
             className="bg-gray-500 hover:bg-gray-600 text-white py-1 px-3 rounded flex items-center"
