@@ -27,14 +27,14 @@ public class ShowTime {
 
   @NotNull private Date showTime;
 
-  @NotNull private Date duration;
+  @NotNull private long durationMinutes;
 
   public Date getShowTime() {
     return showTime;
   }
 
-  public Date getDuration() {
-    return duration;
+  public long getDurationMinutes() {
+    return durationMinutes;
   }
 
   public void setSeatsList(Integer amountSeats) {
@@ -70,8 +70,8 @@ public class ShowTime {
     this.showTime = showTime;
   }
 
-  public void setDuration(Date duration) {
-    this.duration = duration;
+  public void setDurationMinutes(long durationMinutes) {
+    this.durationMinutes = durationMinutes;
   }
 
   public long getMovieID() {

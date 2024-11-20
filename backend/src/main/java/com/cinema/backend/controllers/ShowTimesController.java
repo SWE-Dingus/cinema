@@ -1,5 +1,6 @@
 package com.cinema.backend.controllers;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.ShowTime;
@@ -41,10 +42,16 @@ public class ShowTimesController {
   @PostMapping("add")
   public void addShowTime(@RequestBody @Valid ShowTimeInfo showTimeInfo) {
     ShowTime toAdd = showTimeInfo.toEntity();
+    long toAddEnd = toAdd.getShowTime().getTime() + toAdd.getDurationMinutes() * 60000;
     List<ShowTime> showTimesConflicts = showTimeRepository.findAll();
     boolean conflictFound = false;
     for (ShowTime showTimesConflict : showTimesConflicts) {
-      if (showTimesConflict.getShowTime() == toAdd.getShowTime()) {
+      var otherShowTime = showTimesConflict.getShowTime();
+      var otherShowTimeEnd =
+          otherShowTime.getTime() + showTimesConflict.getDurationMinutes() * 60000;
+      if (Math.min(toAddEnd, otherShowTimeEnd)
+              - Math.max(toAdd.getShowTime().getTime(), showTimesConflict.getShowTime().getTime())
+          >= 0) {
         conflictFound = true;
         break;
       }
@@ -67,6 +74,8 @@ public class ShowTimesController {
         toAdd.setMovieID(toAdd.getMovieID());
       }
       showTimeRepository.save(toAdd);
+    } else {
+      throw new ResponseStatusException(BAD_REQUEST, "Show time overlaps with existing show time");
     }
   }
 
@@ -84,7 +93,7 @@ public class ShowTimesController {
         .remove(toChange);
     toChange.setMovieID(convertedEntity.getMovieID());
     // NEED TO ADD CHECKS FOR IF THE MOVIE DOESN'T WORK, AND UPDATE MOVIE LIST AS BELOW
-    toChange.setDuration(convertedEntity.getDuration());
+    toChange.setDurationMinutes(convertedEntity.getDurationMinutes());
     toChange.setShowRoom(convertedEntity.getShowRoomID());
     toChange.setShowTime(convertedEntity.getShowTime());
     movieRepository
