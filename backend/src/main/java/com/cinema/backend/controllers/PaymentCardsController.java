@@ -38,7 +38,7 @@ public class PaymentCardsController {
             .orElseThrow(() -> new ResponseStatusException(BAD_REQUEST));
     // The above throws a BAD_REQUEST error if the User does not exist
     if (toUse.getUserCards().size() >= 3) {
-        return ResponseEntity.status(BAD_REQUEST).body("User cannot add more than 3 payment cards");
+      return ResponseEntity.status(BAD_REQUEST).body("User cannot add more than 3 payment cards");
     }
 
     paymentCardsRepository.save(paymentCardInfo);
