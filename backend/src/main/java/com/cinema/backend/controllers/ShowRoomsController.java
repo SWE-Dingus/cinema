@@ -25,6 +25,14 @@ public class ShowRoomsController {
     return showRoomRepository.findAll();
   }
 
+  @GetMapping("/getSeats/{id}")
+  public Integer getSeats(Integer showRoomNum) {
+    return showRoomRepository
+        .findById(showRoomNum)
+        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))
+        .getNumOfSeats();
+  }
+
   /*
   @PostMapping("add")
   public void addShowTime(@RequestBody @Valid ShowRoomInfo showRoomInfo) {
