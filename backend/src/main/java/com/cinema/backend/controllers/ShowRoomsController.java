@@ -26,9 +26,9 @@ public class ShowRoomsController {
   }
 
   @GetMapping("/getSeats/{id}")
-  public Integer getSeats(Integer showRoomNum) {
+  public Integer getSeats(@PathVariable Integer id) {
     return showRoomRepository
-        .findById(showRoomNum)
+        .findById(id)
         .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))
         .getNumOfSeats();
   }
