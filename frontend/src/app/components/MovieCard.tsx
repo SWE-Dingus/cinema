@@ -51,6 +51,10 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
     router.push(`/movie?id=${movie.id}`);
   };
 
+  const handleBookTickets = () => {
+    router.push(`/movie?id=${movie.id}&showShowtimes=true`);
+  };
+
   return (
     <div
       ref={cardRef}
@@ -96,7 +100,10 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
       {isHovered && (
         <div className="flex space-x-2 mt-3 justify-center">
           {movie.isRunning && (
-            <button className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded">
+            <button
+              onClick={handleBookTickets}
+              className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
+            >
               Book Tickets
             </button>
           )}
