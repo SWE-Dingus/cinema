@@ -57,11 +57,13 @@ public class ShowTimesController {
       }
     }
     if (!conflictFound) {
-      toAdd.setSeatsList(
+      Integer seatsToAdd =
           showRoomRepository
               .findById(toAdd.getShowRoomID())
               .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))
-              .getNumOfSeats());
+              .getNumOfSeats();
+      toAdd.setSeatsList(seatsToAdd);
+      System.out.println("Seats: " + seatsToAdd);
       //      toAdd.setShowTime(showTimeInfo.showTime);
       ////      toAdd.setDuration(showTimeInfo.duration);
       ////      toAdd.setShowRoom(convertedEntity.getShowRoom());
