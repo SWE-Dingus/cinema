@@ -24,6 +24,9 @@ const MovieDetailsPage: React.FC = () => {
   const id = searchParams.get("id");
   const router = useRouter();
 
+  // Hardcoded movie release date
+  const releaseDate = "2024-12-15"; // YYYY-MM-DD format
+
   const handleLogout = useCallback(() => {
     localStorage.removeItem("accountToken");
     localStorage.removeItem("accountEmail");
@@ -112,6 +115,14 @@ const MovieDetailsPage: React.FC = () => {
             </p>
             <p className="text-lg mt-2">
               <strong>Cast:</strong> {movie.cast.join(", ")}
+            </p>
+            <p className="text-lg mt-2">
+              <strong>Release Date:</strong>{" "}
+              {new Date(releaseDate).toLocaleDateString(undefined, {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </p>
             <p className="text-lg mt-4">{movie.synopsis}</p>
             <div className="mt-5">
