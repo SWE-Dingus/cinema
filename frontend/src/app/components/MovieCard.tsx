@@ -52,7 +52,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   };
 
   const handleBookTickets = () => {
-    router.push(`/movie?id=${movie.id}&showShowtimes=true`);
+    router.push(`/showtimes?movieId=${movie.id}&title=${encodeURIComponent(movie.title)}`);
   };
 
   return (

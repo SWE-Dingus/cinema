@@ -82,8 +82,8 @@ const MovieDetailsPage: React.FC = () => {
 
   const handleShowtimeSelect = (showtime: ShowTime) => {
     setShowModal(false);
-    router.push(`/seat-selection?showID=${showtime.showID}`);
-  };
+    router.push(`/seat-selection?showID=${showtime.showID}&movieID=${showtime.movieID}`);
+  };  
 
   if (!movie) return <p>Loading...</p>;
 
