@@ -4,11 +4,11 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.Promotion;
+import com.cinema.backend.interfaces.IEmailSender;
 import com.cinema.backend.records.PromotionInfo;
 import com.cinema.backend.repositories.PromotionsRepository;
 import com.cinema.backend.repositories.UserRepository;
 import com.cinema.backend.services.AccountsService;
-import com.cinema.backend.services.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -29,7 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class PromotionsController {
 
   private final AccountsService accountsService;
-  private final EmailService emailService;
+  private final IEmailSender emailService;
   private final PromotionsRepository promotionsRepository;
   private final UserRepository userRepository;
   private final HttpServletRequest request;
@@ -37,7 +37,7 @@ public class PromotionsController {
   @Autowired
   public PromotionsController(
       AccountsService accountsService,
-      EmailService emailService,
+      IEmailSender emailService,
       PromotionsRepository promotionsRepository,
       UserRepository userRepository,
       HttpServletRequest request) {
