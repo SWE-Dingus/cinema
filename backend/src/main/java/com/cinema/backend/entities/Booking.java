@@ -17,7 +17,7 @@ public class Booking {
 
   @NotEmpty public Date time;
 
-  @NotEmpty public String movieTitle;
+  // @NotEmpty public String movieTitle;
 
   /*
    * FK to user
@@ -33,11 +33,11 @@ public class Booking {
     return bookingID;
   }
 
-  public String getMovieTitle() {
-    return movieTitle;
-  }
+  // public String getMovieTitle() {
+  // return movieTitle;
+  // }
 
-  public void setMovieTitle(String movieTitle) {
-    this.movieTitle = movieTitle;
-  }
+  // public void setMovieTitle(String movieTitle) {
+  // this.movieTitle = movieTitle;
+  // }
 }

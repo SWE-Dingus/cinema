@@ -6,10 +6,10 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import com.cinema.backend.entities.AuthenticationToken;
 import com.cinema.backend.entities.User;
 import com.cinema.backend.entities.User.UserState;
+import com.cinema.backend.interfaces.IEmailSender;
 import com.cinema.backend.records.*;
 import com.cinema.backend.repositories.UserRepository;
 import com.cinema.backend.services.AccountsService;
-import com.cinema.backend.services.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -26,13 +26,13 @@ public class AccountController {
 
   private final UserRepository userRepository;
 
-  private final EmailService emailService;
+  private final IEmailSender emailService;
 
   AccountsService accountsService;
 
   @Autowired
   public AccountController(
-      AccountsService accountsService, EmailService emailService, UserRepository userRepository) {
+      AccountsService accountsService, IEmailSender emailService, UserRepository userRepository) {
     this.accountsService = accountsService;
     this.emailService = emailService;
     this.userRepository = userRepository;
@@ -46,6 +46,7 @@ public class AccountController {
     newUser.password = AccountsService.passwordEncoder.encode(registrationInfo.password());
     newUser.firstName = registrationInfo.firstName();
     newUser.lastName = registrationInfo.lastName();
+    newUser.phoneNumber = registrationInfo.phoneNumber();
     newUser.lastConfirmationCode = codeToUse;
     newUser.state = UserState.INACTIVE;
     newUser.wantsMarketingEmails = registrationInfo.wantsMarketingEmails();
@@ -104,6 +105,8 @@ public class AccountController {
     sendProfileChangeInfo(dbUser.email);
   }
 
+  // Add PutMapping for Editing PaymentCards
+
   @GetMapping("/fetchUser")
   public User fetchUser(@Valid @RequestParam("email") String email) {
     return userRepository.findById(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
@@ -144,6 +147,7 @@ public class AccountController {
             passwordChangeInfo.oldPassword(), toChange.password);
     if (areSame) {
       toChange.password = AccountsService.passwordEncoder.encode(passwordChangeInfo.newPassword());
+      userRepository.save(toChange);
     }
   }
 

@@ -12,7 +12,7 @@ public class ShowRoom {
 
   @NotBlank private String showRoomName;
 
-  public int numOfSeats;
+  public Integer numOfSeats;
 
   public String getShowRoomName() {
     return showRoomName;
@@ -20,5 +20,17 @@ public class ShowRoom {
 
   public void setShowRoomName(String showRoomName) {
     this.showRoomName = showRoomName;
+  }
+
+  public void setNumOfSeats(Integer numSeats) {
+    this.numOfSeats = numSeats;
+  }
+
+  public void setShowRoomID(Integer newID) {
+    this.showRoomID = newID;
+  }
+
+  public Integer getNumOfSeats() {
+    return this.numOfSeats;
   }
 }

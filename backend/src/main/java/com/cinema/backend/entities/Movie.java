@@ -1,9 +1,7 @@
 package com.cinema.backend.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -21,6 +19,31 @@ public class Movie {
     PG13,
     R,
     NC17,
+  }
+
+  public enum Genre {
+    ACTION,
+    ADVENTURE,
+    ANIMATION,
+    COMEDY,
+    CRIME,
+    DOCUMENTARY,
+    DRAMA,
+    FANTASY,
+    HORROR,
+    MUSICAL,
+    MYSTERY,
+    ROMANCE,
+
+    @JsonProperty("SCI-FI")
+    SCI_FI, // Short for "Science Fiction"
+    THRILLER,
+    WAR,
+    WESTERN,
+    BIOGRAPHY,
+    FAMILY,
+    HISTORY,
+    SPORT,
   }
 
   @Id @GeneratedValue private long id;
@@ -42,7 +65,7 @@ public class Movie {
 
   @NotEmpty public String synopsis;
 
-  @NotEmpty public List<@NotEmpty String> category;
+  @NotEmpty public List<@NotNull Genre> category;
 
   @Min(0)
   @NotNull
@@ -68,6 +91,9 @@ public class Movie {
   public String trailerId;
 
   @NotNull public Boolean isRunning;
+
+  @OneToMany(mappedBy = "movieID")
+  public List<ShowTime> shows;
 
   // TODO Add list for screenshots/clips of movie later
 
@@ -95,5 +121,6 @@ public class Movie {
     this.posterUrl = other.posterUrl;
     this.trailerId = other.trailerId;
     this.isRunning = other.isRunning;
+    this.shows = other.shows;
   }
 }

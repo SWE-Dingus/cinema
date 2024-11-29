@@ -5,11 +5,18 @@ interface SearchBarProps {
   setSearchTerm: (term: string) => void;
   genreTerm: string;
   setGenreTerm: (term: string) => void;
+  genreOptions: string[];  // Add genreOptions prop
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, genreTerm, setGenreTerm}) => {
+const SearchBar: React.FC<SearchBarProps> = ({ 
+  searchTerm, 
+  setSearchTerm, 
+  genreTerm, 
+  setGenreTerm, 
+  genreOptions 
+}) => {
   return (
-    <div className="p-5 w-full">
+    <div className="p-5 w-full flex gap-2">
       <input
         type="text"
         placeholder="Search movies..."
@@ -23,12 +30,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, genreT
         onChange={(e) => setGenreTerm(e.target.value)}
       >
         <option value="">Genre</option>
-        <option value="Action">Action</option>
-        <option value="Adventure">Adventure</option>
-        <option value="Comedy">Comedy</option>
-        <option value="Crime">Crime</option>
-        <option value="Cocumentary">Documentary</option>
-        <option value="Drama">Drama</option>
+        {genreOptions.map((genre) => (
+          <option key={genre} value={genre}>
+            {genre.replace("_", " ")}
+          </option>
+        ))}
       </select>
     </div>
   );

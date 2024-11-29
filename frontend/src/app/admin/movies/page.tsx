@@ -31,7 +31,7 @@ const ManageMovies: React.FC = () => {
   const [newIsRunning, setNewIsRunning] = useState<boolean>(false);
   const [newCastMember, setNewCastMember] = useState<string>("");
   const [newCategoryInput, setNewCategoryInput] = useState<string>("");
-
+  const [editMovieID, setEditMovieID] = useState<number>(-1);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
@@ -148,7 +148,73 @@ const ManageMovies: React.FC = () => {
     }
   };
 
-  
+  const startEditMovie = async (movieId: number) => {
+    const response = await fetch(
+      `${Config.apiRoot}/movies/get/${movieId}`,{
+      }
+    )
+    const editInfo = await response.json();
+    console.log("starting...")
+    setEditMovieID(movieId);
+    console.log("set id", movieId)
+    setNewMovieTitle(editInfo.title);
+    console.log("set title")
+    setNewMovieAgeRating(AgeRating[editInfo.ageRating as keyof typeof AgeRating]);
+    console.log("set age")
+    setNewReviewRating(editInfo.reviewRating);
+    console.log("set rating")
+    setNewCast(editInfo.cast);
+    console.log("set cast")
+    setNewDirector(editInfo.director);
+    setNewSynopsis(editInfo.synopsis);
+    setNewCategory(editInfo.category);
+    setNewChildPrice(editInfo.childPrice);
+    setNewAdultPrice(editInfo.adultPrice);
+    setNewSeniorPrice(editInfo.seniorPrice);
+    setNewOnlineFee(editInfo.onlineFee);
+    setNewPosterUrl(editInfo.posterUrl);
+    setNewTrailerUrl(editInfo.trailerId);
+    setNewIsRunning(editInfo.isRunning);
+  };
+
+  const saveEdit = async (movieId: number) => {
+    const editedMovie: Movie = {
+      title: newMovieTitle,
+      ageRating: newMovieAgeRating,
+      reviewRating: newReviewRating,
+      cast: newCast,
+      director: newDirector,
+      synopsis: newSynopsis,
+      category: newCategory,
+      childPrice: newChildPrice,
+      adultPrice: newAdultPrice,
+      seniorPrice: newSeniorPrice,
+      onlineFee: newOnlineFee,
+      posterUrl: newPosterUrl,
+      trailerId: newTrailerUrl,
+      isRunning: newIsRunning,
+    };
+    try {
+      const response = await fetch(`${Config.apiRoot}/movies/update/${movieId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editedMovie),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to save movie");
+      }
+      setEditMovieID(-1)
+      const updatedMoviesResponse = await fetch(`${Config.apiRoot}/movies/getAll`);
+      const newData = await updatedMoviesResponse.json();
+      setMovies(newData);
+      resetMovieFields();
+    } catch (error) {
+      console.error("Error saving movie changes:", error);
+      setErrorMessage("Failed to save movie changes, please try again later.");
+    }
+  };
 
   const resetMovieFields = () => {
     setNewMovieTitle("");
@@ -172,9 +238,17 @@ const ManageMovies: React.FC = () => {
     setNewCastMember("");
   };
 
+  const deleteCastMember = (castMember:string) => {
+    setNewCast(newCast.filter((cast) => cast != castMember))
+  };
+
   const addCategory = () => {
-    setNewCategory([...newCategory, newCategoryInput]);
+    setNewCategory([...newCategory, newCategoryInput.toUpperCase()]);
     setNewCategoryInput("");
+  };
+
+  const deleteCategory = (cat:string) => {
+    setNewCategory(newCategory.filter((cats) => cat.toUpperCase() != cats))
   };
 
   return (
@@ -329,21 +403,22 @@ const ManageMovies: React.FC = () => {
             />
           </div>
 
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              checked={newIsRunning}
-              onChange={(e) => setNewIsRunning(e.target.checked)}
-              className="mr-2"
-            />
-            <label className="block text-sm font-medium">
-              Currently Running
-            </label>
-          </div>
-
           <div>
             <label className="block text-sm font-medium">Cast Members</label>
-            <div>{newCast.join(", ") || "No cast members"}</div>
+            <ul
+              className="flex list-none p-0 m-0"
+            >{newCast.length != 0 ?
+              newCast.map(castMem => {
+              return <li
+                key={castMem}
+                className="hover:text-red-800 mr-10 cursor-pointer"
+                onClick={() => deleteCastMember(castMem)}>
+                  {castMem}
+              </li>
+            }) : <li>No cast members</li>}
+            </ul> 
+            
+            
             <input
               type="text"
               placeholder="Add cast member"
@@ -361,7 +436,19 @@ const ManageMovies: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium">Categories</label>
-            <div>{newCategory.join(", ") || "No categories"}</div>
+            <ul
+            className="flex list-none p-0 m-0"
+            >
+              {newCategory.length != 0 ? newCategory.map(category => {
+                return <li
+                  key={category}
+                  className="hover:text-red-800 mr-10 cursor-pointer"
+                  onClick={() => deleteCategory(category)}
+                  >
+                {category}
+              </li>;}) : <li>No categories</li>
+            }</ul>
+ 
             <input
               type="text"
               placeholder="Add category"
@@ -377,13 +464,47 @@ const ManageMovies: React.FC = () => {
             </button>
           </div>
 
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              checked={newIsRunning}
+              onChange={(e) => setNewIsRunning(e.target.checked)}
+              className="mr-2"
+            />
+            <label className="block text-sm font-medium">
+              Currently Running
+            </label>
+          </div>
+
           <div className="sm:col-span-2">
-            <button
-              onClick={addMovie}
-              className="bg-[#007bff] hover:bg-[#0056b3] text-white px-4 py-2 rounded w-full mt-6 transition"
-            >
-              Add Movie
-            </button>
+            {(editMovieID == -1)  &&
+              <button
+                onClick={addMovie}
+                className="bg-[#007bff] hover:bg-[#0056b3] text-white px-4 py-2 rounded w-full mt-6 transition"
+              >
+                Add Movie
+              </button>
+            }
+
+            {(editMovieID != -1) &&
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <button
+                  onClick={() => saveEdit(editMovieID)}
+                  className="bg-[#007bff] hover:bg-[#0056b3] text-white px-4 py-2 rounded w-full mt-6 transition"
+                >
+                  Save Changes
+                </button>
+                <button
+                  onClick={() => {
+                    setEditMovieID(-1);
+                    resetMovieFields();
+                  }}
+                  className="bg-[#007bff] hover:bg-[#0056b3] text-white px-4 py-2 rounded w-full mt-6 transition"
+                >
+                  Cancel Edit
+                </button>
+              </div>
+            }
           </div>
         </div>
       </div>
@@ -413,6 +534,12 @@ const ManageMovies: React.FC = () => {
                   className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
                 >
                   Delete
+                </button>
+                <button
+                  onClick={() => movie.id && startEditMovie(movie.id)}
+                  className="bg-[#28a745] text-white mt-2 px-4 py-2 rounded hover:bg-[#218838] transition"
+                >
+                  Edit
                 </button>
               </div>
             </li>

@@ -1,6 +1,9 @@
 package com.cinema.backend.services;
 
+import static utils.Utilities.nonNullOrThrow;
+
 import com.cinema.backend.entities.AuthenticationToken;
+import com.cinema.backend.entities.User.AuthorizationLevel;
 import com.cinema.backend.records.AccountCredentialsInfo;
 import com.cinema.backend.records.LoginInfo;
 import com.cinema.backend.records.LogoutInfo;
@@ -8,6 +11,7 @@ import com.cinema.backend.records.PaymentCardInfo;
 import com.cinema.backend.repositories.AuthenticationTokenRepository;
 import com.cinema.backend.repositories.PaymentCardsRepository;
 import com.cinema.backend.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Email;
 import java.time.Duration;
 import java.time.Instant;
@@ -73,6 +77,41 @@ public class AccountsService {
       throw new BadCredentialsException("Incorrect token");
     }
     authenticationTokenRepository.delete(token);
+  }
+
+  public void ensureAdmin(HttpServletRequest request) {
+    var reqUser =
+        nonNullOrThrow(
+            request.getHeader("CinemaAccountEmail"),
+            () ->
+                new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Request is missing the CinemaAccountEmail header"));
+    var reqToken =
+        nonNullOrThrow(
+            request.getHeader("CinemaAccountToken"),
+            () ->
+                new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Request is missing the CinemaAccountToken header"));
+    var dbToken =
+        authenticationTokenRepository
+            .findById(reqUser)
+            .orElseThrow(
+                () ->
+                    new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED,
+                        String.format("Could not find a token for user %s", reqUser)));
+    if (!dbToken.token.equals(reqToken)) {
+      throw new ResponseStatusException(
+          HttpStatus.UNAUTHORIZED,
+          String.format("Headers contained an token for user %s", reqUser));
+    }
+    if (dbToken.authorizationLevel != AuthorizationLevel.ADMIN) {
+      throw new ResponseStatusException(
+          HttpStatus.UNAUTHORIZED,
+          String.format(
+              "User %s is not authorized to make this request to endpoint %s",
+              reqUser, request.getRequestURI()));
+    }
   }
 
   public void verifyToken(AccountCredentialsInfo credentials) throws BadCredentialsException {

@@ -1,5 +1,5 @@
-"use client"
-import React, { useState, useEffect } from "react";
+"use client";
+import React, { useState, useEffect, useRef } from "react";
 import Navbar from "../app/components/Navbar";
 import SearchBar from "../app/components/SearchBar";
 import MovieCard from "../app/components/MovieCard";
@@ -11,8 +11,23 @@ const HomePage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [genreTerm, setGenreTerm] = useState<string>("");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [genres, setGenres] = useState<string[]>([]);
 
-  // Check if user is logged in by checking for the token in localStorage
+  const runningMoviesRef = useRef<HTMLDivElement>(null);
+  const comingSoonMoviesRef = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = (ref: React.RefObject<HTMLDivElement>) => {
+    if (ref.current) {
+      ref.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = (ref: React.RefObject<HTMLDivElement>) => {
+    if (ref.current) {
+      ref.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("accountToken");
     const expires = localStorage.getItem("expires");
@@ -21,11 +36,10 @@ const HomePage: React.FC = () => {
       const expiryDate = new Date(expires);
       const currentDate = new Date();
 
-      // Check if the token is still valid
       if (expiryDate > currentDate) {
         setIsLoggedIn(true);
       } else {
-        handleLogout(); // Token is expired, log out the user
+        handleLogout();
       }
     }
   }, []);
@@ -37,6 +51,16 @@ const HomePage: React.FC = () => {
       setMovies(data);
     } catch (error) {
       console.error("Error fetching movies:", error);
+    }
+  };
+
+  const fetchGenres = async () => {
+    try {
+      const response = await fetch(`${Config.apiRoot}/movies/genres`);
+      const data = await response.json();
+      setGenres(data);
+    } catch (error) {
+      console.error("Error fetching genres:", error);
     }
   };
 
@@ -52,6 +76,7 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     fetchMovies();
+    fetchGenres();
   }, []);
 
   const filteredMovies = movies.filter(
@@ -67,27 +92,69 @@ const HomePage: React.FC = () => {
   return (
     <div>
       <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} genreTerm={genreTerm} setGenreTerm={setGenreTerm} />
-      
-      <section className="p-5">
-        <h2 className="text-2xl font-bold">Currently Running</h2>
-        <div className="grid grid-cols-4 gap-4">
-          {filteredMovies
-            .filter((movie) => movie.isRunning)
-            .map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
+      <SearchBar 
+        searchTerm={searchTerm} 
+        setSearchTerm={setSearchTerm} 
+        genreTerm={genreTerm} 
+        setGenreTerm={setGenreTerm} 
+        genreOptions={genres}
+      />
+
+      {/* Currently Running Section */}
+      <section className="p-12 relative"> {/* Increased padding */}
+        <h2 className="text-2xl font-bold mb-6">Currently Running</h2>
+        <div className="relative overflow-visible px-12"> {/* Add padding to allow space around the cards */}
+          <button 
+            onClick={() => scrollLeft(runningMoviesRef)} 
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-2 z-10"
+          >
+            &#9664;
+          </button>
+          <div
+            ref={runningMoviesRef}
+            className="flex overflow-x-auto space-x-12 scrollbar-hide" // Adjusted space between cards
+          >
+            {filteredMovies
+              .filter((movie) => movie.isRunning)
+              .map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+          </div>
+          <button 
+            onClick={() => scrollRight(runningMoviesRef)} 
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-2 z-10"
+          >
+            &#9654;
+          </button>
         </div>
       </section>
 
-      <section className="p-5">
-        <h2 className="text-2xl font-bold">Coming Soon</h2>
-        <div className="grid grid-cols-4 gap-4">
-          {filteredMovies
-            .filter((movie) => !movie.isRunning)
-            .map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
+      {/* Coming Soon Section */}
+      <section className="p-12 relative"> {/* Increased padding */}
+        <h2 className="text-2xl font-bold mb-6">Coming Soon</h2>
+        <div className="relative overflow-visible px-12"> {/* Add padding to allow space around the cards */}
+          <button 
+            onClick={() => scrollLeft(comingSoonMoviesRef)} 
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-2 z-10"
+          >
+            &#9664;
+          </button>
+          <div
+            ref={comingSoonMoviesRef}
+            className="flex overflow-x-auto space-x-12 scrollbar-hide" // Adjusted space between cards
+          >
+            {filteredMovies
+              .filter((movie) => !movie.isRunning)
+              .map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+          </div>
+          <button 
+            onClick={() => scrollRight(comingSoonMoviesRef)} 
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-2 z-10"
+          >
+            &#9654;
+          </button>
         </div>
       </section>
     </div>
