@@ -1,6 +1,7 @@
-// Navbar.tsx
 import React from "react";
 import Link from "next/link";
+import Image from "next/image"; // Import Next.js Image component
+import dingusLogo from "../images/dingusCatLogoImg.png"; // Import the logo image
 
 interface NavbarProps {
   isLoggedIn: boolean;
@@ -17,9 +18,17 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, handleLogout, hideLogin, hi
         background: "linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%)",
       }}
     >
-      <Link href="/">
-        <h1 className="text-xl font-bold cursor-pointer">Cinema E-Booking Homepage</h1>
+      {/* Logo with link to homepage */}
+      <Link href="/" className="flex items-center">
+        <Image 
+          src={dingusLogo} 
+          alt="Logo" 
+          width={210} // Increased width
+          height={210} // Increased height
+          className="cursor-pointer" // Ensure it looks clickable
+        />
       </Link>
+      
       <div>
         {isLoggedIn ? (
           <>
