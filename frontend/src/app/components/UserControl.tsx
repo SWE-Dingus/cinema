@@ -15,94 +15,95 @@ const UserControl: React.FC<UserControlProps> = ({ user }) => {
 
   const saveUserChanges = async () => {
     fetch(`${Config.apiRoot}/admin/updateUser`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: user.email,
-          firstName: firstName,
-          lastName: lastName,
-          billingAddr: address,
-          authorizationLevel: authLevel,
-          wantsMarketingEmails: promotions,
-        }),
-      })
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: user.email,
+        firstName,
+        lastName,
+        billingAddr: address,
+        authorizationLevel: authLevel,
+        wantsMarketingEmails: promotions,
+      }),
+    });
   };
 
   return (
-    <table className="border-separate border-spacing-5">
-    <thead>
-      <tr>
-        <th>Email</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Address</th>
-        <th>Authorization Level</th>
-        <th>Promotions</th>
-        <th>Save Changes</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr className="text-black">
-        <td className="text-white">{user.email}</td>
-        <td>
-          <input
-            className="text-black"
-            type="text"
-            id="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-        </td>
-        <td>
-          <input
-            className="text-black"
-            type="text"
-            id="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </td>
-        <td>
-          <input
-            className="text-black"
-            type="text"
-            id="address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-        </td>
-        <td>
-          <select
-              value={authLevel}
-              onChange={(e) => {
-                setAuthLevel(e.target.value);
-              }}
-              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
-            >
-              {Object.values(AuthorizationLevel).map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
-        </td>
-        <td>
-          <input
-            className="text-black"
-            type="checkbox"
-            id="promotions"
-            checked={promotions}
-            onChange={(e) => {setPromotions(e.target.checked)}}
-          />
-        </td>
-        <td>
-          <button className="bg-white text-black rounded" onClick={saveUserChanges}>Save</button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <div className="p-6 bg-gray-900 text-white rounded-md shadow-lg">
+      <table className="w-full border-separate border-spacing-4">
+        <thead>
+          <tr className="text-lg font-semibold bg-gray-800">
+            <th className="p-2 text-left">Email</th>
+            <th className="p-2 text-left">First Name</th>
+            <th className="p-2 text-left">Last Name</th>
+            <th className="p-2 text-left">Address</th>
+            <th className="p-2 text-left">Authorization Level</th>
+            <th className="p-2 text-left">Promotions</th>
+            <th className="p-2 text-left">Save Changes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="bg-gray-800">
+            <td className="p-2">{user.email}</td>
+            <td className="p-2">
+              <input
+                className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </td>
+            <td className="p-2">
+              <input
+                className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </td>
+            <td className="p-2">
+              <input
+                className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </td>
+            <td className="p-2">
+              <select
+                value={authLevel}
+                onChange={(e) => setAuthLevel(e.target.value)}
+                className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                {Object.values(AuthorizationLevel).map((value) => (
+                  <option key={value} value={value} className="bg-gray-900">
+                    {value}
+                  </option>
+                ))}
+              </select>
+            </td>
+            <td className="p-2 text-center">
+              <input
+                className="scale-150 accent-blue-400"
+                type="checkbox"
+                checked={promotions}
+                onChange={(e) => setPromotions(e.target.checked)}
+              />
+            </td>
+            <td className="p-2">
+              <button
+                className="w-full p-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                onClick={saveUserChanges}
+              >
+                Save
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   );
 };
 
