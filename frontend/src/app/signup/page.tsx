@@ -2,6 +2,7 @@
 import React, { useState, FormEvent } from "react";
 import Config from "../../../frontend.config";
 import Link from "next/link";
+import Navbar from "../components/Navbar";
 
 const SignupPage: React.FC = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -77,6 +78,8 @@ const SignupPage: React.FC = () => {
   };
 
   return (
+    <>
+    <Navbar isLoggedIn={false} hideSignup={true} />
     <div className="min-h-screen bg-gradient-to-br from-orange-400 to-orange-200 p-6">
       <form onSubmit={handleSignup} className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-8">
         <div className="mb-8 text-center">
@@ -314,6 +317,7 @@ const SignupPage: React.FC = () => {
         </div>
       </form>
     </div>
+    </>
   );
 };
 

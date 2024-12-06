@@ -1,22 +1,24 @@
+// Navbar.tsx
 import React from "react";
-import Link from "next/link"; // Import Link component
+import Link from "next/link";
 
 interface NavbarProps {
   isLoggedIn: boolean;
-  handleLogout: () => void;
+  handleLogout?: () => void;
+  hideLogin?: boolean;
+  hideSignup?: boolean; // Add hideSignup prop
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, handleLogout }) => {
+const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, handleLogout, hideLogin, hideSignup }) => {
   return (
-    <nav 
+    <nav
       className="flex justify-between items-center p-5 text-white"
       style={{
         background: "linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%)",
       }}
     >
-      {/* Make the title a clickable link */}
       <Link href="/">
-        <h1 className="text-xl font-bold cursor-pointer">Cinema E-Booking</h1>
+        <h1 className="text-xl font-bold cursor-pointer">Cinema E-Booking Homepage</h1>
       </Link>
       <div>
         {isLoggedIn ? (
@@ -28,12 +30,16 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, handleLogout }) => {
           </>
         ) : (
           <>
-            <Link href="/login">
-              <button className="mr-4">Login</button>
-            </Link>
-            <Link href="/signup">
-              <button>Sign Up</button>
-            </Link>
+            {!hideLogin && (
+              <Link href="/login">
+                <button className="mr-4">Login</button>
+              </Link>
+            )}
+            {!hideSignup && (
+              <Link href="/signup">
+                <button>Sign Up</button>
+              </Link>
+            )}
           </>
         )}
       </div>

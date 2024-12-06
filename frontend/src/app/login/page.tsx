@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Config from "../../../frontend.config"; // If you need to use the config API root
+import Navbar from "../components/Navbar";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -201,6 +202,8 @@ const LoginPage: React.FC = () => {
   };
 
   return (
+    <>
+     <Navbar isLoggedIn={false} hideLogin={true} />
     <div style={styles.container}>
       <form onSubmit={handleLogin} style={styles.form}>
         <h2 style={styles.title}>Welcome Back</h2>
@@ -315,6 +318,7 @@ const LoginPage: React.FC = () => {
         </p>
       </form>
     </div>
+    </>
   );
 };
 
