@@ -25,3 +25,8 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Apply Tailwind classes to calendar weekends */
+.react-calendar__month-view__days__day--weekend {
+  @apply text-calendarText; /* Use the custom text color defined in Tailwind */
+}

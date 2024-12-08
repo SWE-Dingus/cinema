@@ -1,16 +1,21 @@
 import React from "react";
 import Link from "next/link";
-import Image from "next/image"; // Import Next.js Image component
+import Image from "next/image";
 import dingusLogo from "../images/dingusCatLogoImg.png"; // Import the logo image
 
 interface NavbarProps {
   isLoggedIn: boolean;
   handleLogout?: () => void;
   hideLogin?: boolean;
-  hideSignup?: boolean; // Add hideSignup prop
+  hideSignup?: boolean;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, handleLogout, hideLogin, hideSignup }) => {
+const Navbar: React.FC<NavbarProps> = ({
+  isLoggedIn,
+  handleLogout,
+  hideLogin,
+  hideSignup,
+}) => {
   return (
     <nav
       className="flex justify-between items-center p-5 text-white"
@@ -18,18 +23,29 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, handleLogout, hideLogin, hi
         background: "linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%)",
       }}
     >
-      {/* Logo with link to homepage */}
-      <Link href="/" className="flex items-center">
-        <Image 
-          src={dingusLogo} 
-          alt="Logo" 
-          width={210} // Increased width
-          height={210} // Increased height
-          className="cursor-pointer" // Ensure it looks clickable
-        />
-      </Link>
-      
-      <div>
+      <div className="flex items-center space-x-4">
+        {/* Logo with link to homepage */}
+        <Link href="/" className="flex items-center">
+          <Image
+            src={dingusLogo}
+            alt="Logo"
+            width={210}
+            height={210}
+            className="cursor-pointer"
+          />
+        </Link>
+
+        {/* Showtimes button */}
+        <Link href="/showtimes">
+          <button className="bg-[#fadcd5] text-[#1b0c1a] px-4 py-2 rounded hover:bg-[#e0c2a0] transition duration-200">
+            Showtimes
+          </button>
+        </Link>
+      </div>
+
+      <div className="flex items-center space-x-4">
+        
+
         {isLoggedIn ? (
           <>
             <Link href="/profile">

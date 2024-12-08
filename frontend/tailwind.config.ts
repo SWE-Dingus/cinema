@@ -11,6 +11,7 @@ const config: Config = {
         foreground: "var(--foreground)",
         inputText: "#333333",
         text: "var(--text)",
+        calendarText: "#000000"
       },
       width: {
         '1/10': '10%',
