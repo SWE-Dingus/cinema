@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import Config from "../../../../frontend.config";
 import { Movie } from "../../models/Movie";
@@ -15,7 +15,7 @@ const ManageMovies: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [newMovieTitle, setNewMovieTitle] = useState<string>("");
   const [newMovieAgeRating, setNewMovieAgeRating] = useState<AgeRating>(
-    AgeRating.G,
+    AgeRating.G
   );
   const [newReviewRating, setNewReviewRating] = useState<number>(0);
   const [newCast, setNewCast] = useState<string[]>([]);
@@ -31,6 +31,7 @@ const ManageMovies: React.FC = () => {
   const [newIsRunning, setNewIsRunning] = useState<boolean>(false);
   const [newCastMember, setNewCastMember] = useState<string>("");
   const [newCategoryInput, setNewCategoryInput] = useState<string>("");
+  const [newReleaseDate, setNewReleaseDate] = useState<string>("");
   const [editMovieID, setEditMovieID] = useState<number>(-1);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -80,12 +81,16 @@ const ManageMovies: React.FC = () => {
       setErrorMessage("Category must have at least one value");
       return false;
     }
+    if (!newReleaseDate) {
+      setErrorMessage("Release Date is required");
+      return false;
+    }
     setErrorMessage(""); // Clear error if validation passes
     return true;
-  }
+  };
 
   const addMovie = async () => {
-    if(!validateFields()) return;
+    if (!validateFields()) return;
 
     const newMovie: Movie = {
       title: newMovieTitle,
@@ -102,6 +107,7 @@ const ManageMovies: React.FC = () => {
       posterUrl: newPosterUrl,
       trailerId: newTrailerUrl,
       isRunning: newIsRunning,
+      releaseDate: newReleaseDate,
     };
 
     try {
@@ -119,7 +125,9 @@ const ManageMovies: React.FC = () => {
 
       //const savedMovie = await response.json();
       //setMovies((prevMovies) => [...prevMovies, savedMovie]);
-      const updatedMoviesResponse = await fetch(`${Config.apiRoot}/movies/getAll`);
+      const updatedMoviesResponse = await fetch(
+        `${Config.apiRoot}/movies/getAll`
+      );
       const newData = await updatedMoviesResponse.json();
       setMovies(newData);
       resetMovieFields();
@@ -135,7 +143,7 @@ const ManageMovies: React.FC = () => {
         `${Config.apiRoot}/movies/delete/${movieId}`,
         {
           method: "DELETE",
-        },
+        }
       );
 
       if (!response.ok) {
@@ -149,22 +157,21 @@ const ManageMovies: React.FC = () => {
   };
 
   const startEditMovie = async (movieId: number) => {
-    const response = await fetch(
-      `${Config.apiRoot}/movies/get/${movieId}`,{
-      }
-    )
+    const response = await fetch(`${Config.apiRoot}/movies/get/${movieId}`, {});
     const editInfo = await response.json();
-    console.log("starting...")
+    console.log("starting...");
     setEditMovieID(movieId);
-    console.log("set id", movieId)
+    console.log("set id", movieId);
     setNewMovieTitle(editInfo.title);
-    console.log("set title")
-    setNewMovieAgeRating(AgeRating[editInfo.ageRating as keyof typeof AgeRating]);
-    console.log("set age")
+    console.log("set title");
+    setNewMovieAgeRating(
+      AgeRating[editInfo.ageRating as keyof typeof AgeRating]
+    );
+    console.log("set age");
     setNewReviewRating(editInfo.reviewRating);
-    console.log("set rating")
+    console.log("set rating");
     setNewCast(editInfo.cast);
-    console.log("set cast")
+    console.log("set cast");
     setNewDirector(editInfo.director);
     setNewSynopsis(editInfo.synopsis);
     setNewCategory(editInfo.category);
@@ -193,20 +200,26 @@ const ManageMovies: React.FC = () => {
       posterUrl: newPosterUrl,
       trailerId: newTrailerUrl,
       isRunning: newIsRunning,
+      releaseDate: newReleaseDate,
     };
     try {
-      const response = await fetch(`${Config.apiRoot}/movies/update/${movieId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editedMovie),
-      });
+      const response = await fetch(
+        `${Config.apiRoot}/movies/update/${movieId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editedMovie),
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to save movie");
       }
-      setEditMovieID(-1)
-      const updatedMoviesResponse = await fetch(`${Config.apiRoot}/movies/getAll`);
+      setEditMovieID(-1);
+      const updatedMoviesResponse = await fetch(
+        `${Config.apiRoot}/movies/getAll`
+      );
       const newData = await updatedMoviesResponse.json();
       setMovies(newData);
       resetMovieFields();
@@ -231,6 +244,7 @@ const ManageMovies: React.FC = () => {
     setNewPosterUrl("");
     setNewTrailerUrl("");
     setNewIsRunning(false);
+    setNewReleaseDate("");
   };
 
   const addCastMember = () => {
@@ -238,8 +252,8 @@ const ManageMovies: React.FC = () => {
     setNewCastMember("");
   };
 
-  const deleteCastMember = (castMember:string) => {
-    setNewCast(newCast.filter((cast) => cast != castMember))
+  const deleteCastMember = (castMember: string) => {
+    setNewCast(newCast.filter((cast) => cast != castMember));
   };
 
   const addCategory = () => {
@@ -247,14 +261,14 @@ const ManageMovies: React.FC = () => {
     setNewCategoryInput("");
   };
 
-  const deleteCategory = (cat:string) => {
-    setNewCategory(newCategory.filter((cats) => cat.toUpperCase() != cats))
+  const deleteCategory = (cat: string) => {
+    setNewCategory(newCategory.filter((cats) => cat.toUpperCase() != cats));
   };
 
   return (
     <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
       <h1 className="text-4xl font-bold mb-8 text-center">Manage Movies</h1>
-      
+
       {errorMessage && (
         <div className="bg-red-500 text-white p-4 rounded mb-4">
           {errorMessage}
@@ -284,7 +298,7 @@ const ManageMovies: React.FC = () => {
               value={newMovieAgeRating}
               onChange={(e) => {
                 setNewMovieAgeRating(
-                  AgeRating[e.target.value as keyof typeof AgeRating],
+                  AgeRating[e.target.value as keyof typeof AgeRating]
                 );
               }}
               className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
@@ -405,20 +419,24 @@ const ManageMovies: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium">Cast Members</label>
-            <ul
-              className="flex list-none p-0 m-0"
-            >{newCast.length != 0 ?
-              newCast.map(castMem => {
-              return <li
-                key={castMem}
-                className="hover:text-red-800 mr-10 cursor-pointer"
-                onClick={() => deleteCastMember(castMem)}>
-                  {castMem}
-              </li>
-            }) : <li>No cast members</li>}
-            </ul> 
-            
-            
+            <ul className="flex list-none p-0 m-0">
+              {newCast.length != 0 ? (
+                newCast.map((castMem) => {
+                  return (
+                    <li
+                      key={castMem}
+                      className="hover:text-red-800 mr-10 cursor-pointer"
+                      onClick={() => deleteCastMember(castMem)}
+                    >
+                      {castMem}
+                    </li>
+                  );
+                })
+              ) : (
+                <li>No cast members</li>
+              )}
+            </ul>
+
             <input
               type="text"
               placeholder="Add cast member"
@@ -436,19 +454,24 @@ const ManageMovies: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium">Categories</label>
-            <ul
-            className="flex list-none p-0 m-0"
-            >
-              {newCategory.length != 0 ? newCategory.map(category => {
-                return <li
-                  key={category}
-                  className="hover:text-red-800 mr-10 cursor-pointer"
-                  onClick={() => deleteCategory(category)}
-                  >
-                {category}
-              </li>;}) : <li>No categories</li>
-            }</ul>
- 
+            <ul className="flex list-none p-0 m-0">
+              {newCategory.length != 0 ? (
+                newCategory.map((category) => {
+                  return (
+                    <li
+                      key={category}
+                      className="hover:text-red-800 mr-10 cursor-pointer"
+                      onClick={() => deleteCategory(category)}
+                    >
+                      {category}
+                    </li>
+                  );
+                })
+              ) : (
+                <li>No categories</li>
+              )}
+            </ul>
+
             <input
               type="text"
               placeholder="Add category"
@@ -475,18 +498,28 @@ const ManageMovies: React.FC = () => {
               Currently Running
             </label>
           </div>
+          
+          <div>
+            <label className="block text-sm font-medium">Release Date</label>
+            <input
+              type="date"
+              value={newReleaseDate}
+              onChange={(e) => setNewReleaseDate(e.target.value)}
+              className="border border-gray-300 p-3 rounded w-full bg-[#3b2d3b] text-white focus:outline-none focus:ring-2 focus:ring-[#fadcd5]"
+            />
+          </div>
 
           <div className="sm:col-span-2">
-            {(editMovieID == -1)  &&
+            {editMovieID == -1 && (
               <button
                 onClick={addMovie}
                 className="bg-[#007bff] hover:bg-[#0056b3] text-white px-4 py-2 rounded w-full mt-6 transition"
               >
                 Add Movie
               </button>
-            }
+            )}
 
-            {(editMovieID != -1) &&
+            {editMovieID != -1 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <button
                   onClick={() => saveEdit(editMovieID)}
@@ -504,7 +537,7 @@ const ManageMovies: React.FC = () => {
                   Cancel Edit
                 </button>
               </div>
-            }
+            )}
           </div>
         </div>
       </div>
@@ -528,6 +561,7 @@ const ManageMovies: React.FC = () => {
                   <div>Cast: {movie.cast?.join(", ") || "No cast"}</div>
                   <div>Review Rating: {movie.reviewRating}</div>
                   <div>Running: {movie.isRunning ? "Yes" : "No"}</div>
+                  <div>Release Date: {movie.releaseDate || "No release date"}</div>
                 </div>
                 <button
                   onClick={() => movie.id && deleteMovie(movie.id)}

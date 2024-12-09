@@ -7,7 +7,8 @@ import Config from "../../frontend.config";
 import { Movie } from "@/app/models/Movie";
 
 const HomePage: React.FC = () => {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [runningMovies, setRunningMovies] = useState<Movie[]>([]);
+  const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [genreTerm, setGenreTerm] = useState<string>("");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -18,13 +19,13 @@ const HomePage: React.FC = () => {
 
   const scrollLeft = (ref: React.RefObject<HTMLDivElement>) => {
     if (ref.current) {
-      ref.current.scrollBy({ left: -300, behavior: 'smooth' });
+      ref.current.scrollBy({ left: -300, behavior: "smooth" });
     }
   };
 
   const scrollRight = (ref: React.RefObject<HTMLDivElement>) => {
     if (ref.current) {
-      ref.current.scrollBy({ left: 300, behavior: 'smooth' });
+      ref.current.scrollBy({ left: 300, behavior: "smooth" });
     }
   };
 
@@ -44,13 +45,23 @@ const HomePage: React.FC = () => {
     }
   }, []);
 
-  const fetchMovies = async () => {
+  const fetchRunningMovies = async () => {
     try {
-      const response = await fetch(`${Config.apiRoot}/movies/getAll`);
+      const response = await fetch(`${Config.apiRoot}/movies/running`);
       const data = await response.json();
-      setMovies(data);
+      setRunningMovies(data);
     } catch (error) {
-      console.error("Error fetching movies:", error);
+      console.error("Error fetching running movies:", error);
+    }
+  };
+
+  const fetchUpcomingMovies = async () => {
+    try {
+      const response = await fetch(`${Config.apiRoot}/movies/upcoming`);
+      const data = await response.json();
+      setUpcomingMovies(data);
+    } catch (error) {
+      console.error("Error fetching upcoming movies:", error);
     }
   };
 
@@ -75,53 +86,53 @@ const HomePage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchMovies();
+    fetchRunningMovies();
+    fetchUpcomingMovies();
     fetchGenres();
   }, []);
 
-  const filteredMovies = movies.filter(
-    (movie) =>
-      (movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      movie.category
-        .join(", ")
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase())) &&
-      (movie.category.includes(genreTerm) || genreTerm === "")
-  );
+  const filterMovies = (movies: Movie[]) =>
+    movies.filter(
+      (movie) =>
+        (movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          movie.category
+            .join(", ")
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())) &&
+        (movie.category.includes(genreTerm) || genreTerm === "")
+    );
 
   return (
     <div>
       <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
-      <SearchBar 
-        searchTerm={searchTerm} 
-        setSearchTerm={setSearchTerm} 
-        genreTerm={genreTerm} 
-        setGenreTerm={setGenreTerm} 
+      <SearchBar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        genreTerm={genreTerm}
+        setGenreTerm={setGenreTerm}
         genreOptions={genres}
       />
 
       {/* Currently Running Section */}
-      <section className="p-12 relative"> {/* Increased padding */}
+      <section className="p-12 relative">
         <h2 className="text-2xl font-bold mb-6">Currently Running</h2>
-        <div className="relative overflow-visible px-12"> {/* Add padding to allow space around the cards */}
-          <button 
-            onClick={() => scrollLeft(runningMoviesRef)} 
+        <div className="relative overflow-visible px-12">
+          <button
+            onClick={() => scrollLeft(runningMoviesRef)}
             className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-2 z-10"
           >
             &#9664;
           </button>
           <div
             ref={runningMoviesRef}
-            className="flex overflow-x-auto space-x-12 scrollbar-hide" // Adjusted space between cards
+            className="flex overflow-x-auto space-x-12 scrollbar-hide"
           >
-            {filteredMovies
-              .filter((movie) => movie.isRunning)
-              .map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
-              ))}
+            {filterMovies(runningMovies).map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
           </div>
-          <button 
-            onClick={() => scrollRight(runningMoviesRef)} 
+          <button
+            onClick={() => scrollRight(runningMoviesRef)}
             className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-2 z-10"
           >
             &#9654;
@@ -130,27 +141,25 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Coming Soon Section */}
-      <section className="p-12 relative"> {/* Increased padding */}
+      <section className="p-12 relative">
         <h2 className="text-2xl font-bold mb-6">Coming Soon</h2>
-        <div className="relative overflow-visible px-12"> {/* Add padding to allow space around the cards */}
-          <button 
-            onClick={() => scrollLeft(comingSoonMoviesRef)} 
+        <div className="relative overflow-visible px-12">
+          <button
+            onClick={() => scrollLeft(comingSoonMoviesRef)}
             className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-2 z-10"
           >
             &#9664;
           </button>
           <div
             ref={comingSoonMoviesRef}
-            className="flex overflow-x-auto space-x-12 scrollbar-hide" // Adjusted space between cards
+            className="flex overflow-x-auto space-x-12 scrollbar-hide"
           >
-            {filteredMovies
-              .filter((movie) => !movie.isRunning)
-              .map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
-              ))}
+            {filterMovies(upcomingMovies).map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
           </div>
-          <button 
-            onClick={() => scrollRight(comingSoonMoviesRef)} 
+          <button
+            onClick={() => scrollRight(comingSoonMoviesRef)}
             className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-2 z-10"
           >
             &#9654;

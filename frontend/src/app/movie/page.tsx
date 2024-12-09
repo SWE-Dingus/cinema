@@ -24,9 +24,6 @@ const MovieDetailsPage: React.FC = () => {
   const id = searchParams.get("id");
   const router = useRouter();
 
-  // Hardcoded movie release date
-  const releaseDate = "2024-12-15"; // YYYY-MM-DD format
-
   const handleLogout = useCallback(() => {
     localStorage.removeItem("accountToken");
     localStorage.removeItem("accountEmail");
@@ -85,8 +82,10 @@ const MovieDetailsPage: React.FC = () => {
 
   const handleShowtimeSelect = (showtime: ShowTime) => {
     setShowModal(false);
-    router.push(`/seat-selection?showID=${showtime.showID}&movieID=${showtime.movieID}`);
-  };  
+    router.push(
+      `/seat-selection?showID=${showtime.showID}&movieID=${showtime.movieID}`
+    );
+  };
 
   if (!movie) return <p>Loading...</p>;
 
@@ -118,11 +117,13 @@ const MovieDetailsPage: React.FC = () => {
             </p>
             <p className="text-lg mt-2">
               <strong>Release Date:</strong>{" "}
-              {new Date(releaseDate).toLocaleDateString(undefined, {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+              {movie.releaseDate
+                ? new Date(movie.releaseDate).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                : "Not Available"}
             </p>
             <p className="text-lg mt-4">{movie.synopsis}</p>
             <div className="mt-5">

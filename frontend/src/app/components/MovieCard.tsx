@@ -3,15 +3,26 @@ import { useRouter } from "next/navigation";
 import { Movie } from "@/app/models/Movie";
 import Image from "next/image";
 import infoIcon from "@/app/images/info.png"; // Adjust path if necessary
+import Config from "../../../frontend.config";
 
 interface MovieCardProps {
   movie: Movie;
+}
+
+interface ShowTime {
+  showID: number;
+  movieID: number;
+  showRoomID: number;
+  showTime: string;
+  durationMinutes: number;
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const [positionClass, setPositionClass] = useState("origin-center"); // Default to center
+  const [showModal, setShowModal] = useState(false);
+  const [showtimes, setShowtimes] = useState<ShowTime[]>([]);
   const cardRef = useRef<HTMLDivElement>(null);
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
@@ -51,8 +62,32 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
     router.push(`/movie?id=${movie.id}`);
   };
 
-  const handleBookTickets = () => {
-    router.push(`/showtimes?movieId=${movie.id}&title=${encodeURIComponent(movie.title)}`);
+  const fetchShowtimes = async () => {
+    try {
+      const response = await fetch(`${Config.apiRoot}/shows/getAll`);
+      if (!response.ok) throw new Error("Failed to fetch showtimes");
+      const data = await response.json();
+      const filteredShowtimes = data.filter(
+        (showtime: ShowTime) => showtime.movieID === movie.id
+      );
+      setShowtimes(filteredShowtimes);
+    } catch (error) {
+      console.error("Error fetching showtimes:", error);
+    }
+  };
+
+  const handleBookTickets = async () => {
+    await fetchShowtimes();
+    setShowModal(true); // Open the modal
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleShowtimeSelect = (showtime: ShowTime) => {
+    setShowModal(false);
+    router.push(`/seat-selection?showID=${showtime.showID}&movieID=${showtime.movieID}`);
   };
 
   return (
@@ -113,6 +148,38 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
           >
             <Image src={infoIcon} alt="Info" className="w-4 h-4 mr-1" /> Info
           </button>
+        </div>
+      )}
+
+      {/* Modal for Showtimes */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <h2 className="text-2xl font-bold mb-4">Select a Showtime</h2>
+            {showtimes.length > 0 ? (
+              <ul className="space-y-2">
+                {showtimes.map((showtime) => (
+                  <li key={showtime.showID}>
+                    <button
+                      onClick={() => handleShowtimeSelect(showtime)}
+                      className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                    >
+                      {new Date(showtime.showTime).toLocaleString()} -{" "}
+                      {showtime.durationMinutes} mins
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No showtimes available.</p>
+            )}
+            <button
+              onClick={handleCloseModal}
+              className="mt-4 bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
+            >
+              Close
+            </button>
+          </div>
         </div>
       )}
     </div>

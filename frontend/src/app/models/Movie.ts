@@ -16,4 +16,5 @@ export interface Movie {
   posterUrl: string;
   trailerId: string;
   isRunning: boolean;
+  releaseDate: string;
 }
