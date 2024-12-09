@@ -7,6 +7,7 @@ import com.cinema.backend.entities.Movie.Genre;
 import com.cinema.backend.repositories.MovieRepository;
 import jakarta.validation.Valid;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,5 +71,37 @@ class MoviesController {
   @GetMapping("/genres")
   public List<String> getGenres() {
     return Arrays.stream(Genre.values()).map(Enum::name).collect(Collectors.toList());
+  }
+
+  @GetMapping("/running")
+  public List<Movie> getCurrentlyRunningMovies() {
+    Date today = new Date();
+    return movieRepository.findAll().stream()
+        .filter(movie -> movie.releaseDate.before(today) || movie.releaseDate.equals(today))
+        .collect(Collectors.toList());
+  }
+
+  @GetMapping("/upcoming")
+  public List<Movie> getUpcomingMovies() {
+    Date today = new Date();
+    return movieRepository.findAll().stream()
+        .filter(movie -> movie.releaseDate.after(today))
+        .collect(Collectors.toList());
+  }
+
+  @GetMapping("/running")
+  public List<Movie> getCurrentlyRunningMovies() {
+    Date today = new Date();
+    return movieRepository.findAll().stream()
+        .filter(movie -> movie.releaseDate.before(today) || movie.releaseDate.equals(today))
+        .collect(Collectors.toList());
+  }
+
+  @GetMapping("/upcoming")
+  public List<Movie> getUpcomingMovies() {
+    Date today = new Date();
+    return movieRepository.findAll().stream()
+        .filter(movie -> movie.releaseDate.after(today))
+        .collect(Collectors.toList());
   }
 }

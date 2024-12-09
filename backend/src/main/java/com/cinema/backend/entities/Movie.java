@@ -1,5 +1,6 @@
 package com.cinema.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.validator.constraints.URL;
 
@@ -95,6 +97,11 @@ public class Movie {
   @OneToMany(mappedBy = "movieID")
   public List<ShowTime> shows;
 
+  @NotNull
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy")
+  @Temporal(TemporalType.DATE)
+  public Date releaseDate;
+
   // TODO Add list for screenshots/clips of movie later
 
   public long getId() {
@@ -122,5 +129,6 @@ public class Movie {
     this.trailerId = other.trailerId;
     this.isRunning = other.isRunning;
     this.shows = other.shows;
+    this.releaseDate = other.releaseDate;
   }
 }
