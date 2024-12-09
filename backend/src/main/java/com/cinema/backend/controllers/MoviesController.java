@@ -88,20 +88,4 @@ class MoviesController {
         .filter(movie -> movie.releaseDate.after(today))
         .collect(Collectors.toList());
   }
-
-  @GetMapping("/running")
-  public List<Movie> getCurrentlyRunningMovies() {
-    Date today = new Date();
-    return movieRepository.findAll().stream()
-        .filter(movie -> movie.releaseDate.before(today) || movie.releaseDate.equals(today))
-        .collect(Collectors.toList());
-  }
-
-  @GetMapping("/upcoming")
-  public List<Movie> getUpcomingMovies() {
-    Date today = new Date();
-    return movieRepository.findAll().stream()
-        .filter(movie -> movie.releaseDate.after(today))
-        .collect(Collectors.toList());
-  }
 }
