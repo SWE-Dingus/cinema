@@ -63,4 +63,8 @@ public class User {
   public List<PaymentCard> getUserCards() {
     return userCards;
   }
+
+  public List<Booking> getUserBookings() {
+    return bookings;
+  }
 }

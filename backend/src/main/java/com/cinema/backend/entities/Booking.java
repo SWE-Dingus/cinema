@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -18,7 +18,7 @@ public class Booking {
 
   @NotEmpty public double total;
 
-  @NotEmpty public Date time;
+  @NotEmpty private Instant time;
 
   // @NotEmpty public String movieTitle;
 
@@ -50,12 +50,12 @@ public class Booking {
     this.showID = newID;
   }
 
-  public void setUserId(String newID) {
-    this.userID = newID;
+  public void setTime(Instant time) {
+    this.time = time;
   }
 
-  public void setTime(Date newTime) {
-    this.time = newTime;
+  public void setUserId(String newID) {
+    this.userID = newID;
   }
 
   public void setTotal(double price) {

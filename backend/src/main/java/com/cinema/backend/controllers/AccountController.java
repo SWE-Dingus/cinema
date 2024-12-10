@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.AuthenticationToken;
+import com.cinema.backend.entities.Booking;
 import com.cinema.backend.entities.User;
 import com.cinema.backend.entities.User.UserState;
 import com.cinema.backend.interfaces.IEmailSender;
@@ -110,6 +111,14 @@ public class AccountController {
   @GetMapping("/fetchUser")
   public User fetchUser(@Valid @RequestParam("email") String email) {
     return userRepository.findById(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+  }
+
+  @GetMapping("/fetchBookings")
+  public List<Booking> fetchBookings(@Valid @RequestParam("email") String email) {
+    return userRepository
+        .findById(email)
+        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))
+        .getUserBookings();
   }
 
   @PostMapping("resetPassword")

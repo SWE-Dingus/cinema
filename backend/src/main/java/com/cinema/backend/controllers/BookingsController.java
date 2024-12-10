@@ -9,6 +9,7 @@ import com.cinema.backend.repositories.BookingRepository;
 import com.cinema.backend.repositories.ShowTimeRepository;
 import com.cinema.backend.repositories.TicketRepository;
 import jakarta.validation.Valid;
+import java.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -44,7 +45,10 @@ public class BookingsController {
   public void createBooking(@Valid @RequestBody BookingInfo bookingInfo) {
     // TODO: Make BookingInfo entity, have in a list of tickets INSIDE the entity, create those
     // tickets
-    Booking bookingObject = bookingRepository.save(bookingInfo.toEntity());
+
+    Booking bookingObject = bookingInfo.toEntity();
+    bookingObject.setTime(Instant.now());
+    bookingObject = bookingRepository.save(bookingObject);
     for (int i = 0; i < bookingInfo.getTickets().size(); i++) {
       Ticket ticketToAdd = bookingInfo.getTickets().get(i).toEntity();
       ticketToAdd.setBookingID(bookingObject.getBookingID());
