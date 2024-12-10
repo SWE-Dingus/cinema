@@ -42,6 +42,9 @@ public class User {
   @OneToMany(mappedBy = "userEmail")
   private List<PaymentCard> userCards;
 
+  @OneToMany(mappedBy = "userID")
+  private List<Booking> bookings;
+
   public void edit(AccountPersonalInfo changes) {
     this.firstName = changes.firstName;
     this.lastName = changes.lastName;
