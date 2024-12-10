@@ -9,6 +9,8 @@ import com.cinema.backend.repositories.MovieRepository;
 import com.cinema.backend.repositories.ShowRoomRepository;
 import com.cinema.backend.repositories.ShowTimeRepository;
 import jakarta.validation.Valid;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,15 +44,17 @@ public class ShowTimesController {
   @PostMapping("add")
   public void addShowTime(@RequestBody @Valid ShowTimeInfo showTimeInfo) {
     ShowTime toAdd = showTimeInfo.toEntity();
-    long toAddEnd = toAdd.getShowTime().getTime() + toAdd.getDurationMinutes() * 60000;
+    Instant toAddEnd = toAdd.getShowTime().plus(Duration.ofMinutes(toAdd.getDurationMinutes()));
     List<ShowTime> showTimesConflicts = showTimeRepository.findAll();
     boolean conflictFound = false;
     for (ShowTime showTimesConflict : showTimesConflicts) {
       var otherShowTime = showTimesConflict.getShowTime();
       var otherShowTimeEnd =
-          otherShowTime.getTime() + showTimesConflict.getDurationMinutes() * 60000;
-      if (Math.min(toAddEnd, otherShowTimeEnd)
-              - Math.max(toAdd.getShowTime().getTime(), showTimesConflict.getShowTime().getTime())
+          otherShowTime.plus(Duration.ofMinutes(showTimesConflict.getDurationMinutes()));
+      if (Math.min(toAddEnd.getEpochSecond(), otherShowTimeEnd.getEpochSecond())
+              - Math.max(
+                  toAdd.getShowTime().getEpochSecond(),
+                  showTimesConflict.getShowTime().getEpochSecond())
           >= 0) {
         conflictFound = true;
         break;

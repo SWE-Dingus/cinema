@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
-import java.sql.Date;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +26,11 @@ public class ShowTime {
    */
   @NotNull private Integer showRoomID;
 
-  @NotNull private Date showTime;
+  @NotNull private Instant showTime;
 
   @NotNull private long durationMinutes;
 
-  public Date getShowTime() {
+  public Instant getShowTime() {
     return showTime;
   }
 
@@ -68,7 +68,7 @@ public class ShowTime {
     this.showRoomID = id;
   }
 
-  public void setShowTime(Date showTime) {
+  public void setShowTime(Instant showTime) {
     this.showTime = showTime;
   }
 

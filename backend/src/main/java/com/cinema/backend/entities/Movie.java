@@ -1,6 +1,5 @@
 package com.cinema.backend.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -98,7 +97,6 @@ public class Movie {
   public List<ShowTime> shows;
 
   @NotNull
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy")
   @Temporal(TemporalType.DATE)
   public Date releaseDate;
 

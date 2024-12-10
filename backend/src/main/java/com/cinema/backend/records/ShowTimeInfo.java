@@ -2,13 +2,13 @@ package com.cinema.backend.records;
 
 import com.cinema.backend.entities.ShowTime;
 import jakarta.validation.constraints.NotNull;
-import java.sql.Date;
+import java.time.Instant;
 
 public record ShowTimeInfo(
     Integer showID,
     long movieID,
     @NotNull Integer showRoomID,
-    @NotNull Date showTime,
+    @NotNull Instant showTime,
     @NotNull long durationMinutes) {
   public ShowTime toEntity() {
     var showTimes = new ShowTime();
