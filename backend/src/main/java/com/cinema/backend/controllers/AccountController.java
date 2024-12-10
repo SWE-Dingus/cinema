@@ -84,7 +84,9 @@ public class AccountController {
 
     // Returns NOT_FOUND if the user does not exist
     // Returns BAD_REQUEST if the user state is inactive
-    if (isActive.state != User.UserState.ACTIVE) {
+    if (isActive.state == UserState.SUSPENDED) {
+      throw new ResponseStatusException(BAD_REQUEST, "User has been suspended and may not log in");
+    } else if (isActive.state != User.UserState.ACTIVE) {
       throw new ResponseStatusException(BAD_REQUEST, "User has not confirmed their email");
     }
     return accountsService.login(loginInfo);
