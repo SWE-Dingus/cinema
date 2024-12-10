@@ -4,10 +4,12 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.Booking;
 import com.cinema.backend.entities.Ticket;
+import com.cinema.backend.entities.User;
 import com.cinema.backend.records.BookingInfo;
 import com.cinema.backend.repositories.BookingRepository;
 import com.cinema.backend.repositories.ShowTimeRepository;
 import com.cinema.backend.repositories.TicketRepository;
+import com.cinema.backend.repositories.UserRepository;
 import jakarta.validation.Valid;
 import java.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +26,18 @@ public class BookingsController {
 
   private final TicketRepository ticketRepository;
 
+  private final UserRepository userRepository;
+
   @Autowired
   public BookingsController(
       BookingRepository bookingRepository,
       ShowTimeRepository showTimeRepository,
-      TicketRepository ticketRepository) {
+      TicketRepository ticketRepository,
+      UserRepository userRepository) {
     this.bookingRepository = bookingRepository;
     this.showTimeRepository = showTimeRepository;
     this.ticketRepository = ticketRepository;
+    this.userRepository = userRepository;
   }
 
   // This should only be called when a user asks for more information about a booking
@@ -61,5 +67,11 @@ public class BookingsController {
       bookingObject.addTicket(ticketToAdd);
     }
     bookingRepository.save(bookingObject);
+    User toUpdate =
+        userRepository
+            .findById(bookingObject.getUserID())
+            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+    toUpdate.getUserBookings().add(bookingObject);
+    userRepository.save(toUpdate);
   }
 }

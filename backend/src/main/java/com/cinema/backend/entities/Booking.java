@@ -70,6 +70,10 @@ public class Booking {
     return showID;
   }
 
+  public String getUserID() {
+    return userID;
+  }
+
   // public String getMovieTitle() {
   // return movieTitle;
   // }
