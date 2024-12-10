@@ -4,8 +4,11 @@ import com.cinema.backend.entities.User;
 import com.cinema.backend.entities.User.AuthorizationLevel;
 import com.cinema.backend.entities.User.UserState;
 import com.cinema.backend.records.AccountPersonalInfo;
+import com.cinema.backend.records.SuspendUserInfo;
+import com.cinema.backend.repositories.AuthenticationTokenRepository;
 import com.cinema.backend.repositories.UserRepository;
 import com.cinema.backend.services.AccountsService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,11 +25,15 @@ public class AdminController {
 
   private final AccountsService accountsService;
   private UserRepository userRepository;
+  private AuthenticationTokenRepository tokenRepository;
+  private final HttpServletRequest request;
 
   @Autowired
-  public AdminController(UserRepository userRepository, AccountsService accountsService) {
+  public AdminController(
+      UserRepository userRepository, AccountsService accountsService, HttpServletRequest request) {
     this.userRepository = userRepository;
     this.accountsService = accountsService;
+    this.request = request;
   }
 
   @PutMapping("/seed")
@@ -64,5 +71,17 @@ public class AdminController {
     if (userUpdates.wantsMarketingEmails != null)
       user.wantsMarketingEmails = userUpdates.wantsMarketingEmails;
     userRepository.save(user);
+  }
+
+  @PutMapping("/suspendUser")
+  public void suspendUser(@RequestBody SuspendUserInfo toSuspend) {
+    accountsService.ensureAdmin(request);
+    var user =
+        userRepository
+            .findById(toSuspend.email())
+            .orElseThrow(() -> new UsernameNotFoundException("Could not find user"));
+    user.state = UserState.SUSPENDED;
+    userRepository.save(user);
+    tokenRepository.deleteById(toSuspend.email());
   }
 }
