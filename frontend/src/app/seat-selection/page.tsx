@@ -19,6 +19,7 @@ const SeatSelection: React.FC = () => {
   const [childPrice, setChild] = useState<number>(0);
   const [adultPrice, setAdult] = useState<number>(0);
   const [seniorPrice, setSenior] = useState<number>(0);
+  const [movieTitle, setMovieTitle] = useState<string>()
 
   useEffect(() => {
     // Parse query parameters
@@ -26,7 +27,7 @@ const SeatSelection: React.FC = () => {
     
     const movieId = urlParams.get('movieId') || '';
     const showId = urlParams.get('showId') || '';
-    let title = '';
+    let title;
     const fetchAllData = async() => {
       try {
         const response = await fetch(`${Config.apiRoot}/movies/get/${Number(movieId)}`);
@@ -35,7 +36,7 @@ const SeatSelection: React.FC = () => {
         setChild(data.childPrice);
         setAdult(data.adultPrice);
         setSenior(data.seniorPrice);
-        title = data.title;
+        setMovieTitle(data.title);
         const seatResp = await fetch(`${Config.apiRoot}/shows/get/${Number(showId)}`);
           if (!seatResp.ok) throw new Error("Showtime not found");
         const seatData = await seatResp.json();
@@ -54,6 +55,7 @@ const SeatSelection: React.FC = () => {
       }
     }
     fetchAllData();
+    title = movieTitle || '';
     setMovieDetails({ movieId, title, showId });
   }, []);
 
