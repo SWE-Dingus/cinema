@@ -3,14 +3,18 @@ package com.cinema.backend.controllers;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.Booking;
+import com.cinema.backend.entities.Movie;
 import com.cinema.backend.entities.ShowTime;
 import com.cinema.backend.entities.Ticket;
 import com.cinema.backend.entities.User;
 import com.cinema.backend.records.BookingInfo;
 import com.cinema.backend.repositories.BookingRepository;
+import com.cinema.backend.repositories.MovieRepository;
 import com.cinema.backend.repositories.ShowTimeRepository;
 import com.cinema.backend.repositories.TicketRepository;
 import com.cinema.backend.repositories.UserRepository;
+import com.cinema.backend.services.EmailService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import java.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +33,23 @@ public class BookingsController {
 
   private final UserRepository userRepository;
 
+  private final EmailService emailService;
+  private final MovieRepository movieRepository;
+
   @Autowired
   public BookingsController(
       BookingRepository bookingRepository,
       ShowTimeRepository showTimeRepository,
       TicketRepository ticketRepository,
-      UserRepository userRepository) {
+      UserRepository userRepository,
+      EmailService emailService,
+      MovieRepository movieRepository) {
     this.bookingRepository = bookingRepository;
     this.showTimeRepository = showTimeRepository;
     this.ticketRepository = ticketRepository;
     this.userRepository = userRepository;
+    this.emailService = emailService;
+    this.movieRepository = movieRepository;
   }
 
   // This should only be called when a user asks for more information about a booking
@@ -49,7 +60,7 @@ public class BookingsController {
   }
 
   @PostMapping("/create/")
-  public void createBooking(@Valid @RequestBody BookingInfo bookingInfo) {
+  public void createBooking(@Valid @RequestBody BookingInfo bookingInfo) throws MessagingException {
     // TODO: Make BookingInfo entity, have in a list of tickets INSIDE the entity, create those
     // tickets
 
@@ -61,7 +72,7 @@ public class BookingsController {
       ticketToAdd.setBookingID(bookingObject.getBookingID());
       ticketToAdd.setShowRoomID(
           showTimeRepository
-              .findById(bookingObject.getShowRoomID())
+              .findById(bookingObject.getShowId())
               .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))
               .getShowRoomID());
       ticketRepository.save(ticketToAdd);
@@ -74,6 +85,40 @@ public class BookingsController {
             .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
     toUpdate.getUserBookings().add(bookingObject);
     userRepository.save(toUpdate);
+
+    ShowTime show =
+        showTimeRepository
+            .findById(bookingObject.getShowId())
+            .orElseThrow(
+                () ->
+                    new ResponseStatusException(
+                        NOT_FOUND, "Booking's showtime could not be found"));
+    Movie movie =
+        movieRepository
+            .findById(show.getMovieID())
+            .orElseThrow(
+                () -> new ResponseStatusException(NOT_FOUND, "Booking's movie could not be found"));
+    StringBuilder message =
+        new StringBuilder(
+            "Hello! You've made an order for the movie %s. Here are your order details:\n\n"
+                .formatted(movie.title));
+    double total = 0;
+    for (Ticket ticket : bookingObject.getTickets()) {
+      var price =
+          switch (ticket.getTicketType()) {
+            case ADULT -> movie.adultPrice;
+            case CHILD -> movie.childPrice;
+            case SENIOR -> movie.seniorPrice;
+          };
+      message.append("%s ticket ($%f)\n".formatted(ticket.getTicketType(), price));
+      total += price;
+    }
+    message.append("Total: ").append(total).append("\n\n");
+    message.append("Thank you for your purchase!");
+    emailService.sendEmail(
+        toUpdate.email,
+        String.format("You've made an order for %s", movie.title),
+        message.toString());
   }
 
   @PutMapping("/cancel/{id}")

@@ -76,7 +76,7 @@ public class Booking {
     return this.time;
   }
 
-  public Integer getShowRoomID() {
+  public Integer getShowId() {
     return showID;
   }
 
