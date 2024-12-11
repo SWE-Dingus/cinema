@@ -116,9 +116,9 @@ public class AccountController {
   }
 
   @GetMapping("/fetchBookings")
-  public List<Booking> fetchBookings(@Valid @RequestParam("email") String email) {
+  public List<Booking> fetchBookings(@Valid @RequestBody AccountPersonalInfo accountPersonalInfo) {
     return userRepository
-        .findById(email)
+        .findById(accountPersonalInfo.email)
         .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))
         .getUserBookings();
   }
