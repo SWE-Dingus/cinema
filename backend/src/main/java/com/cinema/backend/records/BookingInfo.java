@@ -2,12 +2,11 @@ package com.cinema.backend.records;
 
 import com.cinema.backend.entities.Booking;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public record BookingInfo(
-    @NotEmpty double total,
+    @NotNull double total,
     // @NotEmpty Date time,
     @Email @NotNull String userID,
     @NotNull int showID,

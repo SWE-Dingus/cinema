@@ -125,16 +125,16 @@ public class ShowTimesController {
   }
   */
 
-  @DeleteMapping("delete")
-  public void removeShowTime(@PathVariable Integer showID) {
+  @DeleteMapping("/delete/{id}")
+  public void removeShowTime(@PathVariable Integer id) {
     ShowTime toRemove =
         showTimeRepository
-            .findById(showID)
-            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
-    showTimeRepository.deleteById(showID);
+            .findById(id)
+            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "ShowTime not found"));
+    showTimeRepository.deleteById(id);
     movieRepository
         .findById(toRemove.getMovieID())
-        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))
+        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Movie not found"))
         .shows
         .remove(toRemove);
   }

@@ -29,6 +29,13 @@ public class Ticket {
    */
   @NotNull private Integer bookingID;
 
+  public Ticket() {
+    this.type = TicketType.CHILD;
+    this.seatNumber = 1;
+    this.showRoomID = 1;
+    this.bookingID = 0;
+  }
+
   public TicketType getTicketType() {
     return type;
   }

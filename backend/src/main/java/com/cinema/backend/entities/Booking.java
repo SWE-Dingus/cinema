@@ -5,10 +5,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,11 +16,11 @@ public class Booking {
 
   @Id @GeneratedValue private int bookingID;
 
-  @NotEmpty public double total;
+  @NotNull public double total;
 
-  @NotEmpty public boolean cancelled;
+  public boolean cancelled;
 
-  @NotEmpty private Instant time;
+  private Instant time;
 
   // @NotEmpty public String movieTitle;
 
@@ -32,7 +32,7 @@ public class Booking {
   /*
    * FK to ShowTime
    */
-  @NotEmpty @NotNull @NotBlank private int showID;
+  @NotNull private int showID;
 
   /*
    * FK to the list of Tickets
@@ -46,6 +46,13 @@ public class Booking {
 
   public List<Ticket> getTickets() {
     return ticketsInBooking;
+  }
+
+  public void setTicketsList(Integer amountTicket) {
+    this.ticketsInBooking = new ArrayList<Ticket>(amountTicket);
+    for (int i = 0; i < amountTicket; i++) {
+      ticketsInBooking.add(new Ticket());
+    }
   }
 
   public void setCancelFalse() {
@@ -72,6 +79,10 @@ public class Booking {
     ticketsInBooking.add(ticket);
   }
 
+  public double getTotal() {
+    return this.total;
+  }
+
   public Instant getTime() {
     return this.time;
   }
@@ -84,7 +95,7 @@ public class Booking {
     return userID;
   }
 
-  public boolean getCancelStatus() {
+  public boolean getCancelled() {
     return cancelled;
   }
 
