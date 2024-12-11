@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Config from "../../../../frontend.config";
 import { useRouter } from "next/navigation";
-import Navbar from "../../components/Navbar"; // Import the Navbar component
 
 interface PaymentCard {
   cardNumber: string;
@@ -33,7 +32,6 @@ const EditProfilePage: React.FC = () => {
   const [newCard, setNewCard] = useState<PaymentCard | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // State to check if the user is logged in
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const [oldPassword, setOldPassword] = useState("");
@@ -160,20 +158,15 @@ const EditProfilePage: React.FC = () => {
   useEffect(() => {
     const accountEmail = localStorage.getItem("accountEmail");
 
+    // Redirect to 401 if no email is found in localStorage
     if (!accountEmail) {
-      setError("You are not logged in. Redirecting to login...");
-      setTimeout(() => {
-        router.push("/login");
-      }, 1500);
+      router.push("/401");
       return;
     }
 
-    setIsLoggedIn(true); // Set logged-in state to true if user is logged in
 
     const fetchUserData = async () => {
-      const queryParams = new URLSearchParams({
-        email: accountEmail!,
-      });
+      const queryParams = new URLSearchParams({ email: accountEmail });
 
       try {
         const response = await fetch(
@@ -187,8 +180,12 @@ const EditProfilePage: React.FC = () => {
         );
 
         if (!response.ok) {
-          const errorMessage = await response.text();
-          setError(errorMessage || "Failed to fetch user data.");
+          if (response.status === 401) {
+            router.push("/401");
+          } else {
+            const errorMessage = await response.text();
+            setError(errorMessage || "Failed to fetch user data.");
+          }
           return;
         }
 
@@ -228,11 +225,7 @@ const EditProfilePage: React.FC = () => {
 
   return (
     <>
-      {/* Navbar at the top of the page */}
-      <Navbar
-        isLoggedIn={isLoggedIn}
-        handleLogout={() => router.push("/login")}
-      />
+      
 
       <div className="min-h-screen bg-gradient-to-br from-orange-400 to-orange-200 p-6">
         <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-8">

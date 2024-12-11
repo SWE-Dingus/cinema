@@ -28,9 +28,14 @@ const ShowtimesPage: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null); // Default to no date selected
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
 
   useEffect(() => {
+    // Check login state
+    const token = localStorage.getItem("accountToken");
+    setIsLoggedIn(!!token);
+
     const fetchMovies = async () => {
       try {
         const response = await fetch(`${Config.apiRoot}/movies/getAll`);
@@ -39,7 +44,7 @@ const ShowtimesPage: React.FC = () => {
         }
         const data: Movie[] = await response.json();
         setMovies(data);
-        setFilteredMovies(data); // Show all movies initially
+        setFilteredMovies(data);
       } catch (err) {
         setError((err as Error).message || "An error occurred while fetching movies.");
       } finally {
@@ -52,17 +57,16 @@ const ShowtimesPage: React.FC = () => {
 
   const filterByDate = (date: Date | null) => {
     if (!date) {
-      // If no date is selected, show all movies
       setFilteredMovies(movies);
       return;
     }
 
-    const formattedDate = date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+    const formattedDate = date.toISOString().split("T")[0];
     const filtered = movies
       .map((movie) => ({
         ...movie,
         shows: movie.shows.filter((show) => {
-          const showDate = new Date(show.showTime).toISOString().split("T")[0]; // Show date as YYYY-MM-DD
+          const showDate = new Date(show.showTime).toISOString().split("T")[0];
           return showDate === formattedDate;
         }),
       }))
@@ -72,17 +76,17 @@ const ShowtimesPage: React.FC = () => {
   };
 
   const handleDateChange = (value: Date) => {
-    setSelectedDate(value); // Update the selected date
-    filterByDate(value); // Filter movies based on the selected date
+    setSelectedDate(value);
+    filterByDate(value);
   };
 
   const handleShowAllClick = () => {
-    setSelectedDate(null); // Reset the selected date
-    filterByDate(null); // Show all movies
+    setSelectedDate(null);
+    filterByDate(null);
   };
 
-  const minDate = new Date(); // Current date
-  const maxDate = new Date(); // Two months from today
+  const minDate = new Date();
+  const maxDate = new Date();
   maxDate.setMonth(maxDate.getMonth() + 2);
 
   if (isLoading) {
@@ -100,8 +104,8 @@ const ShowtimesPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#1b0c1a] text-white">
-      {/* Include Navbar */}
-      <Navbar isLoggedIn={false} handleLogout={() => {}} />
+      {/* Include Navbar and pass the isLoggedIn state */}
+      <Navbar isLoggedIn={isLoggedIn} />
 
       <div className="p-5">
         <h1 className="text-4xl font-bold mb-6 text-center">Select a Date</h1>

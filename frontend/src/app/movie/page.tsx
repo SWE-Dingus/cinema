@@ -91,7 +91,7 @@ const MovieDetailsPage: React.FC = () => {
 
   return (
     <div>
-      <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      <Navbar isLoggedIn={isLoggedIn} />
       <div className="p-5">
         <div className="flex">
           <div className="relative w-1/3 h-96">

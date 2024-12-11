@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import Config from "../../../frontend.config";
 import { useRouter } from "next/navigation";
-import Navbar from "../components/Navbar"; // Import the Navbar component
 
 interface PaymentCard {
   cardNumber: string;
@@ -56,6 +55,8 @@ const ProfilePage: React.FC = () => {
         if (!response.ok) {
           if (response.status === 401) {
             setIsUnauthorized(true);
+            router.push("/401"); // Redirect to the 401 page
+            return;
           }
           const errorMessage = await response.text();
           setError(errorMessage || "Failed to fetch user data.");
@@ -109,22 +110,28 @@ const ProfilePage: React.FC = () => {
     router.push("/profile/edit");
   };
 
-  if (!isMounted) {
-    return null;
+  if (isUnauthorized) {
+    return null; // Return null to avoid rendering anything while redirecting
   }
 
+  if (!isMounted || !userData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-400 to-orange-200 p-6">
+        <p>{error ? error : "Loading profile..."}</p>
+      </div>
+    );
+  }
   if (isUnauthorized) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-400 to-orange-200 p-6">
-        <Navbar isLoggedIn={false} handleLogout={handleLogout} />
-        <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-8 text-center">
+        <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-6">401 - Unauthorized</h1>
           <p className="text-red-600">
             You are not authorized to view this page. Please{" "}
             <a href="/login" className="text-blue-500 underline">
               login
             </a>{" "}
-            to access your profile.
+            to access your account.
           </p>
         </div>
       </div>
@@ -134,7 +141,6 @@ const ProfilePage: React.FC = () => {
   if (!userData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-400 to-orange-200 p-6">
-        <Navbar isLoggedIn={false} handleLogout={handleLogout} />
         <p>{error ? error : "Loading profile..."}</p>
       </div>
     );
@@ -142,7 +148,6 @@ const ProfilePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-400 to-orange-200 p-6">
-      <Navbar isLoggedIn={true} handleLogout={handleLogout} />
       <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">Profile</h1>
         {error ? (
