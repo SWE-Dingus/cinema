@@ -88,8 +88,8 @@ useEffect(() => {
     });
 
     const orderDetails = {
-      movieTitle: movieDetails.title || "Default Movie Title", // Fallback if title is not found
-      showtime: movieDetails.showId || "Default Showtime", // Fallback if showtime is not found
+      movieTitle: movieDetails.title || "", // FDefault Movie Titlallback if title is not found
+      showtime: movieDetails.showId || "", // Fallback if showtime is not found
       selectedSeats: selectedSeatsWithAgeCategories,
       total: selectedSeatsWithAgeCategories.reduce((sum, s) => sum + s.price, 0),
     };
