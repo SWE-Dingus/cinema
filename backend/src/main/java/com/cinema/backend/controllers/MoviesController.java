@@ -49,8 +49,6 @@ class MoviesController {
     return movieRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
   }
 
-  // @GetMapping("/getPrice/{id}")
-
   @GetMapping("/getAll")
   public List<Movie> getMovies() {
     return movieRepository.findAll();
