@@ -18,6 +18,8 @@ public class Booking {
 
   @NotEmpty public double total;
 
+  @NotEmpty public boolean cancelled;
+
   @NotEmpty private Instant time;
 
   // @NotEmpty public String movieTitle;
@@ -46,6 +48,10 @@ public class Booking {
     return ticketsInBooking;
   }
 
+  public void setCancelFalse() {
+    this.cancelled = false;
+  }
+
   public void setShowID(Integer newID) {
     this.showID = newID;
   }
@@ -72,6 +78,14 @@ public class Booking {
 
   public String getUserID() {
     return userID;
+  }
+
+  public boolean getCancelStatus() {
+    return cancelled;
+  }
+
+  public void cancelTicket() {
+    cancelled = true;
   }
 
   // public String getMovieTitle() {

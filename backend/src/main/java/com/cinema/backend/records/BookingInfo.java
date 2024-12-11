@@ -18,6 +18,7 @@ public record BookingInfo(
     toReturn.setTotal(total);
     toReturn.setShowID(showID);
     toReturn.setUserId(userID);
+    toReturn.setCancelFalse();
     return toReturn;
   }
 

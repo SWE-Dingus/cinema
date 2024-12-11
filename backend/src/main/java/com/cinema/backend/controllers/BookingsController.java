@@ -3,6 +3,7 @@ package com.cinema.backend.controllers;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.Booking;
+import com.cinema.backend.entities.ShowTime;
 import com.cinema.backend.entities.Ticket;
 import com.cinema.backend.entities.User;
 import com.cinema.backend.records.BookingInfo;
@@ -73,5 +74,26 @@ public class BookingsController {
             .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
     toUpdate.getUserBookings().add(bookingObject);
     userRepository.save(toUpdate);
+  }
+
+  @PutMapping("/cancel/{id}")
+  public void cancelBooking(@PathVariable Integer id) {
+    Booking toCancel =
+        bookingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+    if (!toCancel.getCancelStatus()) {
+      toCancel.cancelTicket();
+      for (int i = 0; i < toCancel.getTickets().size(); i++) {
+        Ticket toRemoveSeat =
+            ticketRepository
+                .findById(toCancel.getTickets().get(i).getTicketID())
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+        Integer seatToRemove = toRemoveSeat.getSeat();
+        ShowTime toFreeSeats =
+            showTimeRepository
+                .findById(toRemoveSeat.getShowRoomID())
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+        toFreeSeats.getSeatsList().set(seatToRemove, false);
+      }
+    }
   }
 }

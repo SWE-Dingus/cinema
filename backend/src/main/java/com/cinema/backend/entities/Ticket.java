@@ -60,4 +60,8 @@ public class Ticket {
   public void setBookingID(Integer booking) {
     this.bookingID = booking;
   }
+
+  public Long getTicketID() {
+    return ticketID;
+  }
 }
