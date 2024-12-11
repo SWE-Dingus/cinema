@@ -56,7 +56,7 @@ public class BookingsController {
   // This should only be called when a user asks for more information about a booking
   // Ex: Looking in orders page, wants to view details of specific booking
   @GetMapping("/get/{id}")
-  public Booking getBookingByid(@PathVariable Integer id) {
+  public Booking getBookingById(@PathVariable Integer id) {
     return bookingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
   }
 
