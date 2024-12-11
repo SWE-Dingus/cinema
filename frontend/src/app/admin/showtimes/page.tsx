@@ -22,11 +22,17 @@ const AdminShowtimes: React.FC = () => {
   const [filteredShowtimes, setFilteredShowtimes] = useState<ShowTime[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isAddingShowtime, setIsAddingShowtime] = useState(false);
+  const [validMovies, setValidMovies] = useState<
+    { id: number; title: string }[]
+  >([]);
 
   const [movieID, setMovieID] = useState<number | null>(null);
   const [showRoomID, setShowRoomID] = useState<number | null>(null);
   const [showTime, setShowTime] = useState<string>("");
   const [durationMinutes, setDurationMinutes] = useState<number | null>(null);
+
+  const [minDate, setMinDate] = useState<Date | undefined>(undefined);
+  const [maxDate, setMaxDate] = useState<Date | undefined>(undefined);
 
   useEffect(() => {
     const fetchShowtimes = async () => {
@@ -41,7 +47,9 @@ const AdminShowtimes: React.FC = () => {
         const movieTitles = await Promise.all(
           data.map(async (showtime) => {
             try {
-              const movieResponse = await fetch(`${Config.apiRoot}/movies/get/${showtime.movieID}`);
+              const movieResponse = await fetch(
+                `${Config.apiRoot}/movies/get/${showtime.movieID}`
+              );
               const movieData = await movieResponse.json();
               return { ...showtime, movieTitle: movieData.title };
             } catch {
@@ -52,14 +60,54 @@ const AdminShowtimes: React.FC = () => {
 
         setShowtimes(movieTitles);
         setFilteredShowtimes(movieTitles);
+
+        // Determine min and max dates
+        if (movieTitles.length > 0) {
+          const dates = movieTitles.map((show) => new Date(show.showTime));
+          setMinDate(new Date(Math.min(...dates.map((d) => d.getTime()))));
+          setMaxDate(new Date(Math.max(...dates.map((d) => d.getTime()))));
+        }
       } catch (err) {
-        setError((err as Error).message || "An error occurred while fetching showtimes.");
+        setError(
+          (err as Error).message ||
+            "An error occurred while fetching showtimes."
+        );
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchShowtimes();
+  }, []);
+
+  useEffect(() => {
+    const fetchValidMovies = async () => {
+      try {
+        const response = await fetch(`${Config.apiRoot}/movies/getAll`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch movies");
+        }
+        const movies = await response.json();
+
+        // Filter movies with release dates on or before the current day
+        const today = new Date().toISOString().split("T")[0];
+        const filteredMovies = movies.filter(
+          (movie: { releaseDate: string }) => movie.releaseDate <= today
+        );
+
+        // Map to include only id and title for dropdown
+        setValidMovies(
+          filteredMovies.map((movie: { id: number; title: string }) => ({
+            id: movie.id,
+            title: movie.title,
+          }))
+        );
+      } catch (error) {
+        console.error("Error fetching valid movies:", error);
+      }
+    };
+
+    fetchValidMovies();
   }, []);
 
   const filterByDate = (date: Date | null) => {
@@ -82,15 +130,23 @@ const AdminShowtimes: React.FC = () => {
     filterByDate(value);
   };
 
+  const handleShowAllClick = () => {
+    setSelectedDate(null); // Unselect the date in the calendar
+    filterByDate(null); // Show all showtimes
+  };
+
   const handleAddShowtimeSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (!movieID || !showRoomID || !showTime || !durationMinutes) {
       alert("Please fill in all the fields.");
       return;
     }
-
+  
     try {
+      // Append ":00" to ensure seconds are included, then convert to ISO string
+      const formattedShowTime = new Date(`${showTime}:00`).toISOString();
+  
       const response = await fetch(`${Config.apiRoot}/shows/add`, {
         method: "POST",
         headers: {
@@ -99,24 +155,43 @@ const AdminShowtimes: React.FC = () => {
         body: JSON.stringify({
           movieID,
           showRoomID,
-          showTime,
+          showTime: formattedShowTime,
           durationMinutes,
         }),
       });
-
+  
       if (!response.ok) {
-        throw new Error("Failed to add showtime");
+        const errorData = await response.json(); // Parse the JSON error response
+        if (errorData.message) {
+          throw new Error(errorData.message); // Throw the error message from the backend
+        } else {
+          throw new Error("Failed to add showtime. Please try again.");
+        }
       }
-
+  
       alert("Showtime added successfully.");
       setIsAddingShowtime(false);
-      setShowtimes([
-        ...showtimes,
-        { movieID, showRoomID, showTime, durationMinutes } as ShowTime,
-      ]);
+  
+      // Refresh the showtimes
+      const newShowtime = {
+        movieID,
+        showRoomID,
+        showTime: formattedShowTime,
+        durationMinutes,
+      } as ShowTime;
+  
+      const updatedShowtimes = [...showtimes, newShowtime];
+      setShowtimes(updatedShowtimes);
+  
+      // Recalculate minDate and maxDate
+      const dates = updatedShowtimes.map((show) => new Date(show.showTime));
+      setMinDate(new Date(Math.min(...dates.map((d) => d.getTime()))));
+      setMaxDate(new Date(Math.max(...dates.map((d) => d.getTime()))));
+  
+      // Filter for the current date
       filterByDate(selectedDate);
     } catch (err) {
-      setError((err as Error).message || "An error occurred while adding the showtime.");
+      alert(`Error: ${(err as Error).message}`); // Show the error to the admin
     }
   };
 
@@ -128,11 +203,31 @@ const AdminShowtimes: React.FC = () => {
       if (!response.ok) {
         throw new Error("Failed to delete showtime");
       }
+
       alert("Showtime deleted successfully.");
-      setShowtimes(showtimes.filter((show) => show.showID !== showID));
-      filterByDate(selectedDate);
+
+      // Remove the deleted showtime from both `showtimes` and `filteredShowtimes`
+      const updatedShowtimes = showtimes.filter(
+        (show) => show.showID !== showID
+      );
+      setShowtimes(updatedShowtimes);
+
+      // Re-filter the showtimes for the currently selected date
+      if (selectedDate) {
+        const formattedDate = selectedDate.toISOString().split("T")[0];
+        const updatedFilteredShowtimes = updatedShowtimes.filter((show) => {
+          const showDate = new Date(show.showTime).toISOString().split("T")[0];
+          return showDate === formattedDate;
+        });
+        setFilteredShowtimes(updatedFilteredShowtimes);
+      } else {
+        setFilteredShowtimes(updatedShowtimes);
+      }
     } catch (err) {
-      setError((err as Error).message || "An error occurred while deleting the showtime.");
+      setError(
+        (err as Error).message ||
+          "An error occurred while deleting the showtime."
+      );
     }
   };
 
@@ -152,11 +247,15 @@ const AdminShowtimes: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-[#1b0c1a] text-white">
       <div className="p-5">
-        <h1 className="text-4xl font-bold mb-6 text-center">Manage Showtimes</h1>
+        <h1 className="text-4xl font-bold mb-6 text-center">
+          Manage Showtimes
+        </h1>
         <div className="flex flex-col items-center text-calendarText">
           <Calendar
             onChange={(date) => handleDateChange(date as Date)}
             value={selectedDate}
+            minDate={minDate}
+            maxDate={maxDate}
             className="mx-auto mb-8"
           />
           <button
@@ -164,6 +263,12 @@ const AdminShowtimes: React.FC = () => {
             className="mt-4 px-6 py-3 bg-green-500 text-white rounded transition-transform duration-200 hover:bg-green-600 hover:scale-105"
           >
             {isAddingShowtime ? "Cancel" : "Add Showtime"}
+          </button>
+          <button
+            onClick={handleShowAllClick}
+            className="mt-4 px-6 py-3 bg-blue-500 text-white rounded transition-transform duration-200 hover:bg-blue-600 hover:scale-105"
+          >
+            See All Showtimes
           </button>
           <button
             onClick={() => (window.location.href = "/admin")}
@@ -181,25 +286,37 @@ const AdminShowtimes: React.FC = () => {
             onSubmit={handleAddShowtimeSubmit}
             className="w-full max-w-md space-y-4 text-black"
           >
-            <input
-              type="number"
-              placeholder="Movie ID"
+            {/* Dropdown for selecting Movie ID */}
+            <select
               value={movieID || ""}
               onChange={(e) => setMovieID(Number(e.target.value))}
               className="w-full px-4 py-2 border rounded"
-            />
+              required
+            >
+              <option value="" disabled>
+                Select Movie
+              </option>
+              {validMovies.map((movie) => (
+                <option key={movie.id} value={movie.id}>
+                  {movie.title} (ID: {movie.id})
+                </option>
+              ))}
+            </select>
+
             <input
               type="number"
               placeholder="Show Room ID"
               value={showRoomID || ""}
               onChange={(e) => setShowRoomID(Number(e.target.value))}
               className="w-full px-4 py-2 border rounded"
+              required
             />
             <input
               type="datetime-local"
               value={showTime}
               onChange={(e) => setShowTime(e.target.value)}
               className="w-full px-4 py-2 border rounded"
+              required
             />
             <input
               type="number"
@@ -207,6 +324,7 @@ const AdminShowtimes: React.FC = () => {
               value={durationMinutes || ""}
               onChange={(e) => setDurationMinutes(Number(e.target.value))}
               className="w-full px-4 py-2 border rounded"
+              required
             />
             <button
               type="submit"
@@ -231,9 +349,7 @@ const AdminShowtimes: React.FC = () => {
                 <p>Movie ID: {show.movieID}</p>
                 <p>Movie Title: {show.movieTitle || "Unknown"}</p>
                 <div className="flex mt-2 space-x-2">
-                  <button
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                  >
+                  <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                     Edit
                   </button>
                   <button

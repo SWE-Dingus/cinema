@@ -85,7 +85,7 @@ public class BookingsController {
       ticketToAdd.setShowRoomID(
           showTimeRepository
               .findById(bookingObject.getShowId())
-              .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))
+              .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Can't find Show Time"))
               .getShowRoomID());
       ticketRepository.save(ticketToAdd);
       // Assuming seat number is 1, that will update index 0.
