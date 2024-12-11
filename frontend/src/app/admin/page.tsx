@@ -174,6 +174,16 @@ const AdminMain: React.FC = () => {
           </button>
         </Link>
       </div>
+      {/* Manage Showtimes Section */}
+      <div className="bg-[#2a1c2a] p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Manage Showtimes</h2>
+          <p className="mb-4">View and edit showtimes for all movies.</p>
+          <Link href="/admin/showtimes">
+            <button className="bg-[#fadcd5] text-[#1b0c1a] px-6 py-2 rounded-lg hover:bg-[#e0c2a0] transition">
+              Manage Showtimes
+            </button>
+          </Link>
+        </div>
     </div>
   );
 };
