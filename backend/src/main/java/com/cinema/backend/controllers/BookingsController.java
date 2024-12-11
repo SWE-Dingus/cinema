@@ -78,7 +78,6 @@ public class BookingsController {
 
   @PutMapping("/cancel/{id}")
   public void cancelBooking(@PathVariable Integer id) {
-
     Booking toCancel =
         bookingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
     if (60 <= ((Instant.now().getEpochSecond() - toCancel.getTime().getEpochSecond()) * 60)) {

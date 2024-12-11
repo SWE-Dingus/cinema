@@ -80,6 +80,18 @@ public class AdminController {
     tokenRepository.deleteById(toSuspend.email());
   }
 
+  @PutMapping("/unsuspendUser")
+  public void unsuspendUser(@RequestBody SuspendUserInfo toUnsuspend) {
+    accountsService.ensureAdmin(request);
+    var user =
+        userRepository
+            .findById(toUnsuspend.email())
+            .orElseThrow(() -> new UsernameNotFoundException("Could not find user"));
+    user.state = UserState.ACTIVE;
+    userRepository.save(user);
+    tokenRepository.deleteById(toUnsuspend.email());
+  }
+
   @DeleteMapping("/deleteUser")
   public void deleteUser(@RequestBody SuspendUserInfo toSuspend) {
     accountsService.ensureAdmin(request);
