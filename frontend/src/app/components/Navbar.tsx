@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation"; // For routing
 import dingusLogo from "../images/dingusCatLogoImg.png"; // Import the logo image
+import { useCart } from "../Cart";
 
 interface NavbarProps {
   isLoggedIn: boolean;
@@ -13,7 +14,8 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
   const pathname = usePathname(); // Get the current path
   const router = useRouter(); // For navigation
-
+  const { cartCount } = useCart();
+  
   const handleLogout = () => {
     // Clear user-related data from localStorage
     localStorage.removeItem("accountEmail");
@@ -85,6 +87,12 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
                 </button>
               </Link>
             )}
+
+            {/* Cart Count */}
+        <div className="text-white text-lg flex items-center">
+          🛒 Cart: {cartCount}
+        </div>
+
           </>
         )}
       </div>
