@@ -4,6 +4,7 @@ import { Movie } from "@/app/models/Movie";
 import Image from "next/image";
 import infoIcon from "@/app/images/info.png"; // Adjust path if necessary
 import Config from "../../../frontend.config";
+import { useCart } from "../Cart";
 
 interface MovieCardProps {
   movie: Movie;
@@ -26,7 +27,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
-
+  const { addToCart } = useCart(); // Use the cart context
   // Determine initial position of the card on mount
   useEffect(() => {
     if (cardRef.current) {
@@ -90,6 +91,10 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
     router.push(`/seat-selection?showID=${showtime.showID}&movieID=${showtime.movieID}`);
   };
 
+  const handleAddToCart = () => {
+    addToCart(); // Increment cart count
+  };
+
   return (
     <div
       ref={cardRef}
@@ -142,6 +147,13 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
               Book Tickets
             </button>
           )}
+          <button
+            onClick={handleAddToCart}
+            className="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded"
+          >
+            Add to Cart
+          </button>
+
           <button
             onClick={handleInfoClick}
             className="bg-gray-500 hover:bg-gray-600 text-white py-1 px-3 rounded flex items-center"
