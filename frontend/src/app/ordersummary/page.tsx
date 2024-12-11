@@ -1,7 +1,8 @@
-"use client"; // Marking this as a Client Component
+"use client";
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 
 interface Seat {
   seat: string;
@@ -16,10 +17,13 @@ interface OrderDetails {
   total: number;
 }
 
-const OrderSummary: React.FC = () => {
+// Separate component to handle search params
+const OrderSummaryContent: React.FC = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const [isUnauthorized, setIsUnauthorized] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Load order details from localStorage and check authorization
   useEffect(() => {
@@ -30,10 +34,22 @@ const OrderSummary: React.FC = () => {
     }
 
     const storedOrderDetails = localStorage.getItem("orderDetails");
+    
+    // If no stored order details, try to fetch from URL parameters
+    if (!storedOrderDetails) {
+      const movieTitle = searchParams.get("title");
+      const showtime = searchParams.get("showtime");
+      
+      if (!movieTitle || !showtime) {
+        setError("Incomplete order details");
+        return;
+      }
+    }
+
     if (storedOrderDetails) {
       setOrderDetails(JSON.parse(storedOrderDetails));
     }
-  }, []);
+  }, [searchParams]);
 
   if (isUnauthorized) {
     return (
@@ -46,6 +62,15 @@ const OrderSummary: React.FC = () => {
           </a>{" "}
           to access the order summary.
         </p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
+        <h1 className="text-4xl font-bold mb-6 text-center">Error</h1>
+        <p className="text-center text-red-600">{error}</p>
       </div>
     );
   }
@@ -89,6 +114,19 @@ const OrderSummary: React.FC = () => {
         </button>
       </div>
     </div>
+  );
+};
+
+// Wrapper component with Suspense
+const OrderSummary: React.FC = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen p-5 bg-[#1b0c1a] text-white text-center">
+        Loading order summary...
+      </div>
+    }>
+      <OrderSummaryContent />
+    </Suspense>
   );
 };
 

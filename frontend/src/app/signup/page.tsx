@@ -63,16 +63,26 @@ const SignupPage: React.FC = () => {
       });
 
       if (response.ok) {
-        localStorage.setItem('accountEmail', email);
-        // If registration is successful, redirect to the confirmation page
-        window.location.replace('/registration/confirm');
+        localStorage.setItem("accountEmail", email);
+        const savedCards = JSON.parse(localStorage.getItem("savedCards") || "[]");
+        const newCard = {
+          id: `card_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          cardNumber,
+          cardExpirationMonth,
+          cardExpirationYear,
+          billingAddress: cardBillingAddress,
+        };
+        
+        savedCards.push(newCard);
+        localStorage.setItem("savedCards", JSON.stringify(savedCards));
+
+        window.location.replace("/registration/confirm");
       } else {
-        // Handle non-200 responses
         const errorMessage = await response.text();
-        setError(errorMessage || 'Something went wrong. Please try again.');
+        setError(errorMessage || "Something went wrong. Please try again.");
       }
     } catch (error) {
-      const errorMessage = (error as Error).message || 'There was a problem connecting to the server.';
+      const errorMessage = (error as Error).message || "There was a problem connecting to the server.";
       setError(errorMessage);
     }
   };
