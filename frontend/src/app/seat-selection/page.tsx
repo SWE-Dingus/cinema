@@ -2,51 +2,64 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Config from "../../../frontend.config";
 
 const SeatSelection: React.FC = () => {
   const router = useRouter();
-  const [movieDetails, setMovieDetails] = useState<{ movieId: string; title: string; showtime: string }>({
+  const [movieDetails, setMovieDetails] = useState<{ movieId: string; title: string; showId: string }>({
     movieId: '',
     title: '',
-    showtime: '',
+    showId: '',
   });
-
-  const seats = ["A1", "A2", "A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5"];
+  
+  const [seats, setSeats] = useState<{seatNumber: string; booked: boolean;}[]>([]);
   const ageCategories = ["Child", "Adult", "Senior"];
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [seatAgeCategories, setSeatAgeCategories] = useState<{ [seat: string]: string }>({});
-  const [isUnauthorized, setIsUnauthorized] = useState(false);
+  const [childPrice, setChild] = useState<number>(0);
+  const [adultPrice, setAdult] = useState<number>(0);
+  const [seniorPrice, setSenior] = useState<number>(0);
 
   useEffect(() => {
     // Parse query parameters
     const urlParams = new URLSearchParams(window.location.search);
+    
     const movieId = urlParams.get('movieId') || '';
-    const title = urlParams.get('title') || '';
-    const showtime = urlParams.get('showtime') || '';
-
-    setMovieDetails({ movieId, title, showtime });
-
-    // Check for authorization
-    const accountEmail = localStorage.getItem("accountEmail");
-    if (!accountEmail) {
-      setIsUnauthorized(true);
+    const showId = urlParams.get('showId') || '';
+    let title = '';
+    const fetchAllData = async() => {
+      try {
+        const response = await fetch(`${Config.apiRoot}/movies/get/${Number(movieId)}`);
+          if (!response.ok) throw new Error("Movie not found");
+        const data = await response.json();
+        setChild(data.childPrice);
+        setAdult(data.adultPrice);
+        setSenior(data.seniorPrice);
+        title = data.title;
+        const seatResp = await fetch(`${Config.apiRoot}/shows/get/${Number(showId)}`);
+          if (!seatResp.ok) throw new Error("Showtime not found");
+        const seatData = await seatResp.json();
+        const seatCount = seatData.showRoomID==3 ? 30 : 20;
+        const alphabets = ['A','B','C','D','E','F']
+        let tempArr : {seatNumber: string; booked: boolean;}[];
+        tempArr = [];
+        for (let i = 0; i < seatCount; i++) {
+          const tempSeatNum = alphabets[Math.floor(i/5)]+(i%5 + 1).toString();
+          tempArr = [...tempArr, {seatNumber:tempSeatNum, booked: seatData.seatsList[i]}]
+          console.log(tempSeatNum)
+        }
+        setSeats(tempArr);
+      } catch (e) {
+        console.log("Error fetching the movie and/or seat details:", e);
+      }
     }
+    fetchAllData();
+    setMovieDetails({ movieId, title, showId });
   }, []);
 
-  if (isUnauthorized) {
-    return (
-      <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
-        <h1 className="text-4xl font-bold mb-6 text-center">401 - Unauthorized</h1>
-        <p className="text-center text-red-600">
-          You are not authorized to view this page. Please{" "}
-          <a href="/login" className="text-blue-500 underline">
-            login
-          </a>{" "}
-          to access seat selection.
-        </p>
-      </div>
-    );
-  }
+useEffect(() => {
+  
+})
 
   const toggleSeatSelection = (seat: string) => {
     if (selectedSeats.includes(seat)) {
@@ -69,13 +82,13 @@ const SeatSelection: React.FC = () => {
   const handleProceedToOrderSummary = () => {
     const selectedSeatsWithAgeCategories = selectedSeats.map((seat) => {
       const ageCategory = seatAgeCategories[seat] || "Adult";
-      const price = ageCategory === "Child" ? 8 : ageCategory === "Senior" ? 10 : 12;
+      const price = ageCategory === "Child" ? childPrice : ageCategory === "Senior" ? seniorPrice : adultPrice;
       return { seat, ageCategory, price };
     });
 
     const orderDetails = {
       movieTitle: movieDetails.title || "Default Movie Title", // Fallback if title is not found
-      showtime: movieDetails.showtime || "Default Showtime", // Fallback if showtime is not found
+      showtime: movieDetails.showId || "Default Showtime", // Fallback if showtime is not found
       selectedSeats: selectedSeatsWithAgeCategories,
       total: selectedSeatsWithAgeCategories.reduce((sum, s) => sum + s.price, 0),
     };
@@ -91,13 +104,17 @@ const SeatSelection: React.FC = () => {
       <div className="grid grid-cols-5 gap-2 mb-8">
         {seats.map((seat) => (
           <button
-            key={seat}
-            onClick={() => toggleSeatSelection(seat)}
+            key={seat.seatNumber}
+            disabled={seat.booked}
+            onClick={() => !seat.booked ? toggleSeatSelection(seat.seatNumber) : seat.booked=seat.booked}
             className={`p-4 border rounded-lg transition-colors ${
-              selectedSeats.includes(seat) ? "bg-[#6f42c1]" : "bg-[#2a1c2a]"
-            } hover:bg-[#5a32a1]`}
-          >
-            {seat}
+              !seat.booked ?
+                selectedSeats.includes(seat.seatNumber) ? 
+                  "bg-[#6f42c1] hover:bg-[#5a32a1]" 
+                  : "bg-[#2a1c2a] hover:bg-[#5a32a1]"
+              : "bg-[#7A7A7A]"
+            }`}> 
+            {seat.seatNumber}
           </button>
         ))}
       </div>

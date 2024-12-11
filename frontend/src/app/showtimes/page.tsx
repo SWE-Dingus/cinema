@@ -154,7 +154,7 @@ const ShowtimesPage: React.FC = () => {
                           <Link
                             href={`/seat-selection?movieId=${movie.id}&title=${encodeURIComponent(
                               movie.title
-                            )}&showtime=${encodeURIComponent(show.showTime)}`}
+                            )}&showId=${show.showID}`}
                           >
                             <button className="bg-[#fadcd5] text-[#1b0c1a] px-6 py-3 rounded transition-transform duration-200 hover:bg-[#e0c2a0] hover:scale-105">
                               {showDateTime.toLocaleString()}
