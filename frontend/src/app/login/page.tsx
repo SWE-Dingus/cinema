@@ -203,7 +203,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <>
-     <Navbar isLoggedIn={false} hideLogin={true} />
+     <Navbar isLoggedIn={false}/>
     <div style={styles.container}>
       <form onSubmit={handleLogin} style={styles.form}>
         <h2 style={styles.title}>Welcome Back</h2>

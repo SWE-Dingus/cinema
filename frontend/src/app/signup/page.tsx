@@ -89,7 +89,7 @@ const SignupPage: React.FC = () => {
 
   return (
     <>
-    <Navbar isLoggedIn={false} hideSignup={true} />
+    <Navbar isLoggedIn={false} />
     <div className="min-h-screen bg-gradient-to-br from-orange-400 to-orange-200 p-6">
       <form onSubmit={handleSignup} className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-8">
         <div className="mb-8 text-center">

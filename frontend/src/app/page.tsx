@@ -104,7 +104,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div>
-      <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      <Navbar isLoggedIn={isLoggedIn} />
       <SearchBar
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
