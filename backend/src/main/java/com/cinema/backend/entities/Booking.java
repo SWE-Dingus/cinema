@@ -72,6 +72,10 @@ public class Booking {
     ticketsInBooking.add(ticket);
   }
 
+  public Instant getTime() {
+    return this.time;
+  }
+
   public Integer getShowRoomID() {
     return showID;
   }

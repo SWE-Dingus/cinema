@@ -78,21 +78,26 @@ public class BookingsController {
 
   @PutMapping("/cancel/{id}")
   public void cancelBooking(@PathVariable Integer id) {
+
     Booking toCancel =
         bookingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
-    if (!toCancel.getCancelStatus()) {
-      toCancel.cancelTicket();
-      for (int i = 0; i < toCancel.getTickets().size(); i++) {
-        Ticket toRemoveSeat =
-            ticketRepository
-                .findById(toCancel.getTickets().get(i).getTicketID())
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
-        Integer seatToRemove = toRemoveSeat.getSeat();
-        ShowTime toFreeSeats =
-            showTimeRepository
-                .findById(toRemoveSeat.getShowRoomID())
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
-        toFreeSeats.getSeatsList().set(seatToRemove, false);
+    if (60 <= ((Instant.now().getEpochSecond() - toCancel.getTime().getEpochSecond()) * 60)) {
+      // If 60 is less than (or equal to) the remaining epoch seconds * 60, for minutes,
+      // then we proceed
+      if (!toCancel.getCancelStatus()) {
+        toCancel.cancelTicket();
+        for (int i = 0; i < toCancel.getTickets().size(); i++) {
+          Ticket toRemoveSeat =
+              ticketRepository
+                  .findById(toCancel.getTickets().get(i).getTicketID())
+                  .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+          Integer seatToRemove = toRemoveSeat.getSeat();
+          ShowTime toFreeSeats =
+              showTimeRepository
+                  .findById(toRemoveSeat.getShowRoomID())
+                  .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+          toFreeSeats.getSeatsList().set(seatToRemove, false);
+        }
       }
     }
   }
