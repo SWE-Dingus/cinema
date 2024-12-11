@@ -123,4 +123,12 @@ public class PromotionsController {
     dbPromotion.sent = true;
     promotionsRepository.save(dbPromotion);
   }
+
+  @GetMapping("/get/{id}")
+  public Promotion fetchPromotion(@PathVariable String id) {
+    return promotionsRepository
+        .findById(id)
+        .orElseThrow(
+            () -> new ResponseStatusException(NOT_FOUND, "Promotion with that ID was not found."));
+  }
 }
