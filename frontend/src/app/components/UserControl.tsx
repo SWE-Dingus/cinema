@@ -20,6 +20,8 @@ const UserControl: React.FC<UserControlProps> = ({ user }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "CinemaAccountEmail":String(localStorage.getItem("accountEmail")),
+        "CinemaAccountToken":String(localStorage.getItem("accountToken")),
       },
       body: JSON.stringify({
         email: user.email,
@@ -36,6 +38,8 @@ const UserControl: React.FC<UserControlProps> = ({ user }) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "CinemaAccountEmail":String(localStorage.getItem("accountEmail")),
+        "CinemaAccountToken":String(localStorage.getItem("accountToken")),
       },
       body: JSON.stringify({
         email: user.email,
@@ -45,6 +49,8 @@ const UserControl: React.FC<UserControlProps> = ({ user }) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "CinemaAccountEmail":String(localStorage.getItem("accountEmail")),
+          "CinemaAccountToken":String(localStorage.getItem("accountToken")),
         },
         body: JSON.stringify({
           email: user.email,
