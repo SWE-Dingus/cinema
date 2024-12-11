@@ -41,6 +41,13 @@ public class ShowTimesController {
     return showTimeRepository.findAll();
   }
 
+  @GetMapping("/get/{id}")
+  public ShowTime getRunningShows(@PathVariable Integer id) {
+    return showTimeRepository
+        .findById(id)
+        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+  }
+
   @PostMapping("add")
   public void addShowTime(@RequestBody @Valid ShowTimeInfo showTimeInfo) {
     ShowTime toAdd = showTimeInfo.toEntity();
