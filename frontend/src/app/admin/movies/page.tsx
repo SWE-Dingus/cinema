@@ -167,11 +167,8 @@ const ManageMovies: React.FC = () => {
     setNewMovieAgeRating(
       AgeRating[editInfo.ageRating as keyof typeof AgeRating]
     );
-    console.log("set age");
     setNewReviewRating(editInfo.reviewRating);
-    console.log("set rating");
     setNewCast(editInfo.cast);
-    console.log("set cast");
     setNewDirector(editInfo.director);
     setNewSynopsis(editInfo.synopsis);
     setNewCategory(editInfo.category);
@@ -182,6 +179,7 @@ const ManageMovies: React.FC = () => {
     setNewPosterUrl(editInfo.posterUrl);
     setNewTrailerUrl(editInfo.trailerId);
     setNewIsRunning(editInfo.isRunning);
+    setNewReleaseDate(editInfo.releaseDate);
   };
 
   const saveEdit = async (movieId: number) => {
