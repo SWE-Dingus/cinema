@@ -1,5 +1,6 @@
 package com.cinema.backend.controllers;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.cinema.backend.entities.Booking;
@@ -66,7 +67,8 @@ public class BookingsController {
 
     Booking bookingObject = bookingInfo.toEntity();
     bookingObject.setTime(Instant.now());
-    System.out.println("Size of tickets list in booking info: " + bookingInfo.getTickets().size());
+    // System.out.println("Size of tickets list in booking info: " +
+    // bookingInfo.getTickets().size());
     bookingObject.setTicketsList(bookingInfo.getTickets().size());
     bookingObject = bookingRepository.save(bookingObject);
     ShowTime show =
@@ -76,6 +78,7 @@ public class BookingsController {
                 () ->
                     new ResponseStatusException(
                         NOT_FOUND, "Booking's showtime could not be found"));
+    // System.out.println("Going to add tickets to Booking object");
     for (int i = 0; i < bookingInfo.getTickets().size(); i++) {
       Ticket ticketToAdd = bookingInfo.getTickets().get(i).toEntity();
       ticketToAdd.setBookingID(bookingObject.getBookingID());
@@ -86,15 +89,25 @@ public class BookingsController {
               .getShowRoomID());
       ticketRepository.save(ticketToAdd);
       // Assuming seat number is 1, that will update index 0.
+      if (show.getSeatsList().get(ticketToAdd.getSeat() - 1)) {
+        for (int j = 0; j < bookingObject.getTickets().size(); j++) {
+          ticketRepository.delete(bookingObject.getTickets().get(j));
+        }
+        bookingRepository.delete(bookingObject);
+        throw new ResponseStatusException(
+            BAD_REQUEST, "That seat has already been taken. Cancelling operation.");
+      }
       show.getSeatsList().set(ticketToAdd.getSeat() - 1, true);
       bookingObject.getTickets().set(i, ticketToAdd);
     }
+    System.out.println("Attempting to save ShowTime");
     showTimeRepository.save(show);
     bookingRepository.save(bookingObject);
     User toUpdate =
         userRepository
             .findById(bookingObject.getUserID())
             .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "User cannot be found"));
+    System.out.println("Attempting to add Booking Object to User");
     toUpdate.getUserBookings().add(bookingObject);
     userRepository.save(toUpdate);
 
