@@ -101,7 +101,7 @@ const BookingHistory: React.FC = () => {
               booking.cancelStatus ? "bg-gray-200" : "bg-white"
             }`}
           >
-            <h2 className="text-lg font-bold mb-2">
+            <h2 className="text-lg font-bold mb-2 text-gray-900">
               Booking ID: {booking.id}
               {booking.cancelStatus && (
                 <span className="text-red-600 text-sm ml-2">(Cancelled)</span>

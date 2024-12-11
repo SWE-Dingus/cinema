@@ -128,7 +128,7 @@ const HomePage: React.FC = () => {
             className="flex overflow-x-auto space-x-12 scrollbar-hide"
           >
             {filterMovies(runningMovies).map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
+              <MovieCard key={movie.id} movie={movie} isCurrentlyRunning={true}/>
             ))}
           </div>
           <button
@@ -155,7 +155,7 @@ const HomePage: React.FC = () => {
             className="flex overflow-x-auto space-x-12 scrollbar-hide"
           >
             {filterMovies(upcomingMovies).map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
+              <MovieCard key={movie.id} movie={movie} isCurrentlyRunning={false} />
             ))}
           </div>
           <button

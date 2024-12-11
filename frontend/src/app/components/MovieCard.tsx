@@ -8,6 +8,7 @@ import { useCart } from "../Cart";
 
 interface MovieCardProps {
   movie: Movie;
+  isCurrentlyRunning: boolean; // New prop to indicate if the movie is currently running
 }
 
 interface ShowTime {
@@ -18,7 +19,7 @@ interface ShowTime {
   durationMinutes: number;
 }
 
-const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
+const MovieCard: React.FC<MovieCardProps> = ({ movie, isCurrentlyRunning }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const [positionClass, setPositionClass] = useState("origin-center"); // Default to center
@@ -139,7 +140,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
       {/* Buttons (conditionally rendered on hover) */}
       {isHovered && (
         <div className="flex space-x-2 mt-3 justify-center">
-          {movie.isRunning && (
+          {isCurrentlyRunning && (
             <button
               onClick={handleBookTickets}
               className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
