@@ -88,7 +88,7 @@ const OrderSummaryContent: React.FC = () => {
     <div className="min-h-screen p-5 bg-[#1b0c1a] text-white">
       <h1 className="text-4xl font-bold mb-6 text-center">Order Summary</h1>
       <div className="bg-[#2a1c2a] p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-4">{orderDetails.movieTitle}</h2>
+        {/* <h2 className="text-2xl font-bold mb-4">{orderDetails.movieTitle}</h2> */}
         <p className="mb-4">Showtime: <span className="font-semibold">{orderDetails.showtime}</span></p>
 
         <h3 className="text-xl font-bold mb-2">Selected Seats</h3>

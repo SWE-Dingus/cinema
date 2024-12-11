@@ -106,7 +106,7 @@ const OrderConfirm: React.FC = () => {
 
       <div className="bg-[#2a1c2a] p-6 rounded-lg shadow-md mb-8">
         <h2 className="text-2xl font-bold mb-4 text-[#fadcd5]">
-          Movie: {orderDetails.movieTitle}
+          {/* Movie: {orderDetails.movieTitle} */}
         </h2>
         
         <div className="space-y-2">

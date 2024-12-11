@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-
 interface Seat {
   seat: string;
   ageCategory: string;
@@ -13,6 +12,7 @@ interface OrderDetails {
   title: string;
   showtime: string;
   selectedSeats: Seat[];
+  originalTotal: number;
   total: number;
 }
 
@@ -25,8 +25,9 @@ interface CreditCard {
 }
 
 interface Promotion {
+  id: string;
   code: string;
-  discount: number; // Assuming discount is a percentage value (0-1)
+  discount: number;
 }
 
 const CheckoutPage: React.FC = () => {
@@ -36,8 +37,9 @@ const CheckoutPage: React.FC = () => {
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const [savedCards, setSavedCards] = useState<CreditCard[]>([]);
   const [selectedCard, setSelectedCard] = useState<CreditCard | null>(null);
-  const [promotions] = useState<Promotion[]>([]);
-
+  const [promotions, setPromotions] = useState<Promotion[]>([]);
+  const [appliedPromotion, setAppliedPromotion] = useState<Promotion | null>(null);
+  console.log(promotions)
   const [newCard, setNewCard] = useState<CreditCard>({
     id: "",
     cardNumber: "",
@@ -64,7 +66,13 @@ const CheckoutPage: React.FC = () => {
         (sum: number, seat: Seat) => sum + seat.price,
         0
       );
-      setOrderDetails({ ...parsedOrder, total: calculatedTotal });
+      //comented
+      // setOrderDetails({ ...parsedOrder, total: calculatedTotal });
+      setOrderDetails({ 
+        ...parsedOrder, 
+        originalTotal: calculatedTotal,
+        total: calculatedTotal 
+      });
     }
 
     // Retrieve saved cards from localStorage
@@ -72,6 +80,23 @@ const CheckoutPage: React.FC = () => {
     if (storedCards) {
       setSavedCards(JSON.parse(storedCards));
     }
+
+    // Fetch all promotions
+    const fetchPromotions = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/promotions/get/all");
+        if (!response.ok) {
+          throw new Error(' ');
+        }
+        const data = await response.json();
+        setPromotions(data);
+      } catch (err) {
+        console.error("Error fetching promotions:", err);
+        setError(" ");
+      }
+    };
+
+    fetchPromotions();
   }, [router]);
 
   if (isUnauthorized) {
@@ -92,20 +117,35 @@ const CheckoutPage: React.FC = () => {
     );
   }
 
-  const handleApplyPromotion = () => {
-    const promotion = promotions.find((promo) => promo.code === newPromotion);
-    // const promotion2 = promotions.find((promo) => console.log(promo));
-    
-    // console.log("new code"+newPromotion)
-    // console.log("new disc"+ promotion?.discount)
-    // console.log("promo2"+ promotion2)
-    if (promotion) {
-      const discountAmount = orderDetails ? orderDetails.total * promotion.discount : 0;
-      const newTotal = (orderDetails?.total || 0) - discountAmount;
-      setOrderDetails({ ...orderDetails!, total: newTotal });
-      
-    } else {
+  const handleApplyPromotion = async () => {
+    try {
+      // Fetch specific promotion by code
+      const response = await fetch(`http://localhost:8080/api/promotions/get/${newPromotion}`);
+
+      if (!response.ok) {
+        throw new Error('Promotion not found');
+      }
+
+      const promotion = await response.json();
+
+      if (promotion) {
+        //commented
+        // const discountAmount = orderDetails ? orderDetails.total * promotion.discount : 0;
+        // const newTotal = (orderDetails?.total || 0) - discountAmount;
+        const discountAmount = orderDetails.originalTotal * promotion.discount;
+        const newTotal = orderDetails.originalTotal - discountAmount;
+
+        setOrderDetails({ ...orderDetails!, total: newTotal });
+        setAppliedPromotion(promotion);
+        setError(null);
+      } else {
+        setError("Invalid promotion code");
+        setAppliedPromotion(null);
+      }
+    } catch (err) {
+      console.error("Error applying promotion:", err);
       setError("Invalid promotion code");
+      setAppliedPromotion(null);
     }
   };
 
@@ -180,6 +220,10 @@ const CheckoutPage: React.FC = () => {
         cardType: selectedCard.cardNumber.startsWith('4') ? 'Visa' : 'Mastercard',
         lastFourDigits: selectedCard.cardNumber.slice(-4),
       },
+      promotionApplied: appliedPromotion ? {
+        code: appliedPromotion.code,
+        discount: appliedPromotion.discount
+      } : null,
     };
 
     localStorage.setItem('order', JSON.stringify(orderToSave));
@@ -194,7 +238,7 @@ const CheckoutPage: React.FC = () => {
         {/* Order Details */}
         <div className="mb-6">
           <p className="text-lg text-gray-200 mb-2">
-            <strong>Movie:</strong> {orderDetails.title}
+            {/* <strong>Movie:</strong> {orderDetails.title} */}
           </p>
           <p className="text-lg text-gray-200 mb-2">
             <strong>Showtime:</strong> {orderDetails.showtime}
@@ -202,9 +246,38 @@ const CheckoutPage: React.FC = () => {
           <p className="text-lg text-gray-200 mb-4">
             <strong>Seat(s):</strong> {orderDetails.selectedSeats.map((seat) => seat.seat).join(", ")}
           </p>
-          <div className="text-lg text-gray-200 mb-4">
-            <span>Total:</span>
-            <span>${orderDetails.total}</span>
+          {/*commented
+          */}
+
+          {/* <div className="text-lg text-gray-200 mb-4">
+            <span>Total: </span>
+            <span>${orderDetails.total.toFixed(2)}</span>
+            {appliedPromotion && (
+              <span className="ml-2 text-green-400">
+                (Promo: {appliedPromotion.code} - {appliedPromotion.discount * 100}% off)
+              </span>
+            )}
+          </div>
+        </div> */}
+
+<div className="text-lg text-gray-200 mb-4">
+            {appliedPromotion ? (
+              <>
+                <div>
+                  <span>Original Total: </span>
+                  <span className="line-through">${orderDetails.originalTotal.toFixed(2)}</span>
+                </div>
+                <div>
+                  <span>Discount: </span>
+                  <span className="text-green-400">
+                    {/* -{(orderDetails.originalTotal * appliedPromotion.discount)} 
+                    ({appliedPromotion.code} - {appliedPromotion.discount * 100}% off) */}
+                  Successfully Added!
+                  </span>
+                </div>
+              </>
+            ) : null}
+            
           </div>
         </div>
 
@@ -214,11 +287,10 @@ const CheckoutPage: React.FC = () => {
           {savedCards.map((card) => (
             <div
               key={card.id}
-              className={`p-3 mb-2 rounded-lg flex justify-between items-center ${
-                selectedCard?.id === card.id
+              className={`p-3 mb-2 rounded-lg flex justify-between items-center ${selectedCard?.id === card.id
                   ? 'bg-[#fadcd5] text-black'
                   : 'bg-[#3d2b3d] text-gray-300 hover:bg-[#4a364a]'
-              }`}
+                }`}
             >
               <div onClick={() => setSelectedCard(card)} className="cursor-pointer flex-grow">
                 **** **** **** {card.cardNumber.slice(-4)}
