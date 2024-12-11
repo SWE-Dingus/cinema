@@ -2,18 +2,20 @@
 import Sidebar from "@/app/components/Sidebar";
 import Navbar from "@/app/components/Navbar";
 
-function AccountLayout({ children }: { children: React.ReactNode; }) {
+function AccountLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navbar */}
-      <Navbar isLoggedIn={true} />
+      <div className="sticky top-0 z-50">
+        <Navbar isLoggedIn={true} />
+      </div>
 
       {/* Sidebar and Content */}
-      <div className="flex flex-col md:flex-row">
+      <div className="flex">
         {/* Sidebar */}
-        <div className="w-full md:w-1/4 bg-gray-100 p-4 md:h-auto border-b md:border-b-0 md:border-r">
+        <aside className="w-64">
           <Sidebar />
-        </div>
+        </aside>
 
         {/* Main Content */}
         <main className="flex-1">{children}</main>
