@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import router from "next/router";
-
+import Link from "next/link";
 
 // Configuration file for API endpoints
 import Config from "../../../frontend.config";
@@ -160,17 +160,19 @@ const OrderConfirm: React.FC = () => {
           disabled={isEmailSending}
         >
           {isEmailSending ? 'Sending...' : 'Send Confirmation Email'}
-        </button>
-        <button
-          className="bg-red-500 text-white px-6 py-3 rounded hover:bg-red-600 transition"
-          onClick={() => {
-            localStorage.removeItem("order");
-            setOrderDetails(null);
-            router.push('/');
-          }}
-        >
-          Delete Order
-        </button>
+          </button>
+  <Link href="/" className="inline-block">
+    <button
+      className="bg-red-500 text-white px-6 py-3 rounded hover:bg-red-600 transition"
+      onClick={() => {
+        localStorage.removeItem("order");
+        setOrderDetails(null);
+      }}
+    >
+      Go Home
+    </button>
+  </Link>
+
       </div>
     </div>
   );
