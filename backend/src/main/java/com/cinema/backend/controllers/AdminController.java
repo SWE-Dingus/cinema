@@ -12,12 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin")
@@ -82,6 +77,17 @@ public class AdminController {
             .orElseThrow(() -> new UsernameNotFoundException("Could not find user"));
     user.state = UserState.SUSPENDED;
     userRepository.save(user);
+    tokenRepository.deleteById(toSuspend.email());
+  }
+
+  @DeleteMapping("/deleteUser")
+  public void deleteUser(@RequestBody SuspendUserInfo toSuspend) {
+    accountsService.ensureAdmin(request);
+    var user =
+        userRepository
+            .findById(toSuspend.email())
+            .orElseThrow(() -> new UsernameNotFoundException("Could not find user"));
+    userRepository.delete(user);
     tokenRepository.deleteById(toSuspend.email());
   }
 }
