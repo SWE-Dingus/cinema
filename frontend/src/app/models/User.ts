@@ -3,6 +3,12 @@ export enum AuthorizationLevel {
   Customer = "CUSTOMER",
 }
 
+export enum UserState {
+  Active = "ACTIVE",
+  Inactive = "INACTIVE",
+  Suspended = "SUSPENDED",
+}
+
 export interface User {
   email: string;
   firstName: string;
@@ -10,4 +16,5 @@ export interface User {
   address: string;
   authorizationLevel: AuthorizationLevel;
   wantsMarketingEmails: boolean;
+  userState: UserState;
 }

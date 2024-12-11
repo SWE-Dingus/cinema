@@ -27,7 +27,6 @@ const SeatSelection: React.FC = () => {
     
     const movieId = urlParams.get('movieId') || '';
     const showId = urlParams.get('showId') || '';
-    let title;
     const fetchAllData = async() => {
       try {
         const response = await fetch(`${Config.apiRoot}/movies/get/${Number(movieId)}`);
@@ -55,7 +54,7 @@ const SeatSelection: React.FC = () => {
       }
     }
     fetchAllData();
-    title = movieTitle || '';
+    const title = movieTitle || '';
     setMovieDetails({ movieId, title, showId });
   }, []);
 
